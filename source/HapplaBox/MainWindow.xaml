@@ -1,0 +1,127 @@
+﻿<Window
+    x:Class="HapplaBox.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:HapplaBox"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+    x:Name="WinMain"
+    Title="Happla Box"
+    AllowDrop="True"
+    Background="Transparent"
+    Icon="/Resources/logo48.png"
+    SnapsToDevicePixels="True"
+    UseLayoutRounding="True"
+    mc:Ignorable="d">
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+            CaptionHeight="{Binding Source={x:Static SystemParameters.CaptionHeight}}"
+            GlassFrameThickness="1"
+            ResizeBorderThickness="5" />
+    </WindowChrome.WindowChrome>
+
+    <!--  Title bar button commands  -->
+    <Window.CommandBindings>
+        <CommandBinding
+            CanExecute="CmdBinding_CanExecute"
+            Command="{x:Static SystemCommands.CloseWindowCommand}"
+            Executed="CmdBinding_Executed_Close" />
+        <CommandBinding
+            CanExecute="CmdBinding_CanExecute"
+            Command="{x:Static SystemCommands.MaximizeWindowCommand}"
+            Executed="CmdBinding_Executed_Maximize" />
+        <CommandBinding
+            CanExecute="CmdBinding_CanExecute"
+            Command="{x:Static SystemCommands.MinimizeWindowCommand}"
+            Executed="CmdBinding_Executed_Minimize" />
+        <CommandBinding
+            CanExecute="CmdBinding_CanExecute"
+            Command="{x:Static SystemCommands.RestoreWindowCommand}"
+            Executed="CmdBinding_Executed_Restore" />
+    </Window.CommandBindings>
+
+    <Border x:Name="WinMainBorder">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+
+            <!--  Window chrome  -->
+            <Grid
+                x:Name="WinTitleBar"
+                Grid.Row="0"
+                VerticalAlignment="Top"
+                Panel.ZIndex="100">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <!--  App icon  -->
+                    <Image
+                        Width="20"
+                        Height="20"
+                        Margin="10,6,10,6"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Source="{Binding ElementName=WinMain, Path=Icon}" />
+                    <TextBlock
+                        x:Name="WinTitleText"
+                        Margin="0,0,10,0"
+                        VerticalAlignment="Center"
+                        Text="{Binding ElementName=WinMain, Path=Title}">
+                    </TextBlock>
+                </StackPanel>
+
+                <!--  Caption buttons  -->
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="3,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+
+                    <Button
+                        x:Name="WinBtnMinimize"
+                        Command="{x:Static SystemCommands.MinimizeWindowCommand}"
+                        Style="{StaticResource MinimizeButtonStyle}"
+                        ToolTip="Minimize">
+                    </Button>
+
+                    <Button
+                        x:Name="WinBtnRestore"
+                        Command="{x:Static SystemCommands.RestoreWindowCommand}"
+                        Style="{StaticResource RestoreButtonStyle}"
+                        ToolTip="Restore"
+                        Visibility="Collapsed" />
+
+                    <Button
+                        x:Name="WinBtnMaximize"
+                        Command="{x:Static SystemCommands.MaximizeWindowCommand}"
+                        Style="{StaticResource MaximizeButtonStyle}"
+                        ToolTip="Maximize"
+                        Visibility="Visible" />
+
+                    <Button
+                        x:Name="WinBtnClose"
+                        Command="{x:Static SystemCommands.CloseWindowCommand}"
+                        Style="{StaticResource CloseButtonStyle}"
+                        ToolTip="Close">
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+
+            <!--  App content  -->
+            <Grid x:Name="AppArea" Grid.Row="1">
+                <wv2:WebView2 x:Name="web2" DefaultBackgroundColor="Transparent" />
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
