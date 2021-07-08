@@ -1,6 +1,7 @@
 using HapplaBox.Base;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Linq;
 
 namespace HapplaBox.Settings
 {
@@ -59,11 +60,18 @@ namespace HapplaBox.Settings
         /// </summary>
         public IConfigurationRoot LoadUserConfigs()
         {
+            // filter the command lines begin with '-'
+            // example: HapplaBox.exe -WinMainWidth=900
+            var args = Environment.GetCommandLineArgs()
+                .Where(cmd => cmd.StartsWith('-'))
+                .Select(cmd => cmd[1..]) // trim '-' from the command
+                .ToArray();
+
             var userConfig = new ConfigurationBuilder()
               .SetBasePath(App.ConfigDir(PathType.Dir))
               .AddJsonFile(DefaultFilename, optional: true)
               .AddJsonFile(UserFilename, optional: true)
-              .AddCommandLine(Environment.GetCommandLineArgs())
+              .AddCommandLine(args)
               .AddJsonFile(AdminFilename, optional: true)
               .Build();
 
