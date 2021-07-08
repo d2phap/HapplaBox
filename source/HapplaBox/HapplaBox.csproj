@@ -22,14 +22,10 @@
 
   <ItemGroup>
     <None Remove="Resources\icon256.ico" />
-    <None Remove="Resources\logo48.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Resources\icon256.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\logo48.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
