@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using HapplaBox.Base;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
@@ -23,12 +24,6 @@ namespace HapplaBox.Settings
 
 
         #region HapplaBox settings
-
-        /// <summary>
-        /// Gets, sets default codec to use.
-        /// </summary>
-        public static ICodec DefaultCodec { get; set; } = null;
-
 
         /// <summary>
         /// Gets, sets 'Left' position of WinMain
@@ -68,16 +63,6 @@ namespace HapplaBox.Settings
         {
             var items = _source.LoadUserConfigs();
 
-            // String values
-            #region Load DefaultCodec
-            var _str = items.GetValue(nameof(DefaultCodec), string.Empty);
-
-            var codecMnger = new CodecManager();
-            codecMnger.LoadAllCodecs(App.StartUpDir("codecs"));
-
-            DefaultCodec = codecMnger.Get(_str) ?? codecMnger.Items[0];
-            #endregion
-
 
             // Number values
             WinMainPositionX = items.GetValue(nameof(WinMainPositionX), WinMainPositionX);
@@ -96,7 +81,7 @@ namespace HapplaBox.Settings
         /// </summary>
         public static void Write()
         {
-            var jsonFile = App.ConfigDir(PathType.File, _source.UserFilename);
+            var jsonFile = App.ConfigDir(PathType.File, Source.UserFilename);
             using var fs = File.Create(jsonFile);
             using var writter = new Utf8JsonWriter(fs, new JsonWriterOptions()
             {
@@ -128,9 +113,6 @@ namespace HapplaBox.Settings
 
             settings.TryAdd("Info", infoJson);
 
-
-            // String values
-            settings.TryAdd(nameof(DefaultCodec), DefaultCodec);
 
             // Number values
             settings.TryAdd(nameof(WinMainPositionX), WinMainPositionX);

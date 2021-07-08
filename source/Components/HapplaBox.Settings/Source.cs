@@ -1,3 +1,4 @@
+using HapplaBox.Base;
 using Microsoft.Extensions.Configuration;
 using System;
 
@@ -11,19 +12,19 @@ namespace HapplaBox.Settings
         /// <summary>
         /// Gets the user config file name.
         /// </summary>
-        public string UserFilename { get => "happlaboxConfig.json"; }
+        public static string UserFilename => "happlabox.config.json";
 
 
         /// <summary>
         /// Gets the default config file located.
         /// </summary>
-        public string DefaultFilename { get => "happlaboxConfig.default.json"; }
+        public static string DefaultFilename => "happlabox.default.config.json";
 
 
         /// <summary>
         /// Gets the admin config file name.
         /// </summary>
-        public string AdminFilename { get => "happlaboxConfig.admin.json"; }
+        public static string AdminFilename => "happlabox.admin.config.json";
 
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace HapplaBox.Settings
         /// <summary>
         /// Config file version
         /// </summary>
-        public string Version { get; set; } = "10.0";
+        public string Version { get; set; } = "1.0";
 
 
         /// <summary>
@@ -60,10 +61,10 @@ namespace HapplaBox.Settings
         {
             var userConfig = new ConfigurationBuilder()
               .SetBasePath(App.ConfigDir(PathType.Dir))
-              .AddJsonFile(this.DefaultFilename, optional: true)
-              .AddJsonFile(this.UserFilename, optional: true)
+              .AddJsonFile(DefaultFilename, optional: true)
+              .AddJsonFile(UserFilename, optional: true)
               .AddCommandLine(Environment.GetCommandLineArgs())
-              .AddJsonFile(this.AdminFilename, optional: true)
+              .AddJsonFile(AdminFilename, optional: true)
               .Build();
 
             return userConfig;
