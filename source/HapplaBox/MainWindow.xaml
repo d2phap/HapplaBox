@@ -10,7 +10,7 @@
     Title="Happla Box"
     AllowDrop="True"
     Background="Transparent"
-    Icon="/Resources/logo48.png"
+    Icon="/Resources/icon256.ico"
     SnapsToDevicePixels="True"
     UseLayoutRounding="True"
     mc:Ignorable="d">
@@ -71,7 +71,8 @@
                         Margin="10,6,10,6"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        Source="{Binding ElementName=WinMain, Path=Icon}" />
+                        Source="{DynamicResource Logo}" />
+
                     <TextBlock
                         x:Name="WinTitleText"
                         Margin="0,0,10,0"
