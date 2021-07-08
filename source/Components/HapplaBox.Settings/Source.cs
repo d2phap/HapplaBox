@@ -12,19 +12,19 @@ namespace HapplaBox.Settings
         /// <summary>
         /// Gets the user config file name.
         /// </summary>
-        public static string UserFilename => "happlabox.config.json";
+        public static string UserFilename => "HapplaBoxConfig.user.json";
 
 
         /// <summary>
         /// Gets the default config file located.
         /// </summary>
-        public static string DefaultFilename => "happlabox.default.config.json";
+        public static string DefaultFilename => "HapplaBoxConfig.default.json";
 
 
         /// <summary>
         /// Gets the admin config file name.
         /// </summary>
-        public static string AdminFilename => "happlabox.admin.config.json";
+        public static string AdminFilename => "HapplaBoxConfig.admin.json";
 
 
         /// <summary>

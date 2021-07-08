@@ -38,7 +38,7 @@ namespace HapplaBox.Settings
         /// <summary>
         /// Gets, sets width of WinMain
         /// </summary>
-        public static int WinMainWidth { get; set; } = 1000;
+        public static int WinMainWidth { get; set; } = 1200;
 
         /// <summary>
         /// Gets, sets height of WinMain

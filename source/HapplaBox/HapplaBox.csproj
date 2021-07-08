@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Components\HapplaBox.Settings\HapplaBox.Settings.csproj" />
     <ProjectReference Include="..\Components\HapplaBox.UI\HapplaBox.UI.csproj" />
   </ItemGroup>
 
