@@ -1,2 +1,8 @@
 ﻿[*.{cs,vb}]
 
+
+# IDE0008: Use explicit type
+csharp_style_var_elsewhere = true
+
+# IDE0008: Use explicit type
+csharp_style_var_for_built_in_types = true
