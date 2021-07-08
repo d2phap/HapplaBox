@@ -1,7 +1,6 @@
-﻿using Microsoft.Web.WebView2.Core;
+﻿using HapplaBox.Settings;
 using System;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace HapplaBox
 {
@@ -9,6 +8,8 @@ namespace HapplaBox
     {
         public MainWindow()
         {
+            // Load settings from config file
+            Config.Load();
             InitializeComponent();
             InitializeAsync();
 
@@ -16,8 +17,29 @@ namespace HapplaBox
             Deactivated += MainWindowTheme_Deactivated;
             Activated += MainWindowTheme_Activated;
             Loaded += MainWindowTheme_Loaded;
+
+            Loaded += MainWindow_Loaded;
+            Closing += MainWindow_Closing;
         }
 
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // save WinMain placement
+            var win = new WindowSettings();
+            var wp = win.GetPlacementFromWindow(this);
+            win.SetWinMainPlacementConfig(wp);
+
+
+            // write all settings to file
+            Config.Write();
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            // load window placement from settings
+            var win = new WindowSettings();
+            win.SetPlacementToWindow(this, win.GetWinMainPlacementFromConfig());
+        }
 
         private async void InitializeAsync()
         {
