@@ -43,10 +43,10 @@ namespace HapplaBox
 
         private async void InitializeAsync()
         {
-            await web2.EnsureCoreWebView2Async();
+            await Web2.EnsureCoreWebView2Async();
 
-            Title = "HapplaBox " + web2.CoreWebView2.Environment.BrowserVersionString;
-            web2.Source = new Uri(@"D:\_GITHUB\happla\docs\index.html");
+            Title = "HapplaBox " + Web2.CoreWebView2.Environment.BrowserVersionString;
+            Web2.Source = new Uri(@"D:\_GITHUB\happla\docs\index.html");
         }
     }
 }

@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
     x:Name="WinMain"
-    Title="Happla Box"
+    Title="HapplaBox"
     AllowDrop="True"
     Background="Transparent"
     Icon="/Resources/icon256.ico"
@@ -18,7 +18,8 @@
         <WindowChrome
             CaptionHeight="{Binding Source={x:Static SystemParameters.CaptionHeight}}"
             GlassFrameThickness="1"
-            ResizeBorderThickness="5" />
+            ResizeBorderThickness="5"
+            UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
 
     <!--  Title bar button commands  -->
@@ -121,7 +122,7 @@
 
             <!--  App content  -->
             <Grid x:Name="AppArea" Grid.Row="1">
-                <wv2:WebView2 x:Name="web2" DefaultBackgroundColor="Transparent" />
+                <wv2:WebView2 x:Name="Web2" DefaultBackgroundColor="Transparent" />
             </Grid>
         </Grid>
     </Border>

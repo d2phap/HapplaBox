@@ -2,6 +2,7 @@
 using HapplaBox.UI.WinApi;
 using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -42,14 +43,10 @@ namespace HapplaBox
                     CurrentTheme.Background.Color.G,
                     CurrentTheme.Background.Color.B);
             }
-
-            var ca = new ColorAnimation(CurrentTheme.BackgroundInactive.Color, bgColor, new(TimeSpan.FromMilliseconds(200)));
-            AppArea.Background = CurrentTheme.BackgroundInactive.Clone();
-            AppArea.Background.BeginAnimation(SolidColorBrush.ColorProperty, ca);
-
+            AnimateBackground(AppArea, CurrentTheme.BackgroundInactive.Color, bgColor);
+            AnimateBackground(WinTitleBar, WinTitleBar.Background, CurrentTheme.TitleBar);
 
             WinMainBorder.BorderBrush = CurrentTheme.Border;
-            WinTitleBar.Background = CurrentTheme.TitleBar;
             WinTitleText.Foreground =
               WinBtnMinimize.Foreground =
               WinBtnMaximize.Foreground =
@@ -67,13 +64,10 @@ namespace HapplaBox
                     CurrentTheme.BackgroundInactive.Color.G,
                     CurrentTheme.BackgroundInactive.Color.B);
             }
-
-            var ca = new ColorAnimation(CurrentTheme.Background.Color, bgColor, new(TimeSpan.FromMilliseconds(200)));
-            AppArea.Background = CurrentTheme.Background.Clone();
-            AppArea.Background.BeginAnimation(SolidColorBrush.ColorProperty, ca);
+            AnimateBackground(AppArea, CurrentTheme.Background.Color, bgColor);
+            AnimateBackground(WinTitleBar, WinTitleBar.Background, CurrentTheme.TitleBarInactive);
 
             WinMainBorder.BorderBrush = CurrentTheme.BorderInactive;
-            WinTitleBar.Background = CurrentTheme.TitleBarInactive;
             WinTitleText.Foreground =
               WinBtnMinimize.Foreground =
               WinBtnMaximize.Foreground =
@@ -100,6 +94,33 @@ namespace HapplaBox
             }
 
             return IntPtr.Zero;
+        }
+
+
+        private void AnimateBackground(Grid control, Color from, Color to)
+        {
+            var ca = new ColorAnimation(from, to, new(TimeSpan.FromMilliseconds(200)));
+
+            control.Background = new SolidColorBrush(from);
+            control.Background.BeginAnimation(SolidColorBrush.ColorProperty, ca);
+        }
+
+        private void AnimateBackground(Grid control, Brush from, Brush to)
+        {
+            if (from is null || to is null)
+            {
+                control.Background = to;
+                return;
+            }
+
+            var fromBrush = from.Clone() as SolidColorBrush;
+            var toBrush = to.Clone() as SolidColorBrush;
+
+            var ca = new ColorAnimation(fromBrush.Color, toBrush.Color,
+                new(TimeSpan.FromMilliseconds(200)));
+
+            control.Background = from.Clone();
+            control.Background.BeginAnimation(SolidColorBrush.ColorProperty, ca);
         }
     }
 }
