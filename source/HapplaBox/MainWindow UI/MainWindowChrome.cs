@@ -8,6 +8,8 @@ namespace HapplaBox
 {
     public partial class MainWindow
     {
+        private readonly Thickness WINDOW_BORDER = new(0.9);
+
 
         #region Custom Window Chrome
         // Can execute
@@ -48,12 +50,14 @@ namespace HapplaBox
                 WinMainBorder.BorderThickness = SystemParametersFix.WindowResizeBorderThickness;
                 WinBtnRestore.Visibility = Visibility.Visible;
                 WinBtnMaximize.Visibility = Visibility.Collapsed;
+                AppArea.BorderThickness = new Thickness(0);
             }
             else
             {
-                WinMainBorder.BorderThickness = CurrentTheme.BorderWeight;
+                WinMainBorder.BorderThickness = WINDOW_BORDER;
                 WinBtnRestore.Visibility = Visibility.Collapsed;
                 WinBtnMaximize.Visibility = Visibility.Visible;
+                AppArea.BorderThickness = CurrentTheme.BorderWeight;
             }
 
             UpdateWindowChrome();

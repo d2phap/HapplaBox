@@ -12,3 +12,6 @@ dotnet_style_qualification_for_field = true
 
 # IDE0003: Remove qualification
 dotnet_style_qualification_for_property = true
+
+# Default severity for analyzer diagnostics with category 'Style'
+dotnet_analyzer_diagnostic.category-Style.severity = none

@@ -28,14 +28,12 @@ namespace HapplaBox.UI
         {
             this.Background = WinColors.AccentAlphaBrush;
             this.BackgroundInactive = WinColors.AccentBrush;
-            //this.BackgroundInactive.Opacity = 0.9;
 
-            this.BorderWeight = new Thickness(0.9);
+            this.BorderWeight = new Thickness(2.5, 0, 2, 2);
             this.Border = WinColors.AccentBrush;
             this.BorderInactive = WinColors.AccentAlphaBrush;
 
             this.TitleBar = WinColors.AccentAlphaBrush;
-            //this.TitleBar.Opacity = 0.5;
             this.TitleBarInactive = WinColors.AccentBrush;
             this.TitleBarText = new SolidColorBrush(Colors.White);
             this.TitleBarTextInactive = new SolidColorBrush(Color.FromArgb(130, 255, 255, 255));

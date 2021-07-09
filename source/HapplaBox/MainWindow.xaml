@@ -121,9 +121,9 @@
 
 
             <!--  App content  -->
-            <Grid x:Name="AppArea" Grid.Row="1">
+            <Border x:Name="AppArea" Grid.Row="1">
                 <wv2:WebView2 x:Name="Web2" DefaultBackgroundColor="Transparent" />
-            </Grid>
+            </Border>
         </Grid>
     </Border>
 </Window>
