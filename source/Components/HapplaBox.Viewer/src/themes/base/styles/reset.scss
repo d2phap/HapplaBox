@@ -1,0 +1,27 @@
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: $font-base;
+
+  // remove eslastic scrolling
+  overflow: hidden;
+}
+
+body {
+  margin: auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+pre,
+code,
+kbd,
+samp {
+  font-family: $font-code;
+  font-size: 1em;
+}

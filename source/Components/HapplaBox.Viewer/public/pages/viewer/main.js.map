@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://happlabox.viewer/./src/pages/viewer.ts"],"names":["console","log"],"mappings":";;;;;;;;;;AACAA,QAAQC,IAAI","file":"pages/viewer/main.js","sourcesContent":["\nconsole.log('viewer');\n"],"sourceRoot":""}
