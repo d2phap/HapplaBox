@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://happlabox.viewer/./src/themes/default/styles/pages/viewer.scss"],"names":[],"mappings":";;;;;;;;;;;;AACA,KACE,qBAAsB","file":"pages/viewer/main.css","sourcesContent":["\nbody {\n  background-color: blue;\n}\n"],"sourceRoot":""}

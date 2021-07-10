@@ -28,8 +28,8 @@ const configs = {
   },
   output: {
     clean: true,
-    path: path.resolve(__dirname, './public'),
-    filename: 'pages/[name]/main.js',
+    path: path.resolve(__dirname, './public/dist'),
+    filename: '[name]/[name].bundle.js',
   },
   module: {
     rules: [
@@ -47,6 +47,21 @@ const configs = {
           'sass-loader',
         ],
       },
+      {
+        test: /\.(png|jpg|gif|svg|webp)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              context: path.resolve(__dirname, 'src/'),
+              outputPath: 'base/img/',
+              publicPath: '../base/img',
+              useRelativePaths: true,
+            },
+          },
+        ],
+      },
     ],
   },
   resolve: {
@@ -57,7 +72,7 @@ const configs = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'pages/[name]/main.css',
+      filename: '[name]/[name].main.css',
     }),
     new webpack.BannerPlugin(copyright),
     new ESLintPlugin({
