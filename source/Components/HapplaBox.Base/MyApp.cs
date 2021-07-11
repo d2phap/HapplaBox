@@ -8,7 +8,7 @@ namespace HapplaBox.Base
     /// <summary>
     /// Provides the base information of HapplaBox app
     /// </summary>
-    public static class App
+    public static class MyApp
     {
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace HapplaBox.Base
         /// <returns></returns>
         public static string StartUpDir(params string[] paths)
         {
-            var binaryPath = typeof(App).Assembly.Location;
+            var binaryPath = typeof(MyApp).Assembly.Location;
             var path = Path.GetDirectoryName(binaryPath);
 
             var newPaths = paths.ToList();

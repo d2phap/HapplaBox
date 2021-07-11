@@ -68,7 +68,7 @@ namespace HapplaBox.Settings
                 .ToArray();
 
             var userConfig = new ConfigurationBuilder()
-              .SetBasePath(App.ConfigDir(PathType.Dir))
+              .SetBasePath(MyApp.ConfigDir(PathType.Dir))
               .AddJsonFile(DefaultFilename, optional: true)
               .AddJsonFile(UserFilename, optional: true)
               .AddCommandLine(args)

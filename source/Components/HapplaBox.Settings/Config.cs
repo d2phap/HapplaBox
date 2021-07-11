@@ -81,7 +81,7 @@ namespace HapplaBox.Settings
         /// </summary>
         public static void Write()
         {
-            var jsonFile = App.ConfigDir(PathType.File, Source.UserFilename);
+            var jsonFile = MyApp.ConfigDir(PathType.File, Source.UserFilename);
             using var fs = File.Create(jsonFile);
             using var writter = new Utf8JsonWriter(fs, new JsonWriterOptions()
             {
