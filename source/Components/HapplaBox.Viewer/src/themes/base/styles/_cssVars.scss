@@ -1,0 +1,6 @@
+
+:root {
+  @each $key, $value in $vars {
+    --#{$key}: #{$value};
+  }
+}

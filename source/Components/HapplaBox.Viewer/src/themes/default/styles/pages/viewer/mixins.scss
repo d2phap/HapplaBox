@@ -11,7 +11,7 @@
   z-index: $zIndex;
 
   padding: 10px;
-  border: 1px solid getVar(colorBorder);
+  border: 1px solid RGBA(getVar(colorBorder));
   border-radius: getVar(borderRadius);
   box-shadow: getVar(shadow);
 
