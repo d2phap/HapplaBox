@@ -1,3 +1,26 @@
 
-$font-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI";
-$font-code: ui-monospace, SFMono-Regular, SF Mono, Consolas, Liberation Mono, Menlo, monospace;
+$vars: (
+  fontBase: "system-ui, -apple-system, BlinkMacSystemFont, Segoe UI",
+  fontCode: "ui-monospace, SFMono-Regular, SF Mono, Consolas, Liberation Mono, Menlo, monospace",
+
+  shadow: 0 10px 30px -15px #000,
+  borderRadius: 5px,
+  fluentBlur: 20px,
+  fluentOpacity: 0.5,
+
+  colorBg: 255 255 255,
+  colorText: 0 0 0,
+  colorBorder: 255 255 255 / 0.1,
+);
+
+
+// Function to get CSS variable
+@function getVar($key) {
+  @return var(--#{$key});
+}
+
+:root {
+  @each $key, $value in $vars {
+    --#{$key}: #{$value};
+  }
+}

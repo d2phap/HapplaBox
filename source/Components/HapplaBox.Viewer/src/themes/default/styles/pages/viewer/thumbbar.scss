@@ -1,0 +1,7 @@
+
+#thumbbar {
+  @include panel(99);
+  bottom: 20px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}

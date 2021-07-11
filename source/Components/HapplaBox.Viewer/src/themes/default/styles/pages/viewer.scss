@@ -1,5 +1,11 @@
 
-body {
-  background-color: blue;
-  background-image: url("../../../base/img/logo.svg");
-}
+// Variables
+@import "../../../base/styles/_variables.scss";
+@import "./viewer/mixins.scss";
+
+
+// Components
+@import "./viewer/toolbar.scss";
+@import "./viewer/thumbbar.scss";
+@import "./viewer/board.scss";
+
