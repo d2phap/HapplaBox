@@ -1,0 +1,3 @@
+[submodule "source/Components/submodules/happla"]
+	path = source/Components/submodules/happla
+	url = https://github.com/d2phap/happla.git
