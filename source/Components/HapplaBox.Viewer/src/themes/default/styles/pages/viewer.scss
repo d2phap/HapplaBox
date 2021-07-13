@@ -9,3 +9,17 @@
 @import "./viewer/thumbbar.scss";
 @import "./viewer/board.scss";
 
+
+.info {
+  @include panel(95);
+
+  left: 20px;
+  top: 50%;
+  transform: translate(0, -50%);
+
+  pointer-events: none;
+  font-family: getVar(fontCode);
+  line-height: 1.5;
+  font-size: 12px;
+  min-width: 210px;
+}

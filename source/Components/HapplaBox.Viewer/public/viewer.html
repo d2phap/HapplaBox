@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="./dist/viewer/viewer.main.css">
 
   <script src="./dist/base/base.bundle.js"></script>
-  <script src="./dist/viewer/viewer.bundle.js"></script>
 </head>
 <body>
   <div id="board">
@@ -30,7 +29,18 @@
     </div>
   </div>
 
+  <div class="info">
+    <div>Zoom: <span id="elZoom"></span></div>
+    <div>Scale ratio: <span id="elScaleRatio"></span></div>
+    <div>X: <span id="elX"></span></div>
+    <div>Y: <span id="elY"></span></div>
+    <div>Width: <span id="elWidth"></span></div>
+    <div>Height: <span id="elHeight"></span></div>
+  </div>
+
   <div id="toolbar">toolbar</div>
   <div id="thumbbar">thumbbar</div>
+
+  <script src="./dist/viewer/viewer.bundle.js"></script>
 </body>
 </html>
