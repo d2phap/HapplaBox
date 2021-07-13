@@ -1,5 +1,8 @@
-﻿using HapplaBox.Settings;
+﻿using HapplaBox.Base;
+using HapplaBox.Settings;
+using Microsoft.Web.WebView2.Core;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace HapplaBox
@@ -43,10 +46,21 @@ namespace HapplaBox
 
         private async void InitializeAsync()
         {
-            await Web2.EnsureCoreWebView2Async();
+            var env = await CoreWebView2Environment.CreateAsync(userDataFolder: MyApp.ConfigDir(PathType.Dir, "ViewerData"));
+            await Web2.EnsureCoreWebView2Async(env);
+
+            Web2.CoreWebView2.Settings.IsZoomControlEnabled = false;
+            Web2.CoreWebView2.Settings.IsStatusBarEnabled = false;
+            Web2.CoreWebView2.Settings.IsBuiltInErrorPageEnabled = false;
+            Web2.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
+            Web2.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+            //Web2.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
 
             Title = "HapplaBox " + Web2.CoreWebView2.Environment.BrowserVersionString;
-            Web2.Source = new Uri(@"D:\_GITHUB\happla\docs\index.html");
+
+
+            Web2.Source = new Uri(@"D:\_GITHUB\HapplaBox\source\Components\HapplaBox.Viewer\public\viewer.html");
         }
+
     }
 }
