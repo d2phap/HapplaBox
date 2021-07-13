@@ -20,12 +20,17 @@ const elHeight = document.getElementById('elHeight');
 
 
 const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {
-  // elScaleRatio.innerText = board.scaleRatio;
   elZoom.innerText = factor;
-  elX.innerText = x;
-  elY.innerText = y;
-  elWidth.innerText = `${elBoardContent.clientWidth * factor}px (${elBoardContent.clientWidth}px)`;
-  elHeight.innerText = `${elBoardContent.clientHeight * factor}px (${elBoardContent.clientHeight}px)`;
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  elScaleRatio.innerText = board.scaleRatio.toFixed(2);
+  elX.innerText = x.toFixed(2);
+  elY.innerText = y.toFixed(2);
+
+  const w = (elBoardContent.clientWidth * factor).toFixed(2);
+  const h = (elBoardContent.clientHeight * factor).toFixed(2);
+
+  elWidth.innerText = `${w}px (${elBoardContent.clientWidth}px)`;
+  elHeight.innerText = `${h}px (${elBoardContent.clientHeight}px)`;
 };
 
 const onPanning: PanEventFunction = (x: number, y: number) => {
@@ -35,7 +40,7 @@ const onPanning: PanEventFunction = (x: number, y: number) => {
 
 const onBeforeContentReady = () => {
   elWrapper.style.opacity = 0;
-  elWrapper.style.transition = 'opacity ease 500ms';
+  elWrapper.style.transition = 'opacity ease 300ms';
 };
 
 const onContentReady = () => {
