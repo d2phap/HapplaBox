@@ -4,32 +4,36 @@
   bottom: 20px;
   left: 50%;
   transform: translate(-50%, 0);
-  padding: 5px;
+  padding: 0;
   max-width: calc(100vw - 20px);
 }
 
 .thumbnail-list {
   list-style: none;
   padding-left: 0;
-  margin-top: 0;
-  margin-bottom: 0;
+  margin: 0 -1px;
   display: flex;
   max-width: 100vw;
   overflow-y: hidden;
-  overflow-x: auto;
+  overflow-x: visible;
+  padding: 5px;
   user-select: none;
 
   & > li {
-    height: 100px;
-    min-width: 120px;
     display: grid;
     grid-template-rows: minmax(0, 1fr) auto;
-    padding: 10px;
+    padding: 5px;
+    margin-left: 1px;
+    margin-right: 1px;
     border-radius: getVar(borderRadius);
     cursor: pointer;
     transition: background-color 200ms ease;
 
     .preview {
+      height: 80px;
+      width: 80px;
+      border-radius: getVar(borderRadius);
+      overflow: hidden;
       transition: transform 200ms ease;
 
       img {
@@ -44,23 +48,37 @@
     }
 
     .info {
+      color: getVar(colorText);
+      text-align: center;
       font-size: 12px;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
+      margin-top: 2px;
+
+      display: none;
     }
 
     &:hover {
       background-color: RGBA(getVar(colorBg) / 0.5);
+      box-shadow: inset 0 0 0 1px RGBA(getVar(colorBorder));
 
       .preview {
-        transform: translateY(calc(1px - #{getVar(borderRadius)}));
+        transform: scale(0.95) translateY(-3px);
+      }
+    }
+
+    &:active {
+      background-color: RGBA(getVar(colorBg) / 0.7);
+
+      .preview {
+        transform: scale(0.95) translateY(0);
       }
     }
 
     &.active {
-      background-color: RGBA(getVar(colorBg) / 0.7);
-      box-shadow: inset 0 0 0 2px #007eba;
+      background-color: RGBA(getVar(colorBg) / 0.5);
+      box-shadow: inset 0 0 0 2px RGBA(getVar(colorAccent));
     }
   }
 }
