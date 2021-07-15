@@ -122,7 +122,11 @@
 
             <!--  App content  -->
             <Border x:Name="AppArea" Grid.Row="1">
-                <wv2:WebView2 x:Name="Web2" DefaultBackgroundColor="Transparent" />
+                <wv2:WebView2
+                    x:Name="Web2"
+                    CoreWebView2InitializationCompleted="Web2_CoreWebView2InitializationCompleted"
+                    DefaultBackgroundColor="Transparent"
+                    NavigationCompleted="Web2_NavigationCompleted" />
             </Border>
         </Grid>
     </Border>

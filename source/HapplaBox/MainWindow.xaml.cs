@@ -9,6 +9,8 @@ namespace HapplaBox
 {
     public partial class MainWindow : Window
     {
+        private bool IsWebviewReady = false;
+
         public MainWindow()
         {
             // Load settings from config file
@@ -50,8 +52,15 @@ namespace HapplaBox
             {
                 AdditionalBrowserArguments = "--disable-web-security --allow-file-access-from-files --allow-file-access",
             };
+
             var env = await CoreWebView2Environment.CreateAsync(userDataFolder: MyApp.ConfigDir(PathType.Dir, "ViewerData"), options: options);
+
             await Web2.EnsureCoreWebView2Async(env);
+        }
+
+        private void Web2_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+        {
+            IsWebviewReady = e.IsSuccess;
 
             Web2.CoreWebView2.Settings.IsZoomControlEnabled = false;
             Web2.CoreWebView2.Settings.IsStatusBarEnabled = false;
@@ -62,9 +71,12 @@ namespace HapplaBox
 
             Title = "HapplaBox " + Web2.CoreWebView2.Environment.BrowserVersionString;
 
-
             Web2.Source = new Uri(@"D:\_GITHUB\HapplaBox\source\Components\HapplaBox.Viewer\public\viewer.html");
         }
 
+        private void Web2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        {
+            UpdateWebviewTheme();
+        }
     }
 }

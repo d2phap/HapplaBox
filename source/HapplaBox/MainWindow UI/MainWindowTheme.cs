@@ -1,4 +1,5 @@
-﻿using HapplaBox.UI;
+﻿using HapplaBox.Base;
+using HapplaBox.UI;
 using HapplaBox.UI.WinApi;
 using System;
 using System.Windows;
@@ -27,8 +28,21 @@ namespace HapplaBox
             {
                 MainWindowTheme_Deactivated(this, null);
             }
-
+            
             AppArea.BorderThickness = CurrentTheme.BorderWeight;
+
+            UpdateWebviewTheme();
+        }
+
+        private void UpdateWebviewTheme()
+        {
+            if (!IsWebviewReady) return;
+
+            // color accent
+            var correctColor = CurrentTheme.Accent.Color;
+            var accentColorStr = $"{correctColor.R} {correctColor.G} {correctColor.B}";
+
+            Web2.CoreWebView2.ExecuteScriptAsync($"document.documentElement.style.setProperty('--colorAccent', '{accentColorStr}');");
         }
 
         private void MainWindowTheme_Activated(object sender, EventArgs e)

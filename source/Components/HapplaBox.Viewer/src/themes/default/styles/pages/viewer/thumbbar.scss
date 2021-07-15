@@ -27,14 +27,14 @@
     margin-right: 1px;
     border-radius: getVar(borderRadius);
     cursor: pointer;
-    transition: background-color 200ms ease;
+    transition: all 200ms ease;
 
     .preview {
-      height: 80px;
-      width: 80px;
+      height: var(--thumbnailSize);
+      width: var(--thumbnailSize);
       border-radius: getVar(borderRadius);
       overflow: hidden;
-      transition: transform 200ms ease;
+      transition: all 200ms ease;
 
       img {
         display: block;
@@ -65,13 +65,16 @@
 
       .preview {
         transform: scale(0.95) translateY(-3px);
+        box-shadow: 0 5px 20px -10px RGBA(getVar(colorText) / 0.5);
       }
     }
 
     &:active {
+      transition: all 80ms ease;
       background-color: RGBA(getVar(colorBg) / 0.7);
 
       .preview {
+        transition: all 80ms ease;
         transform: scale(0.95) translateY(0);
       }
     }
