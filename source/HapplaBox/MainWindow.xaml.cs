@@ -46,7 +46,11 @@ namespace HapplaBox
 
         private async void InitializeAsync()
         {
-            var env = await CoreWebView2Environment.CreateAsync(userDataFolder: MyApp.ConfigDir(PathType.Dir, "ViewerData"));
+            var options = new CoreWebView2EnvironmentOptions
+            {
+                AdditionalBrowserArguments = "--disable-web-security --allow-file-access-from-files --allow-file-access",
+            };
+            var env = await CoreWebView2Environment.CreateAsync(userDataFolder: MyApp.ConfigDir(PathType.Dir, "ViewerData"), options: options);
             await Web2.EnsureCoreWebView2Async(env);
 
             Web2.CoreWebView2.Settings.IsZoomControlEnabled = false;
