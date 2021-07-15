@@ -57,7 +57,7 @@ const board = new Board(elBoard, elBoardContent, {
 });
 
 
-board.imageRendering = InterpolationMode.Pixelated;
+board.imageRendering = InterpolationMode.Auto;
 board.waitForContentReady()
   .then(async () => {
     board.enable();
