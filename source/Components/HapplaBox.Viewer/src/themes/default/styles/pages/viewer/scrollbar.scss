@@ -11,7 +11,7 @@
   border-radius: var(--scrollBarSize);
   border-color: transparent;
   border-style: solid;
-  border-width: calc(var(--scrollBarSize) / 3);
+  border-width: calc(var(--scrollBarSize) / 2.25);
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:active {
