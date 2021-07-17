@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const path = require('path');
-const fs = require('fs');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -27,9 +26,8 @@ const configs = {
     about: ['./src/pages/about.ts', './src/themes/default/styles/pages/about.scss'],
   },
   output: {
-    clean: true,
-    path: path.resolve(__dirname, './public/dist'),
-    filename: '[name]/[name].bundle.js',
+    path: path.resolve(__dirname, './public'),
+    filename: './js/[name].bundle.js',
   },
   module: {
     rules: [
@@ -40,7 +38,29 @@ const configs = {
       },
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
       {
+        test: /\.html$/i,
+        loader: 'html-loader',
+      },
+      {
+        // css loader for web component
+        // url() in css must be based on /public/
+        test: /\.inline.scss$/,
+        exclude: /node_modules/,
+        use: [
+          'sass-to-string',
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                outputStyle: 'compressed',
+              },
+            },
+          },
+        ],
+      },
+      {
         test: /\.(scss|css)$/,
+        exclude: [/\.inline.scss$/],
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
@@ -48,19 +68,11 @@ const configs = {
         ],
       },
       {
-        test: /\.(png|jpg|gif|svg|webp)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              context: path.resolve(__dirname, 'src/'),
-              outputPath: 'base/img/',
-              publicPath: '../base/img',
-              useRelativePaths: true,
-            },
-          },
-        ],
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: './img/[name][ext][query]',
+        },
       },
     ],
   },
@@ -72,7 +84,7 @@ const configs = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name]/[name].main.css',
+      filename: './css/[name].main.css',
     }),
     new webpack.BannerPlugin(copyright),
     new ESLintPlugin({

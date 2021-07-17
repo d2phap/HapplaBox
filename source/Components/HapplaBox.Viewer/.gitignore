@@ -104,4 +104,6 @@ typings/
 .DS_Store
 
 
-public/dist/
+public/css/
+public/js/
+public/img/
