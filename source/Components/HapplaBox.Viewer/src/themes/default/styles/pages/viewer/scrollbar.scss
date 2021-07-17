@@ -7,19 +7,19 @@
   cursor: pointer;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: RGBA(getVar(colorText) / 0.2);
+  background-color: RGBA(getVar(colorText) / 0.4);
   border-radius: var(--scrollBarSize);
   border-color: transparent;
   border-style: solid;
-  border-width: calc(var(--scrollBarSize) / 2.25);
+  border-width: calc((var(--scrollBarSize) / 2.5) - 1px);
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:active {
-  background-color: RGBA(getVar(colorText) / 0.4);
+  background-color: RGBA(getVar(colorText) / 0.7);
 }
 ::-webkit-scrollbar-thumb:hover,
 ::-webkit-scrollbar-thumb:active {
-  border-width: 1px;
-  background-color: RGBA(getVar(colorText) / 0.5);
+  border-width: 0;
+  background-color: RGBA(getVar(colorText) / 0.6);
   cursor: pointer;
 }
