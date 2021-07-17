@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace HapplaBox
 {
@@ -13,6 +14,7 @@ namespace HapplaBox
     {
         private const int WM_DWMCOLORIZATIONCOLORCHANGED = 0x0320;
         private Theme CurrentTheme = new();
+        private DispatcherTimer themeUpdateTimer = new();
 
 
         private void UpdateTheme()
@@ -28,8 +30,16 @@ namespace HapplaBox
             {
                 MainWindowTheme_Deactivated(this, null);
             }
-            
-            AppArea.BorderThickness = CurrentTheme.BorderWeight;
+
+            if (WindowState == WindowState.Maximized)
+            {
+                AppArea.BorderThickness = new Thickness(0);
+            }
+            else
+            {
+                AppArea.BorderThickness = CurrentTheme.BorderWeight;
+            }
+
 
             UpdateWebviewTheme();
         }
@@ -93,16 +103,25 @@ namespace HapplaBox
             UpdateTheme();
             UpdateWindowChrome();
 
+            themeUpdateTimer.Interval = TimeSpan.FromMilliseconds(500);
+            themeUpdateTimer.Tick += ThemeUpdateTimer_Tick;
+
             var source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
             source.AddHook(new HwndSourceHook(WndProc));
         }
 
+        private void ThemeUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            themeUpdateTimer.Stop();
+            UpdateTheme();
+        }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == WM_DWMCOLORIZATIONCOLORCHANGED)
             {
-                UpdateTheme();
+                themeUpdateTimer.Stop();
+                themeUpdateTimer.Start();
             }
 
             return IntPtr.Zero;
