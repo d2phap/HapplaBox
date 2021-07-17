@@ -1,11 +1,16 @@
 
-// @ts-nocheck
 import {
   Board,
   InterpolationMode,
   PanEventFunction,
   ZoomEventFunction,
 } from '@d2phap/happla';
+
+import '@/pages/my-com';
+
+customElements.whenDefined('floating-particles').then(() => {
+  console.log('"floating-particles" is defined.');
+});
 
 const elBoard = document.getElementById('board');
 const elWrapper = document.getElementById('wrapper');
@@ -20,7 +25,7 @@ const elHeight = document.getElementById('elHeight');
 
 
 const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {
-  elZoom.innerText = factor;
+  elZoom.innerText = factor.toString();
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   elScaleRatio.innerText = board.scaleRatio.toFixed(2);
   elX.innerText = x.toFixed(2);
@@ -34,12 +39,12 @@ const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: num
 };
 
 const onPanning: PanEventFunction = (x: number, y: number) => {
-  elX.innerText = x;
-  elY.innerText = y;
+  elX.innerText = x.toString();
+  elY.innerText = y.toString();
 };
 
 const onBeforeContentReady = () => {
-  elWrapper.style.opacity = 0;
+  elWrapper.style.opacity = '0';
   elWrapper.style.transition = 'opacity ease 300ms';
 };
 
@@ -75,7 +80,7 @@ board.waitForContentReady()
     await board.panTo(-w / 2, -h / 2);
     board.zoomTo(scale, x, y);
 
-    elWrapper.style.opacity = 1;
+    elWrapper.style.opacity = '1';
   });
 
 // const img = document.getElementById('img');

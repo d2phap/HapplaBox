@@ -5,7 +5,7 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "module": "ESNext",
-    "target": "ES5",
+    "target": "ESNext",
     "allowJs": true,
     "moduleResolution": "node",
     "baseUrl": ".",
@@ -19,4 +19,3 @@
   ],
   "exclude": ["node_modules", "dist"]
 }
-
