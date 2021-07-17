@@ -1,13 +1,11 @@
 
 // Variables
 @import "../../../base/styles/scssVars";
-@import "./viewer/mixins.scss";
+@import "../../../base/styles/mixins.scss";
 
 
 // Components
-@import "./viewer/scrollbar.scss";
 @import "./viewer/toolbar.scss";
-@import "./viewer/thumbbar.scss";
 @import "./viewer/board.scss";
 
 

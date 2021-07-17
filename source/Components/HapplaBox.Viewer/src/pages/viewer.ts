@@ -6,7 +6,7 @@ import {
   ZoomEventFunction,
 } from '@d2phap/happla';
 
-import '@/pages/my-com';
+import '@/components/thumbnail-bar';
 
 customElements.whenDefined('floating-particles').then(() => {
   console.log('"floating-particles" is defined.');

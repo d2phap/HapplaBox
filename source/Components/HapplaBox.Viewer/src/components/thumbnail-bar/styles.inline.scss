@@ -1,4 +1,9 @@
 
+@import "../../themes/base/styles/scssVars";
+@import "../../themes/base/styles/mixins.scss";
+@import "../../themes/base/styles/scrollbar.scss";
+
+
 #thumbbar {
   @include panel(99);
   bottom: 10px;
@@ -56,7 +61,7 @@
       white-space: nowrap;
       margin-top: 2px;
 
-      display: none;
+      // display: none;
     }
 
     &:hover {
