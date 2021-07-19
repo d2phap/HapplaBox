@@ -36,5 +36,6 @@ module.exports = {
     'linebreak-style': 'off',
     'class-methods-use-this': 'off',
     'no-debugger': 'off',
+    'arrow-parens': 'off',
   },
 };

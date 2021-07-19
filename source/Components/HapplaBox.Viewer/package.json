@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "HapplaBox.Viewer",
   "scripts": {
-    "start": "webpack --watch --config ./webpack.config.js --progress --mode=production",
+    "start": "webpack --watch --config ./webpack.config.js --progress --mode=development",
     "build": "webpack --config ./webpack.config.js --progress --mode=production",
     "test": ""
   },
