@@ -37,5 +37,6 @@ module.exports = {
     'class-methods-use-this': 'off',
     'no-debugger': 'off',
     'arrow-parens': 'off',
+    'no-plusplus': 'off',
   },
 };
