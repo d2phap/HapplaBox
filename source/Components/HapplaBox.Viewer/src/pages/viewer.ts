@@ -21,7 +21,16 @@ const elHeight = document.getElementById('elHeight');
 
 initThumbnailBar();
 const thumbnailBarEl = document.querySelector('thumbnail-bar').shadowRoot.host as ThumbnailBar;
-const myEl = thumbnailBarEl.getItem(55);
+const items = [];
+for (let index = 0; index < 1000; index++) {
+  items.push({
+    name: `Pic${index + 1}`,
+    src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
+    tooltip: `Photo ${index + 1}`,
+  });
+}
+thumbnailBarEl.renderItems(items, 0);
+const myEl = thumbnailBarEl.getItem(500);
 thumbnailBarEl.selectItem(myEl);
 thumbnailBarEl.scrollToItem(myEl);
 
