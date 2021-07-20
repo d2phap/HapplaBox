@@ -2,6 +2,7 @@
 import BaseElement from '@/components/BaseElement';
 import styles from '@/components/thumbnail-bar/styles.inline.scss';
 import template from '@/components/thumbnail-bar/template.html';
+import ThumbnailItem from '@/components/thumbnail-bar/thumbnailItem';
 
 const SELECTED_CLASS = 'selected';
 
@@ -12,7 +13,8 @@ const styleEl = document.createElement('style');
 styleEl.textContent = styles;
 
 export class ThumbnailBar extends BaseElement {
-  private multiselect = false;
+  #multiselect = false;
+  #items: ThumbnailItem[] = [];
 
   constructor() {
     super();
@@ -25,7 +27,6 @@ export class ThumbnailBar extends BaseElement {
     // bind events
     this.onMouseWheel = this.onMouseWheel.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
-    this.onMultiselectChanged = this.onMultiselectChanged.bind(this);
 
     // bind methods
     this.getItem = this.getItem.bind(this);
@@ -39,26 +40,25 @@ export class ThumbnailBar extends BaseElement {
     listEl.addEventListener('keydown', this.onKeyDown, false);
   }
 
-  static get observedAttributes() {
-    return ['multiselect'];
-  }
 
   private connectedCallback() {
     this.style.setProperty('--hostOpacity', '1');
   }
 
-  private attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (name === 'multiselect') {
-      this.onMultiselectChanged(oldValue, newValue);
-    }
+  get multiselect() {
+    return this.#multiselect;
   }
 
-  get isMultiSelection() {
-    return this.multiselect;
+  set multiselect(value: boolean) {
+    this.#multiselect = value;
   }
 
-  set isMultiSelection(value: boolean) {
-    this.setAttribute('multiselect', `${value}`);
+  get items() {
+    return this.#items;
+  }
+
+  set items(value: ThumbnailItem[]) {
+    this.#items = value;
   }
 
   private onMouseWheel(e: WheelEvent) {
@@ -79,18 +79,6 @@ export class ThumbnailBar extends BaseElement {
     }
   }
 
-  private onMultiselectChanged(oldValue: string, newValue: string) {
-    this.multiselect = newValue.toLowerCase() === 'true';
-
-    if (!this.multiselect) {
-      const allSelections = Array.from(this.shadowRoot.querySelectorAll(`.${SELECTED_CLASS}`));
-      const lastItem = allSelections.pop();
-
-      allSelections.forEach(el => el.classList.remove(SELECTED_CLASS));
-
-      this.scrollToItem(lastItem);
-    }
-  }
 
   /**
    * Get the given element or item index
@@ -115,7 +103,7 @@ export class ThumbnailBar extends BaseElement {
     const el = this.getItem(index);
     if (!el) return;
 
-    if (!this.multiselect) {
+    if (!this.#multiselect) {
       const allSelections = this.shadowRoot.querySelectorAll(`.${SELECTED_CLASS}`);
       allSelections.forEach(item => item.classList.remove(SELECTED_CLASS));
     }

@@ -1,0 +1,6 @@
+
+export default interface ThumbnailItem {
+  name: string;
+  src: string;
+  isSelected: boolean;
+}

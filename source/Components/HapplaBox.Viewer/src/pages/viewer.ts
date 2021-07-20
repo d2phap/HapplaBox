@@ -23,6 +23,7 @@ initThumbnailBar();
 const thumbnailBarEl = document.querySelector('thumbnail-bar').shadowRoot.host as ThumbnailBar;
 const myEl = thumbnailBarEl.getItem(55);
 thumbnailBarEl.selectItem(myEl);
+thumbnailBarEl.scrollToItem(myEl);
 
 
 const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {
