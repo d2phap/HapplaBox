@@ -3,26 +3,19 @@
 @import "../../themes/base/styles/mixins.scss";
 @import "../../themes/base/styles/scrollbar.scss";
 
-#thumbbar {
+:host {
+  --hostOpacity: 0;
+  --hostTransitionProp: opacity;
+  --hostTransitionTime: 1000ms;
+
   @include panel(99);
   bottom: 15px;
   left: 50%;
   padding: 0 5px;
   max-width: 90vw;
   transform: translate(-50%, 0);
-
-  // --opacity: 0;
-  // --top: 20px;
-
-  // transition: all ease 1000ms;
-  // opacity: var(--opacity);
-  // transform: translate(-50%, var(--top));
-
-  // &:hover {
-  //   --opacity: 1;
-  //   --top: 0px;
-  //   transition: all ease 500ms;
-  // }
+  transition: var(--hostTransitionProp) ease var(--hostTransitionTime);
+  opacity: var(--hostOpacity);
 }
 
 
@@ -105,7 +98,7 @@
       }
     }
 
-    &.active {
+    &.selected {
       background-color: RGBA(getVar(colorBg) / 0.7);
       box-shadow: inset 0 0 0 2px RGBA(getVar(colorAccent));
 

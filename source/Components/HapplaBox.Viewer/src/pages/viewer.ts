@@ -1,4 +1,5 @@
 
+import { initThumbnailBar, ThumbnailBar } from '@/components/thumbnail-bar';
 import {
   Board,
   InterpolationMode,
@@ -6,11 +7,6 @@ import {
   ZoomEventFunction,
 } from '@d2phap/happla';
 
-import '@/components/thumbnail-bar';
-
-customElements.whenDefined('floating-particles').then(() => {
-  console.log('"floating-particles" is defined.');
-});
 
 const elBoard = document.getElementById('board');
 const elWrapper = document.getElementById('wrapper');
@@ -22,6 +18,11 @@ const elX = document.getElementById('elX');
 const elY = document.getElementById('elY');
 const elWidth = document.getElementById('elWidth');
 const elHeight = document.getElementById('elHeight');
+
+initThumbnailBar();
+const thumbnailBarEl = document.querySelector('thumbnail-bar').shadowRoot.host as ThumbnailBar;
+const myEl = thumbnailBarEl.getItem(55);
+thumbnailBarEl.selectItem(myEl);
 
 
 const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {
