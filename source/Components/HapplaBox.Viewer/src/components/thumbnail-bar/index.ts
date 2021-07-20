@@ -2,7 +2,9 @@
 import BaseElement from '@/components/BaseElement';
 import styles from '@/components/thumbnail-bar/styles.inline.scss';
 import template from '@/components/thumbnail-bar/template.html';
+import thumbnailItemTemplate from '@/components/thumbnail-bar/thumbnail-item.html';
 import ThumbnailItem from '@/components/thumbnail-bar/thumbnailItem';
+import { compileTemplate } from '@/utils';
 
 const SELECTED_CLASS = 'selected';
 
@@ -14,7 +16,13 @@ styleEl.textContent = styles;
 
 export class ThumbnailBar extends BaseElement {
   #multiselect = false;
-  #items: ThumbnailItem[] = [];
+  #items: ThumbnailItem[] = [
+    {
+      name: 'xxx',
+      src: 'https://picsum.photos/seed/xxx1/300/200',
+      tooltip: 'XXX 1',
+    },
+  ];
 
   constructor() {
     super();
@@ -33,11 +41,14 @@ export class ThumbnailBar extends BaseElement {
     this.selectItem = this.selectItem.bind(this);
     this.scrollToItem = this.scrollToItem.bind(this);
     this.scrollToSelectedItem = this.scrollToSelectedItem.bind(this);
+    this.renderItems = this.renderItems.bind(this);
 
     // register events
     const listEl = this.shadowRoot.querySelector('.thumbnail-list');
     listEl.addEventListener('wheel', this.onMouseWheel, false);
     listEl.addEventListener('keydown', this.onKeyDown, false);
+
+    this.renderItems(this.#items);
   }
 
 
@@ -57,9 +68,6 @@ export class ThumbnailBar extends BaseElement {
     return this.#items;
   }
 
-  set items(value: ThumbnailItem[]) {
-    this.#items = value;
-  }
 
   private onMouseWheel(e: WheelEvent) {
     // direction is vertical (mouse wheel)
@@ -81,12 +89,37 @@ export class ThumbnailBar extends BaseElement {
 
 
   /**
+   * Insert and render thumbnail items
+   * @param itemsToInsert Items to insert to the list
+   * @param pos Position to insert
+   */
+  public renderItems(itemsToInsert: ThumbnailItem[], pos: number = 0) {
+    let html = '';
+
+    itemsToInsert.forEach(data => {
+      html += compileTemplate(thumbnailItemTemplate, data);
+    });
+
+    this.#items.push(...itemsToInsert);
+
+    const listEl = this.shadowRoot.querySelector('.thumbnail-list');
+    if (listEl.childElementCount > 0) {
+      const posEl = listEl.children.item(pos);
+      posEl?.insertAdjacentHTML('afterend', html);
+    }
+    else {
+      listEl.insertAdjacentHTML('beforeend', html);
+    }
+  }
+
+
+  /**
    * Get the given element or item index
    * @returns Element | null
    */
   public getItem(value: Element | number) {
     if (Number.isSafeInteger(value)) {
-      return this.shadowRoot.querySelector(`.thumbnail-list > li:nth-child(${value})`);
+      return this.shadowRoot.querySelector(`.thumbnail-list > li:nth-child(${value as number + 1})`);
     }
 
     if (typeof value === 'object') {
