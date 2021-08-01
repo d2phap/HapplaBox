@@ -6,7 +6,6 @@ import { compileTemplate } from '@/utils';
 
 export interface VirtualListConfig {
   isHorizontal?: boolean;
-  itemSize: number;
   totalItems: number;
 }
 
@@ -20,17 +19,21 @@ export class VirtualList extends BaseElement {
   #lastRepaintY: number = undefined;
   #maxBuffer = 0;
 
-  // Cache 4 times the number of items that fit in the container viewport
   #cachedItemsLength = 0;
   #containerEl: HTMLElement;
   #scrollerEl: HTMLElement;
 
-  #itemSize = 0;
   #totalHeight = 0;
   #totalRows = 0;
 
+  get itemSize() {
+    const rootStyle = getComputedStyle(document.body);
+
+    return parseInt(rootStyle.getPropertyValue('--thumbnailSize').trim(), 10);
+  }
+
   get itemRenderedSize() {
-    return this.#itemSize + 14;
+    return this.itemSize + 11;
   }
 
   constructor() {
@@ -64,8 +67,6 @@ export class VirtualList extends BaseElement {
 
   load(config: VirtualListConfig) {
     this.#isHorizontal = config.isHorizontal || false;
-    this.#itemSize = config.itemSize;
-
     this.#totalRows = config.totalItems;
     this.#totalHeight = this.itemRenderedSize * this.#totalRows;
 
@@ -80,20 +81,6 @@ export class VirtualList extends BaseElement {
     this.setScrollerSize(this.#totalHeight);
     this.renderChunk(0, this.#cachedItemsLength / 2);
   }
-
-  // updateDirection() {
-  //   this.#screenItemsLength = Math.ceil(this.#isHorizontal
-  // ? config.w : config.h / this.#itemSize);
-
-  //   if (this.#isHorizontal) {
-  //     this.#screenItemsLength = Math.ceil(this.#isHorizontal
-  // ? config.w : config.h / this.#itemSize);
-  //     this.#containerEl.classList.add('direction--horizontal');
-  //   }
-  //   else {
-  //     this.#containerEl.classList.remove('direction--horizontal');
-  //   }
-  // }
 
   createContainer() {
     const el = document.createElement('div');
