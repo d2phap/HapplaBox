@@ -1,5 +1,6 @@
 
-import { initThumbnailBar, ThumbnailBar } from '@/components/thumbnail-bar';
+// import { initThumbnailBar, ThumbnailBar } from '@/components/thumbnail-bar';
+import { initVirtualList, VirtualList } from '@/components/virtual-list';
 import {
   Board,
   InterpolationMode,
@@ -19,20 +20,36 @@ const elY = document.getElementById('elY');
 const elWidth = document.getElementById('elWidth');
 const elHeight = document.getElementById('elHeight');
 
-initThumbnailBar();
-const thumbnailBarEl = document.querySelector('thumbnail-bar').shadowRoot.host as ThumbnailBar;
-const items = [];
-for (let index = 0; index < 1000; index++) {
-  items.push({
-    name: `Pic${index + 1}`,
-    src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
-    tooltip: `Photo ${index + 1}`,
-  });
-}
-thumbnailBarEl.renderItems(items, 0);
-const myEl = thumbnailBarEl.getItem(500);
-thumbnailBarEl.selectItem(myEl);
-thumbnailBarEl.scrollToItem(myEl);
+// initThumbnailBar();
+// const thumbnailBarEl = document.querySelector('thumbnail-bar').shadowRoot.host as ThumbnailBar;
+// const items = [];
+// for (let index = 0; index < 1000; index++) {
+//   items.push({
+//     name: `Pic${index + 1}`,
+//     src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
+//     tooltip: `Photo ${index + 1}`,
+//   });
+// }
+// thumbnailBarEl.renderItems(items, 0);
+// const myEl = thumbnailBarEl.getItem(500);
+// thumbnailBarEl.selectItem(myEl);
+// thumbnailBarEl.scrollToItem(myEl);
+
+
+initVirtualList();
+const virtualListEl = document.querySelector('virtual-list').shadowRoot.host as unknown as VirtualList;
+virtualListEl.load({
+  w: 300,
+  h: 300,
+  itemHeight: 20,
+  totalRows: 100,
+  isHorizontal: true,
+  generatorFn: (rowIndex: number) => {
+    const el = document.createElement('div');
+    el.innerHTML = `Row ${rowIndex}`;
+    return el;
+  },
+});
 
 
 const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {
