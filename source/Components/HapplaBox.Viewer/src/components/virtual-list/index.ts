@@ -44,11 +44,15 @@ export class VirtualList extends BaseElement {
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(styleEl);
 
+    // bind events
+    this.onScroll = this.onScroll.bind(this);
+    this.onMouseWheel = this.onMouseWheel.bind(this);
+
+    // bind methods
     this.renderChunk = this.renderChunk.bind(this);
     this.createContainer = this.createContainer.bind(this);
     this.createScroller = this.createScroller.bind(this);
     this.setScrollerSize = this.setScrollerSize.bind(this);
-    this.onScroll = this.onScroll.bind(this);
     this.load = this.load.bind(this);
 
     this.#scrollerEl = this.createScroller();
@@ -56,6 +60,7 @@ export class VirtualList extends BaseElement {
     this.shadowRoot.appendChild(this.#containerEl);
 
     this.#containerEl.addEventListener('scroll', this.onScroll);
+    this.#containerEl.addEventListener('wheel', this.onMouseWheel, false);
   }
 
   get container() {
@@ -165,6 +170,17 @@ export class VirtualList extends BaseElement {
     if (!this.#lastRepaintY || Math.abs(scrollPos - this.#lastRepaintY) > this.#maxBuffer) {
       this.renderChunk(first, this.#cachedItemsLength);
       this.#lastRepaintY = scrollPos;
+    }
+  }
+
+  private onMouseWheel(e: WheelEvent) {
+    // direction is vertical (mouse wheel)
+    if (e.deltaX === 0) {
+      e.preventDefault();
+
+      // enable horizontal scrolling on mouse wheel
+      // @ts-ignore
+      e.currentTarget.scrollLeft += e.deltaY;
     }
   }
 }
