@@ -12,4 +12,12 @@ export const compileTemplate = (template: string, o: any): string => {
   return handler(o);
 };
 
-export default { compileTemplate };
+
+/**
+ * Pause and return the given data
+ * @param duration Duration in millisecond
+ * @param data Data to return after resuming
+ */
+export const pause = <T>(duration: number, data?: T) => new Promise((resolve) => {
+  setTimeout(() => resolve(data), duration);
+}) as Promise<T>;

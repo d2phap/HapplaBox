@@ -4,8 +4,22 @@
 
 :host {
   position: absolute;
-  width: 30vw;
-  height: 50vh;
+  width: 100vw;
+  height: auto;
+
+  --hostOpacity: 0;
+  --hostTransitionProp: opacity;
+  --hostTransitionTime: 1000ms;
+
+  @include panel(99);
+  bottom: 15px;
+  left: 50%;
+  padding: 0 5px;
+  max-width: 90vw;
+
+  transform: translate(-50%, 0);
+  transition: var(--hostTransitionProp) ease var(--hostTransitionTime);
+  // opacity: var(--hostOpacity);
 }
 
 .virtual-scroller {
@@ -14,22 +28,30 @@
   pointer-events: none;
 }
 
-.virtual-row {
-  width: 100%;
+.virtual-item {
   position: absolute;
+
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  padding: 5px;
+  border-radius: getVar(borderRadius);
+  cursor: pointer;
+  transition: all 200ms ease;
+
+  background-color: rgba(#000, 0.1);
 }
 
 .virtual-container {
   position: relative;
+  padding: 5px 0;
   width: 100%;
-  height: 100%;
+  height: calc(var(--thumbnailSize) * 1px + 12px);
   overflow-y: auto;
-  background-color: rgba(#fff, 0.7);
 
   &.direction--horizontal {
-    .virtual-row {
-      width: auto;
-      height: 100%;
+    .virtual-item {
+      width: calc(var(--thumbnailSize) * 1px);
+      height: calc(var(--thumbnailSize) * 1px);
     }
   }
 }

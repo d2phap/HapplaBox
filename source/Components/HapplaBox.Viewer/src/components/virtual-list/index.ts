@@ -1,11 +1,10 @@
 
 import BaseElement from '@/components/BaseElement';
 import styles from '@/components/virtual-list/styles.inline.scss';
+import { pause } from '@/utils';
 
 export interface VirtualListConfig {
-  w: number;
-  h: number;
-  isHorizontal: boolean;
+  isHorizontal?: boolean;
   itemHeight: number;
   totalRows: number;
   generatorFn: (rowIndex: number) => HTMLElement;
@@ -44,13 +43,24 @@ export class VirtualList extends BaseElement {
     this.renderChunk = this.renderChunk.bind(this);
     this.createContainer = this.createContainer.bind(this);
     this.createScroller = this.createScroller.bind(this);
+    this.setScrollerSize = this.setScrollerSize.bind(this);
     this.onScroll = this.onScroll.bind(this);
     this.load = this.load.bind(this);
+
+    this.#scrollerEl = this.createScroller();
+    this.#containerEl = this.createContainer();
+    this.shadowRoot.appendChild(this.#containerEl);
+
+    this.#containerEl.addEventListener('scroll', this.onScroll);
   }
 
   get container() {
     return this.#containerEl;
   }
+
+  // private connectedCallback() {
+  //   this.style.setProperty('--hostOpacity', '1');
+  // }
 
   load(config: VirtualListConfig) {
     this.#isHorizontal = config.isHorizontal || false;
@@ -58,22 +68,67 @@ export class VirtualList extends BaseElement {
 
     this.#generatorFn = config.generatorFn;
     this.#totalRows = config.totalRows;
-
     this.#totalHeight = this.#itemHeight * this.#totalRows;
-    this.#screenItemsLength = Math.ceil(this.#isHorizontal ? config.w : config.h / this.#itemHeight);
+
+    this.#screenItemsLength = Math.ceil(
+      this.#isHorizontal
+        ? this.#containerEl.clientWidth
+        : this.#containerEl.clientHeight / this.#itemHeight,
+    );
     this.#cachedItemsLength = this.#screenItemsLength * 3;
     this.#maxBuffer = this.#screenItemsLength * this.#itemHeight;
 
-    this.#scrollerEl = this.createScroller(this.#totalHeight.toString());
-    this.#containerEl = this.createContainer();
-    this.#containerEl.addEventListener('scroll', this.onScroll);
-
-    this.renderChunk(this.#containerEl, 0, this.#cachedItemsLength / 2);
-
-    this.shadowRoot.appendChild(this.#containerEl);
+    this.setScrollerSize(this.#totalHeight);
+    this.renderChunk(0, this.#cachedItemsLength / 2);
   }
 
-  renderChunk(node: Element, fromPos: number, howMany: number) {
+  // updateDirection() {
+  //   this.#screenItemsLength = Math.ceil(this.#isHorizontal
+  // ? config.w : config.h / this.#itemHeight);
+
+  //   if (this.#isHorizontal) {
+  //     this.#screenItemsLength = Math.ceil(this.#isHorizontal
+  // ? config.w : config.h / this.#itemHeight);
+  //     this.#containerEl.classList.add('direction--horizontal');
+  //   }
+  //   else {
+  //     this.#containerEl.classList.remove('direction--horizontal');
+  //   }
+  // }
+
+  createContainer() {
+    const el = document.createElement('div');
+    el.classList.add('virtual-container');
+
+    return el;
+  }
+
+  createScroller() {
+    const el = document.createElement('div');
+    el.classList.add('virtual-scroller');
+
+    el.style.top = '0';
+    el.style.left = '0';
+
+    return el;
+  }
+
+  setScrollerSize(size: number) {
+    if (!this.#scrollerEl) {
+      return;
+    }
+
+    if (this.#isHorizontal) {
+      this.#scrollerEl.style.width = `${size}px`;
+      this.#scrollerEl.style.height = '1px';
+    }
+    else {
+      this.#scrollerEl.style.width = '1px';
+      this.#scrollerEl.style.height = `${size}px`;
+    }
+  }
+
+  renderChunk(fromPos: number, howMany: number) {
     const fragment = document.createDocumentFragment();
     fragment.appendChild(this.#scrollerEl);
 
@@ -84,51 +139,26 @@ export class VirtualList extends BaseElement {
 
     for (let i = fromPos; i < finalItem; i++) {
       const item = this.#generatorFn(i);
-      item.classList.add('virtual-row');
+      item.classList.add('virtual-item');
+
+      const size = this.#itemHeight;
+
+      item.style.width = `${size}px`;
+      item.style.height = `${size}px`;
 
       if (this.#isHorizontal) {
-        item.style.left = `${i * this.#itemHeight}px`;
+        item.style.left = `${i * (size + 11)}px`;
       }
       else {
-        item.style.top = `${i * this.#itemHeight}px`;
+        item.style.top = `${i * (size + 11)}px`;
       }
 
       fragment.appendChild(item);
     }
 
     // eslint-disable-next-line no-param-reassign
-    node.innerHTML = '';
-    node.appendChild(fragment);
-  }
-
-  createContainer() {
-    const el = document.createElement('div');
-    el.classList.add('virtual-container');
-
-    if (this.#isHorizontal) {
-      el.classList.add('direction--horizontal');
-    }
-
-    return el;
-  }
-
-  createScroller(height: string) {
-    const el = document.createElement('div');
-    el.classList.add('virtual-scroller');
-
-    el.style.top = '0';
-    el.style.left = '0';
-
-    if (this.#isHorizontal) {
-      el.style.width = `${height}px`;
-      el.style.height = '1px';
-    }
-    else {
-      el.style.width = '1px';
-      el.style.height = `${height}px`;
-    }
-
-    return el;
+    this.#containerEl.innerHTML = '';
+    this.#containerEl.appendChild(fragment);
   }
 
   onScroll(e: Event) {
@@ -138,7 +168,7 @@ export class VirtualList extends BaseElement {
     first = first < 0 ? 0 : first;
 
     if (!this.#lastRepaintY || Math.abs(scrollTop - this.#lastRepaintY) > this.#maxBuffer) {
-      this.renderChunk(this.#containerEl, first, this.#cachedItemsLength);
+      this.renderChunk(first, this.#cachedItemsLength);
       this.#lastRepaintY = scrollTop;
     }
 

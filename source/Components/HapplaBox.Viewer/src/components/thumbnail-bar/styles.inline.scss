@@ -42,8 +42,8 @@
     transition: all 200ms ease;
 
     .preview {
-      height: var(--thumbnailSize);
-      width: var(--thumbnailSize);
+      height: var(--thumbnailSize) "px";
+      width: var(--thumbnailSize) "px";
       border-radius: getVar(borderRadius);
       overflow: hidden;
       transition: all 200ms ease;

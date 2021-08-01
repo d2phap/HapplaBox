@@ -35,14 +35,13 @@ const elHeight = document.getElementById('elHeight');
 // thumbnailBarEl.selectItem(myEl);
 // thumbnailBarEl.scrollToItem(myEl);
 
+const rootStyle = getComputedStyle(document.body);
 
 initVirtualList();
 const virtualListEl = document.querySelector('virtual-list').shadowRoot.host as unknown as VirtualList;
 virtualListEl.load({
-  w: 300,
-  h: 300,
-  itemHeight: 20,
-  totalRows: 100,
+  itemHeight: parseInt(rootStyle.getPropertyValue('--thumbnailSize').trim(), 10),
+  totalRows: 4,
   isHorizontal: true,
   generatorFn: (rowIndex: number) => {
     const el = document.createElement('div');
