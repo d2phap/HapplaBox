@@ -1,0 +1,37 @@
+@import "../../themes/base/styles/scssVars";
+@import "../../themes/base/styles/mixins.scss";
+@import "../../themes/base/styles/scrollbar.scss";
+
+:host {
+  position: absolute;
+  width: 30vw;
+  height: 50vh;
+}
+
+.virtual-scroller {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.virtual-row {
+  width: 100%;
+  position: absolute;
+}
+
+.virtual-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background-color: rgba(#fff, 0.7);
+
+  &.direction--horizontal {
+    .virtual-row {
+      width: auto;
+      height: 100%;
+    }
+  }
+}
+
+
