@@ -9,6 +9,7 @@ export interface VirtualListConfig {
   totalItems: number;
 }
 
+const SELECTED_CLASS = 'selected';
 
 const styleEl = document.createElement('style');
 styleEl.textContent = styles;
@@ -82,14 +83,14 @@ export class VirtualList extends BaseElement {
     this.renderChunk(0, this.#cachedItemsLength / 2);
   }
 
-  createContainer() {
+  private createContainer() {
     const el = document.createElement('div');
     el.classList.add('virtual-container');
 
     return el;
   }
 
-  createScroller() {
+  private createScroller() {
     const el = document.createElement('div');
     el.classList.add('virtual-scroller');
 
@@ -99,7 +100,7 @@ export class VirtualList extends BaseElement {
     return el;
   }
 
-  setScrollerSize(size: number) {
+  private setScrollerSize(size: number) {
     if (!this.#scrollerEl) {
       return;
     }
@@ -114,7 +115,7 @@ export class VirtualList extends BaseElement {
     }
   }
 
-  renderChunk(fromPos: number, howMany: number) {
+  private renderChunk(fromPos: number, howMany: number) {
     const fragment = document.createDocumentFragment();
     fragment.appendChild(this.#scrollerEl);
 
@@ -153,7 +154,7 @@ export class VirtualList extends BaseElement {
     this.#containerEl.appendChild(fragment);
   }
 
-  onScroll(e: Event) {
+  private onScroll(e: Event) {
     e.preventDefault();
     const el = e.target as HTMLElement;
 
