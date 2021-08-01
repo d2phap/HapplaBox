@@ -3,10 +3,6 @@
 @import "../../themes/base/styles/scrollbar.scss";
 
 :host {
-  position: absolute;
-  width: 100vw;
-  height: auto;
-
   --hostOpacity: 0;
   --hostTransitionProp: opacity;
   --hostTransitionTime: 1000ms;
@@ -16,10 +12,12 @@
   left: 50%;
   padding: 0 5px;
   max-width: 90vw;
+  width: 100vw;
+  height: auto;
 
   transform: translate(-50%, 0);
   transition: var(--hostTransitionProp) ease var(--hostTransitionTime);
-  // opacity: var(--hostOpacity);
+  opacity: var(--hostOpacity);
 }
 
 .virtual-scroller {
@@ -30,7 +28,7 @@
 
 .virtual-item {
   position: absolute;
-
+  user-select: none;
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
   padding: 5px;
@@ -38,7 +36,70 @@
   cursor: pointer;
   transition: all 200ms ease;
 
-  background-color: rgba(#000, 0.1);
+  .preview {
+    height: var(--thumbnailSize) "px";
+    width: var(--thumbnailSize) "px";
+    border-radius: getVar(borderRadius);
+    overflow: hidden;
+    transition: all 200ms ease;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      -webkit-user-drag: none;
+    }
+  }
+
+  .info {
+    color: getVar(colorText);
+    text-align: center;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-top: 2px;
+
+    display: none;
+  }
+
+  &:focus-visible,
+  &:hover {
+    background-color: RGBA(getVar(colorBg) / 0.5);
+    box-shadow: inset 0 0 0 1px RGBA(getVar(colorBorder));
+
+    .preview {
+      transform: scale(0.95) translateY(-3px);
+      box-shadow: 0 5px 20px -10px RGBA(getVar(colorText) / 0.5);
+    }
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--focusShadow);
+  }
+
+  &:active {
+    transition: all 80ms ease;
+    background-color: RGBA(getVar(colorBg) / 0.7);
+
+    .preview {
+      transition: all 80ms ease;
+      transform: scale(0.95) translateY(0);
+    }
+  }
+
+  &.selected {
+    background-color: RGBA(getVar(colorBg) / 0.7);
+    box-shadow: inset 0 0 0 2px RGBA(getVar(colorAccent));
+
+    &:focus-visible {
+      box-shadow: var(--focusShadow), inset 0 0 0 2px RGBA(getVar(colorAccent));
+    }
+  }
 }
 
 .virtual-container {
@@ -55,5 +116,3 @@
     }
   }
 }
-
-

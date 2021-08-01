@@ -1,13 +1,14 @@
 
 import BaseElement from '@/components/BaseElement';
 import styles from '@/components/virtual-list/styles.inline.scss';
-import { pause } from '@/utils';
+import thumbnailItemTemplate from '@/components/virtual-list/thumbnail-item.html';
+import ThumbnailItem from '@/components/virtual-list/thumbnailItem';
+import { compileTemplate } from '@/utils';
 
 export interface VirtualListConfig {
   isHorizontal?: boolean;
   itemHeight: number;
   totalRows: number;
-  generatorFn: (rowIndex: number) => HTMLElement;
 }
 
 // const rootEl = document.createElement('template');
@@ -29,7 +30,6 @@ export class VirtualList extends BaseElement {
 
   #itemHeight = 0;
   #totalHeight = 0;
-  #generatorFn: (rowIndex: number) => HTMLElement;
   #totalRows = 0;
 
   constructor() {
@@ -58,15 +58,14 @@ export class VirtualList extends BaseElement {
     return this.#containerEl;
   }
 
-  // private connectedCallback() {
-  //   this.style.setProperty('--hostOpacity', '1');
-  // }
+  private connectedCallback() {
+    this.style.setProperty('--hostOpacity', '1');
+  }
 
   load(config: VirtualListConfig) {
     this.#isHorizontal = config.isHorizontal || false;
     this.#itemHeight = config.itemHeight;
 
-    this.#generatorFn = config.generatorFn;
     this.#totalRows = config.totalRows;
     this.#totalHeight = this.#itemHeight * this.#totalRows;
 
@@ -138,22 +137,28 @@ export class VirtualList extends BaseElement {
     }
 
     for (let i = fromPos; i < finalItem; i++) {
-      const item = this.#generatorFn(i);
-      item.classList.add('virtual-item');
-
       const size = this.#itemHeight;
-
-      item.style.width = `${size}px`;
-      item.style.height = `${size}px`;
+      let left = '';
+      let top = '';
 
       if (this.#isHorizontal) {
-        item.style.left = `${i * (size + 11)}px`;
+        left = `${i * (size + 11)}`;
       }
       else {
-        item.style.top = `${i * (size + 11)}px`;
+        top = `${i * (size + 11)}`;
       }
 
-      fragment.appendChild(item);
+      const itemHtml = compileTemplate(thumbnailItemTemplate, {
+        size, left, top,
+        src: `https://picsum.photos/seed/pic${i}/300/200`,
+        tooltip: `Pic ${i + 1}`,
+        name: `Picture ${i + 1}`,
+      });
+
+      const itemEl = document.createElement('template');
+      itemEl.innerHTML = itemHtml;
+
+      fragment.appendChild(itemEl.content.cloneNode(true));
     }
 
     // eslint-disable-next-line no-param-reassign
