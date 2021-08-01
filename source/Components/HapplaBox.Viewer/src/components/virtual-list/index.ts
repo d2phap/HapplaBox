@@ -2,17 +2,14 @@
 import BaseElement from '@/components/BaseElement';
 import styles from '@/components/virtual-list/styles.inline.scss';
 import thumbnailItemTemplate from '@/components/virtual-list/thumbnail-item.html';
-import ThumbnailItem from '@/components/virtual-list/thumbnailItem';
 import { compileTemplate } from '@/utils';
 
 export interface VirtualListConfig {
   isHorizontal?: boolean;
-  itemHeight: number;
-  totalRows: number;
+  itemSize: number;
+  totalItems: number;
 }
 
-// const rootEl = document.createElement('template');
-// rootEl.innerHTML = template;
 
 const styleEl = document.createElement('style');
 styleEl.textContent = styles;
@@ -28,9 +25,13 @@ export class VirtualList extends BaseElement {
   #containerEl: HTMLElement;
   #scrollerEl: HTMLElement;
 
-  #itemHeight = 0;
+  #itemSize = 0;
   #totalHeight = 0;
   #totalRows = 0;
+
+  get itemRenderedSize() {
+    return this.#itemSize + 14;
+  }
 
   constructor() {
     super();
@@ -38,7 +39,6 @@ export class VirtualList extends BaseElement {
     // initialize component
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(styleEl);
-    // this.shadowRoot.appendChild(rootEl.content.cloneNode(true));
 
     this.renderChunk = this.renderChunk.bind(this);
     this.createContainer = this.createContainer.bind(this);
@@ -64,18 +64,18 @@ export class VirtualList extends BaseElement {
 
   load(config: VirtualListConfig) {
     this.#isHorizontal = config.isHorizontal || false;
-    this.#itemHeight = config.itemHeight;
+    this.#itemSize = config.itemSize;
 
-    this.#totalRows = config.totalRows;
-    this.#totalHeight = this.#itemHeight * this.#totalRows;
+    this.#totalRows = config.totalItems;
+    this.#totalHeight = this.itemRenderedSize * this.#totalRows;
 
     this.#screenItemsLength = Math.ceil(
       this.#isHorizontal
-        ? this.#containerEl.clientWidth
-        : this.#containerEl.clientHeight / this.#itemHeight,
+        ? this.#containerEl.clientWidth / this.itemRenderedSize
+        : this.#containerEl.clientHeight / this.itemRenderedSize,
     );
     this.#cachedItemsLength = this.#screenItemsLength * 3;
-    this.#maxBuffer = this.#screenItemsLength * this.#itemHeight;
+    this.#maxBuffer = this.#screenItemsLength * this.itemRenderedSize;
 
     this.setScrollerSize(this.#totalHeight);
     this.renderChunk(0, this.#cachedItemsLength / 2);
@@ -83,11 +83,11 @@ export class VirtualList extends BaseElement {
 
   // updateDirection() {
   //   this.#screenItemsLength = Math.ceil(this.#isHorizontal
-  // ? config.w : config.h / this.#itemHeight);
+  // ? config.w : config.h / this.#itemSize);
 
   //   if (this.#isHorizontal) {
   //     this.#screenItemsLength = Math.ceil(this.#isHorizontal
-  // ? config.w : config.h / this.#itemHeight);
+  // ? config.w : config.h / this.#itemSize);
   //     this.#containerEl.classList.add('direction--horizontal');
   //   }
   //   else {
@@ -137,22 +137,22 @@ export class VirtualList extends BaseElement {
     }
 
     for (let i = fromPos; i < finalItem; i++) {
-      const size = this.#itemHeight;
       let left = '';
       let top = '';
 
       if (this.#isHorizontal) {
-        left = `${i * (size + 11)}`;
+        left = `${i * this.itemRenderedSize}`;
       }
       else {
-        top = `${i * (size + 11)}`;
+        top = `${i * this.itemRenderedSize}`;
       }
 
       const itemHtml = compileTemplate(thumbnailItemTemplate, {
-        size, left, top,
+        left,
+        top,
         src: `https://picsum.photos/seed/pic${i}/300/200`,
         tooltip: `Pic ${i + 1}`,
-        name: `Picture ${i + 1}`,
+        name: `P${i + 1}`,
       });
 
       const itemEl = document.createElement('template');
@@ -167,17 +167,17 @@ export class VirtualList extends BaseElement {
   }
 
   onScroll(e: Event) {
-    // @ts-ignore
-    const scrollTop = e.target.scrollTop as number;
-    let first = parseInt(`${scrollTop / this.#itemHeight}`, 10) - this.#screenItemsLength;
+    e.preventDefault();
+    const el = e.target as HTMLElement;
+
+    const scrollPos = this.#isHorizontal ? el.scrollLeft : el.scrollTop;
+    let first = Math.trunc(scrollPos / this.itemRenderedSize - this.#screenItemsLength);
     first = first < 0 ? 0 : first;
 
-    if (!this.#lastRepaintY || Math.abs(scrollTop - this.#lastRepaintY) > this.#maxBuffer) {
+    if (!this.#lastRepaintY || Math.abs(scrollPos - this.#lastRepaintY) > this.#maxBuffer) {
       this.renderChunk(first, this.#cachedItemsLength);
-      this.#lastRepaintY = scrollTop;
+      this.#lastRepaintY = scrollPos;
     }
-
-    e.preventDefault();
   }
 }
 

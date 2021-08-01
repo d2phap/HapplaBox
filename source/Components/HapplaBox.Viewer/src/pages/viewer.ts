@@ -40,14 +40,9 @@ const rootStyle = getComputedStyle(document.body);
 initVirtualList();
 const virtualListEl = document.querySelector('virtual-list').shadowRoot.host as unknown as VirtualList;
 virtualListEl.load({
-  itemHeight: parseInt(rootStyle.getPropertyValue('--thumbnailSize').trim(), 10),
-  totalRows: 4,
+  itemSize: parseInt(rootStyle.getPropertyValue('--thumbnailSize').trim(), 10),
+  totalItems: 1_000,
   isHorizontal: true,
-  generatorFn: (rowIndex: number) => {
-    const el = document.createElement('div');
-    el.innerHTML = `Row ${rowIndex}`;
-    return el;
-  },
 });
 
 

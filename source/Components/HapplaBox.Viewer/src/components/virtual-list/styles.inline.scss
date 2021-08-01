@@ -34,11 +34,11 @@
   padding: 5px;
   border-radius: getVar(borderRadius);
   cursor: pointer;
+  width: calc(var(--thumbnailSize) * 1px);
+  height: calc(var(--thumbnailSize) * 1px);
   transition: all 200ms ease;
 
   .preview {
-    height: var(--thumbnailSize) "px";
-    width: var(--thumbnailSize) "px";
     border-radius: getVar(borderRadius);
     overflow: hidden;
     transition: all 200ms ease;
@@ -108,11 +108,4 @@
   width: 100%;
   height: calc(var(--thumbnailSize) * 1px + 12px);
   overflow-y: auto;
-
-  &.direction--horizontal {
-    .virtual-item {
-      width: calc(var(--thumbnailSize) * 1px);
-      height: calc(var(--thumbnailSize) * 1px);
-    }
-  }
 }
