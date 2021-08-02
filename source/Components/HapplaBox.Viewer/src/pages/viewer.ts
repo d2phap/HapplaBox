@@ -1,5 +1,4 @@
 
-// import { initThumbnailBar, ThumbnailBar } from '@/components/thumbnail-bar';
 import { initVirtualList, VirtualList } from '@/components/virtual-list';
 import {
   Board,

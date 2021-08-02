@@ -129,20 +129,33 @@ export class VirtualList extends BaseElement {
       finalItem = this.#totalRows;
     }
 
-    for (let i = fromPos; i < finalItem; i++) {
-      let left = '';
-      let top = '';
-
+    // for center alignment
+    let firstPadding = 0;
+    if (this.#totalRows < this.#screenItemsLength) {
       if (this.#isHorizontal) {
-        left = `${i * this.itemRenderedSize}`;
+        firstPadding = this.#containerEl.clientWidth / 2 - this.#totalHeight / 2;
       }
       else {
-        top = `${i * this.itemRenderedSize}`;
+        firstPadding = this.#containerEl.clientHeight / 2 - this.#totalHeight / 2;
+      }
+    }
+
+    for (let i = fromPos; i < finalItem; i++) {
+      let left = NaN;
+      let top = NaN;
+      let style = '';
+
+      if (this.#isHorizontal) {
+        left = firstPadding + i * this.itemRenderedSize;
+        style = `left: ${left}px`;
+      }
+      else {
+        top = firstPadding + i * this.itemRenderedSize;
+        style = `top: ${top}px`;
       }
 
       const itemHtml = compileTemplate(thumbnailItemTemplate, {
-        left,
-        top,
+        style,
         src: `https://picsum.photos/seed/pic${i}/300/200`,
         tooltip: `Pic ${i + 1}`,
         name: `P${i + 1}`,
