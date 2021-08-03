@@ -24,19 +24,9 @@ export class VirtualList extends BaseElement {
   #cachedItemsLength = 0;
   #containerEl: HTMLElement;
   #scrollerEl: HTMLElement;
-  #totalHeight = 0;
 
   #items: ThumbnailItem[] = [];
 
-  get itemSize() {
-    const rootStyle = getComputedStyle(document.body);
-
-    return parseInt(rootStyle.getPropertyValue('--thumbnailSize').trim(), 10);
-  }
-
-  get itemRenderedSize() {
-    return this.itemSize + 11;
-  }
 
   constructor() {
     super();
@@ -66,6 +56,16 @@ export class VirtualList extends BaseElement {
     this.#containerEl.addEventListener('wheel', this.onMouseWheel, false);
   }
 
+  get itemSize() {
+    const rootStyle = getComputedStyle(document.body);
+
+    return parseInt(rootStyle.getPropertyValue('--thumbnailSize').trim(), 10);
+  }
+
+  get itemRenderedSize() {
+    return this.itemSize + 11;
+  }
+
   get container() {
     return this.#containerEl;
   }
@@ -77,6 +77,11 @@ export class VirtualList extends BaseElement {
 
     return this.#containerEl.clientHeight;
   }
+
+  get scrollingSize() {
+    return this.itemRenderedSize * this.#items.length;
+  }
+
 
   private connectedCallback() {
     this.style.setProperty('--hostOpacity', '1');
@@ -152,7 +157,7 @@ export class VirtualList extends BaseElement {
     // for center alignment
     let firstPadding = 0;
     if (this.#items.length < this.#screenItemsLength) {
-      firstPadding = this.containerSize / 2 - this.#totalHeight / 2;
+      firstPadding = this.containerSize / 2 - this.scrollingSize / 2;
     }
 
     for (let i = fromPos; i < finalItem; i++) {
@@ -188,13 +193,12 @@ export class VirtualList extends BaseElement {
   public load(config: VirtualListConfig) {
     this.#isHorizontal = config.isHorizontal || false;
     this.#items = config.items;
-    this.#totalHeight = this.itemRenderedSize * this.#items.length;
 
     this.#screenItemsLength = Math.ceil(this.containerSize / this.itemRenderedSize);
     this.#cachedItemsLength = this.#screenItemsLength * 3;
     this.#maxBuffer = this.#screenItemsLength * this.itemRenderedSize;
 
-    this.setScrollerSize(this.#totalHeight);
+    this.setScrollerSize(this.scrollingSize);
     this.renderItems(0, this.#cachedItemsLength / 2);
   }
 
