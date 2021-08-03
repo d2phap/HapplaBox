@@ -23,7 +23,6 @@ export class VirtualList extends BaseElement {
   #cachedItemsLength = 0;
   #containerEl: HTMLElement;
   #scrollerEl: HTMLElement;
-
   #totalHeight = 0;
   #totalRows = 0;
 
@@ -49,7 +48,7 @@ export class VirtualList extends BaseElement {
     this.onMouseWheel = this.onMouseWheel.bind(this);
 
     // bind methods
-    this.renderChunk = this.renderChunk.bind(this);
+    this.renderItems = this.renderItems.bind(this);
     this.createContainer = this.createContainer.bind(this);
     this.createScroller = this.createScroller.bind(this);
     this.setScrollerSize = this.setScrollerSize.bind(this);
@@ -67,6 +66,14 @@ export class VirtualList extends BaseElement {
     return this.#containerEl;
   }
 
+  get containerSize() {
+    if (this.#isHorizontal) {
+      return this.#containerEl.clientWidth;
+    }
+
+    return this.#containerEl.clientHeight;
+  }
+
   private connectedCallback() {
     this.style.setProperty('--hostOpacity', '1');
   }
@@ -76,16 +83,12 @@ export class VirtualList extends BaseElement {
     this.#totalRows = config.totalItems;
     this.#totalHeight = this.itemRenderedSize * this.#totalRows;
 
-    this.#screenItemsLength = Math.ceil(
-      this.#isHorizontal
-        ? this.#containerEl.clientWidth / this.itemRenderedSize
-        : this.#containerEl.clientHeight / this.itemRenderedSize,
-    );
+    this.#screenItemsLength = Math.ceil(this.containerSize / this.itemRenderedSize);
     this.#cachedItemsLength = this.#screenItemsLength * 3;
     this.#maxBuffer = this.#screenItemsLength * this.itemRenderedSize;
 
     this.setScrollerSize(this.#totalHeight);
-    this.renderChunk(0, this.#cachedItemsLength / 2);
+    this.renderItems(0, this.#cachedItemsLength / 2);
   }
 
   private createContainer() {
@@ -120,7 +123,7 @@ export class VirtualList extends BaseElement {
     }
   }
 
-  private renderChunk(fromPos: number, howMany: number) {
+  private renderItems(fromPos: number, howMany: number) {
     const fragment = document.createDocumentFragment();
     fragment.appendChild(this.#scrollerEl);
 
@@ -132,30 +135,24 @@ export class VirtualList extends BaseElement {
     // for center alignment
     let firstPadding = 0;
     if (this.#totalRows < this.#screenItemsLength) {
-      if (this.#isHorizontal) {
-        firstPadding = this.#containerEl.clientWidth / 2 - this.#totalHeight / 2;
-      }
-      else {
-        firstPadding = this.#containerEl.clientHeight / 2 - this.#totalHeight / 2;
-      }
+      firstPadding = this.containerSize / 2 - this.#totalHeight / 2;
     }
 
     for (let i = fromPos; i < finalItem; i++) {
-      let left = NaN;
-      let top = NaN;
       let style = '';
 
       if (this.#isHorizontal) {
-        left = firstPadding + i * this.itemRenderedSize;
+        const left = firstPadding + i * this.itemRenderedSize;
         style = `left: ${left}px`;
       }
       else {
-        top = firstPadding + i * this.itemRenderedSize;
+        const top = firstPadding + i * this.itemRenderedSize;
         style = `top: ${top}px`;
       }
 
       const itemHtml = compileTemplate(thumbnailItemTemplate, {
         style,
+        index: i,
         src: `https://picsum.photos/seed/pic${i}/300/200`,
         tooltip: `Pic ${i + 1}`,
         name: `P${i + 1}`,
@@ -172,6 +169,19 @@ export class VirtualList extends BaseElement {
     this.#containerEl.appendChild(fragment);
   }
 
+  public scrollToIndex(index: number) {
+    // get center item position
+    const itemPos = (index * this.itemRenderedSize)
+      - (this.containerSize / 2)
+      - this.itemRenderedSize;
+
+    this.#containerEl.scrollTo({
+      left: this.#isHorizontal ? itemPos : undefined,
+      top: this.#isHorizontal ? undefined : itemPos,
+      behavior: 'smooth',
+    });
+  }
+
   private onScroll(e: Event) {
     e.preventDefault();
     const el = e.target as HTMLElement;
@@ -181,7 +191,7 @@ export class VirtualList extends BaseElement {
     first = first < 0 ? 0 : first;
 
     if (!this.#lastRepaintY || Math.abs(scrollPos - this.#lastRepaintY) > this.#maxBuffer) {
-      this.renderChunk(first, this.#cachedItemsLength);
+      this.renderItems(first, this.#cachedItemsLength);
       this.#lastRepaintY = scrollPos;
     }
   }

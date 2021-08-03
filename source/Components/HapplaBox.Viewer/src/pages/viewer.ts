@@ -38,9 +38,11 @@ const elHeight = document.getElementById('elHeight');
 initVirtualList();
 const virtualListEl = document.querySelector('virtual-list').shadowRoot.host as unknown as VirtualList;
 virtualListEl.load({
-  totalItems: 10_000,
+  totalItems: 100_000,
   isHorizontal: true,
 });
+
+virtualListEl.scrollToIndex(50);
 
 
 const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {
