@@ -39,6 +39,7 @@ export class VirtualList extends BaseElement {
     this.onScroll = this.onScroll.bind(this);
     this.onMouseWheel = this.onMouseWheel.bind(this);
     this.onResize = this.onResize.bind(this);
+    this.onAttrHideLabelChanged = this.onAttrHideLabelChanged.bind(this);
 
     // bind methods
     this.renderItems = this.renderItems.bind(this);
@@ -92,6 +93,19 @@ export class VirtualList extends BaseElement {
     return Math.ceil(this.containerSize / this.itemRenderedSize);
   }
 
+  static get observedAttributes() {
+    return ['hide-label'];
+  }
+
+  private attributeChangedCallback(name: string, oldVal: string, newVal: string) {
+    if (oldVal === newVal) {
+      return;
+    }
+
+    if (name === 'hide-label') {
+      this.onAttrHideLabelChanged(newVal);
+    }
+  }
 
   private connectedCallback() {
     this.style.setProperty('--hostOpacity', '1');
@@ -124,6 +138,15 @@ export class VirtualList extends BaseElement {
     this.#maxBuffer = this.maxItemsOnScreen * this.itemRenderedSize;
 
     this.redrawItems(true);
+  }
+
+  private onAttrHideLabelChanged(val: string) {
+    if (val === 'false') {
+      this.#containerEl.style.setProperty('--infoDisplay', 'block');
+    }
+    else {
+      this.#containerEl.style.setProperty('--infoDisplay', 'none');
+    }
   }
 
 
@@ -160,7 +183,10 @@ export class VirtualList extends BaseElement {
   }
 
   private redrawItems(forced: boolean = false) {
-    const scrollPos = this.#isHorizontal ? this.#containerEl.scrollLeft : this.#containerEl.scrollTop;
+    const scrollPos = this.#isHorizontal
+      ? this.#containerEl.scrollLeft
+      : this.#containerEl.scrollTop;
+
     let first = Math.trunc(scrollPos / this.itemRenderedSize - this.maxItemsOnScreen);
     first = first < 0 ? 0 : first;
 
