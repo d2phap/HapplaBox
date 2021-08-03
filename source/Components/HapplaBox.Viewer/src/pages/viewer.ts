@@ -37,9 +37,18 @@ const elHeight = document.getElementById('elHeight');
 
 initVirtualList();
 const virtualListEl = document.querySelector('virtual-list').shadowRoot.host as unknown as VirtualList;
+const items = [];
+for (let index = 0; index < 100; index++) {
+  items.push({
+    name: `Pic${index + 1}`,
+    src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
+    tooltip: `Photo ${index + 1}`,
+  });
+}
+
 virtualListEl.load({
-  totalItems: 100_000,
   isHorizontal: true,
+  items,
 });
 
 virtualListEl.scrollToIndex(50);

@@ -3,10 +3,11 @@ import BaseElement from '@/components/BaseElement';
 import styles from '@/components/virtual-list/styles.inline.scss';
 import thumbnailItemTemplate from '@/components/virtual-list/thumbnail-item.html';
 import { compileTemplate } from '@/utils';
+import ThumbnailItem from '@/components/virtual-list/thumbnailItem';
 
 export interface VirtualListConfig {
   isHorizontal?: boolean;
-  totalItems: number;
+  items: ThumbnailItem[];
 }
 
 const SELECTED_CLASS = 'selected';
@@ -24,7 +25,8 @@ export class VirtualList extends BaseElement {
   #containerEl: HTMLElement;
   #scrollerEl: HTMLElement;
   #totalHeight = 0;
-  #totalRows = 0;
+
+  #items: ThumbnailItem[] = [];
 
   get itemSize() {
     const rootStyle = getComputedStyle(document.body);
@@ -52,7 +54,9 @@ export class VirtualList extends BaseElement {
     this.createContainer = this.createContainer.bind(this);
     this.createScroller = this.createScroller.bind(this);
     this.setScrollerSize = this.setScrollerSize.bind(this);
+
     this.load = this.load.bind(this);
+    this.scrollToIndex = this.scrollToIndex.bind(this);
 
     this.#scrollerEl = this.createScroller();
     this.#containerEl = this.createContainer();
@@ -78,18 +82,31 @@ export class VirtualList extends BaseElement {
     this.style.setProperty('--hostOpacity', '1');
   }
 
-  load(config: VirtualListConfig) {
-    this.#isHorizontal = config.isHorizontal || false;
-    this.#totalRows = config.totalItems;
-    this.#totalHeight = this.itemRenderedSize * this.#totalRows;
+  private onScroll(e: Event) {
+    e.preventDefault();
+    const el = e.target as HTMLElement;
 
-    this.#screenItemsLength = Math.ceil(this.containerSize / this.itemRenderedSize);
-    this.#cachedItemsLength = this.#screenItemsLength * 3;
-    this.#maxBuffer = this.#screenItemsLength * this.itemRenderedSize;
+    const scrollPos = this.#isHorizontal ? el.scrollLeft : el.scrollTop;
+    let first = Math.trunc(scrollPos / this.itemRenderedSize - this.#screenItemsLength);
+    first = first < 0 ? 0 : first;
 
-    this.setScrollerSize(this.#totalHeight);
-    this.renderItems(0, this.#cachedItemsLength / 2);
+    if (!this.#lastRepaintY || Math.abs(scrollPos - this.#lastRepaintY) > this.#maxBuffer) {
+      this.renderItems(first, this.#cachedItemsLength);
+      this.#lastRepaintY = scrollPos;
+    }
   }
+
+  private onMouseWheel(e: WheelEvent) {
+    // direction is vertical (mouse wheel)
+    if (e.deltaX === 0) {
+      e.preventDefault();
+
+      // enable horizontal scrolling on mouse wheel
+      // @ts-ignore
+      e.currentTarget.scrollLeft += e.deltaY;
+    }
+  }
+
 
   private createContainer() {
     const el = document.createElement('div');
@@ -128,38 +145,33 @@ export class VirtualList extends BaseElement {
     fragment.appendChild(this.#scrollerEl);
 
     let finalItem = fromPos + howMany;
-    if (finalItem > this.#totalRows) {
-      finalItem = this.#totalRows;
+    if (finalItem > this.#items.length) {
+      finalItem = this.#items.length;
     }
 
     // for center alignment
     let firstPadding = 0;
-    if (this.#totalRows < this.#screenItemsLength) {
+    if (this.#items.length < this.#screenItemsLength) {
       firstPadding = this.containerSize / 2 - this.#totalHeight / 2;
     }
 
     for (let i = fromPos; i < finalItem; i++) {
       let style = '';
+      const itemPos = firstPadding + (i * this.itemRenderedSize);
 
       if (this.#isHorizontal) {
-        const left = firstPadding + i * this.itemRenderedSize;
-        style = `left: ${left}px`;
+        style = `left: ${itemPos}px`;
       }
       else {
-        const top = firstPadding + i * this.itemRenderedSize;
-        style = `top: ${top}px`;
+        style = `top: ${itemPos}px`;
       }
 
-      const itemHtml = compileTemplate(thumbnailItemTemplate, {
+      const itemEl = document.createElement('template');
+      itemEl.innerHTML = compileTemplate(thumbnailItemTemplate, {
+        ...this.#items[i],
         style,
         index: i,
-        src: `https://picsum.photos/seed/pic${i}/300/200`,
-        tooltip: `Pic ${i + 1}`,
-        name: `P${i + 1}`,
       });
-
-      const itemEl = document.createElement('template');
-      itemEl.innerHTML = itemHtml;
 
       fragment.appendChild(itemEl.content.cloneNode(true));
     }
@@ -169,6 +181,26 @@ export class VirtualList extends BaseElement {
     this.#containerEl.appendChild(fragment);
   }
 
+
+  /**
+   * Loads items
+   */
+  public load(config: VirtualListConfig) {
+    this.#isHorizontal = config.isHorizontal || false;
+    this.#items = config.items;
+    this.#totalHeight = this.itemRenderedSize * this.#items.length;
+
+    this.#screenItemsLength = Math.ceil(this.containerSize / this.itemRenderedSize);
+    this.#cachedItemsLength = this.#screenItemsLength * 3;
+    this.#maxBuffer = this.#screenItemsLength * this.itemRenderedSize;
+
+    this.setScrollerSize(this.#totalHeight);
+    this.renderItems(0, this.#cachedItemsLength / 2);
+  }
+
+  /**
+   * Scrolls to item by the given index
+   */
   public scrollToIndex(index: number) {
     // get center item position
     const itemPos = (index * this.itemRenderedSize)
@@ -180,31 +212,6 @@ export class VirtualList extends BaseElement {
       top: this.#isHorizontal ? undefined : itemPos,
       behavior: 'smooth',
     });
-  }
-
-  private onScroll(e: Event) {
-    e.preventDefault();
-    const el = e.target as HTMLElement;
-
-    const scrollPos = this.#isHorizontal ? el.scrollLeft : el.scrollTop;
-    let first = Math.trunc(scrollPos / this.itemRenderedSize - this.#screenItemsLength);
-    first = first < 0 ? 0 : first;
-
-    if (!this.#lastRepaintY || Math.abs(scrollPos - this.#lastRepaintY) > this.#maxBuffer) {
-      this.renderItems(first, this.#cachedItemsLength);
-      this.#lastRepaintY = scrollPos;
-    }
-  }
-
-  private onMouseWheel(e: WheelEvent) {
-    // direction is vertical (mouse wheel)
-    if (e.deltaX === 0) {
-      e.preventDefault();
-
-      // enable horizontal scrolling on mouse wheel
-      // @ts-ignore
-      e.currentTarget.scrollLeft += e.deltaY;
-    }
   }
 }
 
