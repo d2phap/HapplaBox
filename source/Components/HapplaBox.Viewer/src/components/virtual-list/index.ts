@@ -26,6 +26,7 @@ export class VirtualList extends BaseElement {
   #resizeObserver: ResizeObserver;
 
   #items: ThumbnailItem[] = [];
+  #selectedItems: number[] = [];
 
 
   constructor() {
@@ -50,6 +51,7 @@ export class VirtualList extends BaseElement {
 
     this.load = this.load.bind(this);
     this.scrollToIndex = this.scrollToIndex.bind(this);
+    this.selectItems = this.selectItems.bind(this);
 
     this.#scrollerEl = this.createScroller();
     this.#containerEl = this.createContainer();
@@ -229,6 +231,7 @@ export class VirtualList extends BaseElement {
         ...this.#items[i],
         style,
         index: i,
+        class: this.#selectedItems.includes(i) ? SELECTED_CLASS : '',
       });
 
       fragment.appendChild(itemEl.content.cloneNode(true));
@@ -268,6 +271,47 @@ export class VirtualList extends BaseElement {
       top: this.#isHorizontal ? undefined : itemPos,
       behavior: 'smooth',
     });
+  }
+
+  /**
+   * Selects items by the given index array
+   * @param indexArr Array of indexes
+   * @param appendSelection
+   * -
+   * - `true` to insert `indexArr` into the current selection list;
+   * - `false` to replace the current selection list by `indexArr`.
+   */
+  public selectItems(indexArr: number[], appendSelection: boolean = false) {
+    // deselect the old items
+    if (this.#selectedItems.length > 0) {
+      const oldSelectionQuery = this.#selectedItems
+        .map(i => `[data-index="${i}"]`)
+        .join(',');
+
+      const els = this.#containerEl.querySelectorAll(oldSelectionQuery);
+      els.forEach(el => el.classList.remove(SELECTED_CLASS));
+    }
+
+    // select the new items
+    if (indexArr.length > 0) {
+      const newSelectionQuery = indexArr
+        .map(i => `[data-index="${i}"]`)
+        .join(',');
+
+      const els = this.#containerEl.querySelectorAll(newSelectionQuery);
+      els.forEach(el => el.classList.add(SELECTED_CLASS));
+    }
+
+    // update selection list
+    if (appendSelection) {
+      this.#selectedItems.push(...indexArr);
+    }
+    else {
+      this.#selectedItems = indexArr;
+    }
+
+    // sort index asc
+    this.#selectedItems.sort((a, b) => a - b);
   }
 }
 

@@ -52,6 +52,7 @@ virtualListEl.load({
 });
 
 virtualListEl.scrollToIndex(50);
+virtualListEl.selectItems([0, 40, 9, 50]);
 
 
 const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {
