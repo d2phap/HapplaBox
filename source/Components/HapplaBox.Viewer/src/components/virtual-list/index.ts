@@ -17,13 +17,13 @@ styleEl.textContent = styles;
 
 export class VirtualList extends BaseElement {
   #isHorizontal = false;
-  #screenItemsLength = 0;
-  #lastRepaintY: number = undefined;
+  #lastRepaintPos: number = undefined;
   #maxBuffer = 0;
 
   #cachedItemsLength = 0;
   #containerEl: HTMLElement;
   #scrollerEl: HTMLElement;
+  #resizeObserver: ResizeObserver;
 
   #items: ThumbnailItem[] = [];
 
@@ -38,12 +38,14 @@ export class VirtualList extends BaseElement {
     // bind events
     this.onScroll = this.onScroll.bind(this);
     this.onMouseWheel = this.onMouseWheel.bind(this);
+    this.onResize = this.onResize.bind(this);
 
     // bind methods
     this.renderItems = this.renderItems.bind(this);
     this.createContainer = this.createContainer.bind(this);
     this.createScroller = this.createScroller.bind(this);
     this.setScrollerSize = this.setScrollerSize.bind(this);
+    this.redrawItems = this.redrawItems.bind(this);
 
     this.load = this.load.bind(this);
     this.scrollToIndex = this.scrollToIndex.bind(this);
@@ -54,6 +56,10 @@ export class VirtualList extends BaseElement {
 
     this.#containerEl.addEventListener('scroll', this.onScroll);
     this.#containerEl.addEventListener('wheel', this.onMouseWheel, false);
+
+    // resize event observer
+    this.#resizeObserver = new ResizeObserver(this.onResize);
+    this.#resizeObserver.observe(this.shadowRoot.host);
   }
 
   get itemSize() {
@@ -82,23 +88,24 @@ export class VirtualList extends BaseElement {
     return this.itemRenderedSize * this.#items.length;
   }
 
+  get maxItemsOnScreen() {
+    return Math.ceil(this.containerSize / this.itemRenderedSize);
+  }
+
 
   private connectedCallback() {
     this.style.setProperty('--hostOpacity', '1');
   }
 
+  private disconnectedCallback() {
+    this.#resizeObserver.disconnect();
+  }
+
+
   private onScroll(e: Event) {
     e.preventDefault();
-    const el = e.target as HTMLElement;
 
-    const scrollPos = this.#isHorizontal ? el.scrollLeft : el.scrollTop;
-    let first = Math.trunc(scrollPos / this.itemRenderedSize - this.#screenItemsLength);
-    first = first < 0 ? 0 : first;
-
-    if (!this.#lastRepaintY || Math.abs(scrollPos - this.#lastRepaintY) > this.#maxBuffer) {
-      this.renderItems(first, this.#cachedItemsLength);
-      this.#lastRepaintY = scrollPos;
-    }
+    this.redrawItems();
   }
 
   private onMouseWheel(e: WheelEvent) {
@@ -110,6 +117,13 @@ export class VirtualList extends BaseElement {
       // @ts-ignore
       e.currentTarget.scrollLeft += e.deltaY;
     }
+  }
+
+  private onResize() {
+    this.#cachedItemsLength = this.maxItemsOnScreen * 3;
+    this.#maxBuffer = this.maxItemsOnScreen * this.itemRenderedSize;
+
+    this.redrawItems(true);
   }
 
 
@@ -145,6 +159,19 @@ export class VirtualList extends BaseElement {
     }
   }
 
+  private redrawItems(forced: boolean = false) {
+    const scrollPos = this.#isHorizontal ? this.#containerEl.scrollLeft : this.#containerEl.scrollTop;
+    let first = Math.trunc(scrollPos / this.itemRenderedSize - this.maxItemsOnScreen);
+    first = first < 0 ? 0 : first;
+
+    const isScrollChanged = Math.abs(scrollPos - this.#lastRepaintPos) > this.#maxBuffer;
+
+    if (forced || !this.#lastRepaintPos || isScrollChanged) {
+      this.renderItems(first, this.#cachedItemsLength);
+      this.#lastRepaintPos = scrollPos;
+    }
+  }
+
   private renderItems(fromPos: number, howMany: number) {
     const fragment = document.createDocumentFragment();
     fragment.appendChild(this.#scrollerEl);
@@ -156,7 +183,7 @@ export class VirtualList extends BaseElement {
 
     // for center alignment
     let firstPadding = 0;
-    if (this.#items.length < this.#screenItemsLength) {
+    if (this.#items.length < this.maxItemsOnScreen) {
       firstPadding = this.containerSize / 2 - this.scrollingSize / 2;
     }
 
@@ -194,9 +221,8 @@ export class VirtualList extends BaseElement {
     this.#isHorizontal = config.isHorizontal || false;
     this.#items = config.items;
 
-    this.#screenItemsLength = Math.ceil(this.containerSize / this.itemRenderedSize);
-    this.#cachedItemsLength = this.#screenItemsLength * 3;
-    this.#maxBuffer = this.#screenItemsLength * this.itemRenderedSize;
+    this.#cachedItemsLength = this.maxItemsOnScreen * 3;
+    this.#maxBuffer = this.maxItemsOnScreen * this.itemRenderedSize;
 
     this.setScrollerSize(this.scrollingSize);
     this.renderItems(0, this.#cachedItemsLength / 2);
