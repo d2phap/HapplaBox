@@ -44,6 +44,7 @@ export class VirtualList extends BaseElement {
     // bind events
     this.onScroll = this.onScroll.bind(this);
     this.onMouseWheel = this.onMouseWheel.bind(this);
+    this.onFocus = this.onFocus.bind(this);
     this.onResize = this.onResize.bind(this);
     this.onAttrHideLabelChanged = this.onAttrHideLabelChanged.bind(this);
     this.onItemClicked = this.onItemClicked.bind(this);
@@ -65,6 +66,7 @@ export class VirtualList extends BaseElement {
 
     this.#containerEl.addEventListener('scroll', this.onScroll);
     this.#containerEl.addEventListener('wheel', this.onMouseWheel, false);
+    this.#containerEl.addEventListener('focus', this.onFocus, false);
 
     // resize event observer
     this.#resizeObserver = new ResizeObserver(this.onResize);
@@ -139,6 +141,14 @@ export class VirtualList extends BaseElement {
       // @ts-ignore
       e.currentTarget.scrollLeft += e.deltaY;
     }
+  }
+
+  private onFocus() {
+    this.shadowRoot.host.classList.add('show-focus-highlight');
+
+    setTimeout(() => {
+      this.shadowRoot.host.classList.remove('show-focus-highlight');
+    }, 1000);
   }
 
   private onItemClicked(e: MouseEvent) {
