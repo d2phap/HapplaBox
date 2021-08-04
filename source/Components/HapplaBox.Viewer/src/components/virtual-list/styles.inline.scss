@@ -4,10 +4,6 @@
 @import "../../themes/base/styles/scrollbar.scss";
 
 :host {
-  --hostOpacity: 0;
-  --hostTransitionProp: opacity;
-  --hostTransitionTime: 1000ms;
-
   @include panel(99);
   bottom: 15px;
   left: 50%;
@@ -17,8 +13,7 @@
   height: auto;
 
   transform: translate(-50%, 0);
-  transition: var(--hostTransitionProp) ease var(--hostTransitionTime);
-  opacity: var(--hostOpacity);
+  transition: box-shadow ease 200ms;
 }
 
 
@@ -78,7 +73,10 @@
     }
   }
 
-  &:focus-visible {
+  @include removeFocusRing();
+
+  &:focus-visible,
+  &.is--focused {
     background-color: RGBA(getVar(colorBg) / 0.5);
     box-shadow: var(--focusShadow);
   }
@@ -93,11 +91,12 @@
     }
   }
 
-  &.selected {
+  &.is--selected {
     background-color: RGBA(getVar(colorBg) / 0.7);
     box-shadow: inset 0 0 0 2px RGBA(getVar(colorAccent));
 
-    &:focus-visible {
+    &:focus-visible,
+    &.is--focused {
       box-shadow: var(--focusShadow), inset 0 0 0 2px RGBA(getVar(colorAccent));
     }
   }
@@ -111,8 +110,4 @@
   overflow-y: auto;
 
   @include removeFocusRing();
-
-  &:focus-visible {
-    box-shadow: var(--focusShadow);
-  }
 }

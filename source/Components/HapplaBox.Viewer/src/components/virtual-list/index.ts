@@ -10,7 +10,8 @@ export interface VirtualListConfig {
   items: ThumbnailItem[];
 }
 
-const SELECTED_CLASS = 'selected';
+const CLASS_SELECTED = 'is--selected';
+const CLASS_FOCUSED = 'is--focused';
 
 const styleEl = document.createElement('style');
 styleEl.textContent = styles;
@@ -41,6 +42,7 @@ export class VirtualList extends BaseElement {
     this.onMouseWheel = this.onMouseWheel.bind(this);
     this.onResize = this.onResize.bind(this);
     this.onAttrHideLabelChanged = this.onAttrHideLabelChanged.bind(this);
+    this.onItemClicked = this.onItemClicked.bind(this);
 
     // bind methods
     this.renderItems = this.renderItems.bind(this);
@@ -110,7 +112,7 @@ export class VirtualList extends BaseElement {
   }
 
   private connectedCallback() {
-    this.style.setProperty('--hostOpacity', '1');
+    //
   }
 
   private disconnectedCallback() {
@@ -133,6 +135,13 @@ export class VirtualList extends BaseElement {
       // @ts-ignore
       e.currentTarget.scrollLeft += e.deltaY;
     }
+  }
+
+  private onItemClicked(e: MouseEvent) {
+    const el = e.currentTarget as HTMLElement;
+    const index = parseInt(el.getAttribute('data-index'), 10);
+
+    this.selectItems([index]);
   }
 
   private onResize() {
@@ -163,6 +172,7 @@ export class VirtualList extends BaseElement {
   private createScroller() {
     const el = document.createElement('div');
     el.classList.add('virtual-scroller');
+    el.tabIndex = 0;
 
     el.style.top = '0';
     el.style.left = '0';
@@ -218,8 +228,10 @@ export class VirtualList extends BaseElement {
 
     for (let i = fromPos; i < finalItem; i++) {
       let style = '';
+      let cssClass = '';
       const itemPos = firstPadding + (i * this.itemRenderedSize);
 
+      // set item position
       if (this.#isHorizontal) {
         style = `left: ${itemPos}px`;
       }
@@ -227,16 +239,24 @@ export class VirtualList extends BaseElement {
         style = `top: ${itemPos}px`;
       }
 
+      // set selected item
+      if (this.#selectedItems.includes(i)) {
+        cssClass = CLASS_SELECTED;
+      }
+
       const itemEl = document.createElement('template');
       itemEl.innerHTML = compileTemplate(thumbnailItemTemplate, {
         ...this.#items[i],
         style,
+        class: cssClass,
         index: i,
-        class: this.#selectedItems.includes(i) ? SELECTED_CLASS : '',
       });
 
       fragment.appendChild(itemEl.content.cloneNode(true));
     }
+
+    // add click events
+    fragment.childNodes.forEach(n => n.addEventListener('click', this.onItemClicked));
 
     // eslint-disable-next-line no-param-reassign
     this.#containerEl.innerHTML = '';
@@ -290,7 +310,7 @@ export class VirtualList extends BaseElement {
         .join(',');
 
       const els = this.#containerEl.querySelectorAll(oldSelectionQuery);
-      els.forEach(el => el.classList.remove(SELECTED_CLASS));
+      els.forEach(el => el.classList.remove(CLASS_SELECTED));
     }
 
     // select the new items
@@ -300,7 +320,7 @@ export class VirtualList extends BaseElement {
         .join(',');
 
       const els = this.#containerEl.querySelectorAll(newSelectionQuery);
-      els.forEach(el => el.classList.add(SELECTED_CLASS));
+      els.forEach(el => el.classList.add(CLASS_SELECTED));
     }
 
     // update selection list
