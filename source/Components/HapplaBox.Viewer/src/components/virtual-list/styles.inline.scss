@@ -1,3 +1,4 @@
+
 @import "../../themes/base/styles/scssVars";
 @import "../../themes/base/styles/mixins.scss";
 @import "../../themes/base/styles/scrollbar.scss";
@@ -19,6 +20,7 @@
   transition: var(--hostTransitionProp) ease var(--hostTransitionTime);
   opacity: var(--hostOpacity);
 }
+
 
 .virtual-scroller {
   position: absolute;
@@ -77,7 +79,6 @@
   }
 
   &:focus-visible {
-    outline: none;
     background-color: RGBA(getVar(colorBg) / 0.5);
     box-shadow: var(--focusShadow);
   }
@@ -108,4 +109,10 @@
   width: 100%;
   height: calc(var(--thumbnailSize) * 1px + 12px);
   overflow-y: auto;
+
+  @include removeFocusRing();
+
+  &:focus-visible {
+    box-shadow: var(--focusShadow);
+  }
 }

@@ -39,7 +39,6 @@ export class VirtualList extends BaseElement {
     // bind events
     this.onScroll = this.onScroll.bind(this);
     this.onMouseWheel = this.onMouseWheel.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
     this.onResize = this.onResize.bind(this);
     this.onAttrHideLabelChanged = this.onAttrHideLabelChanged.bind(this);
 
@@ -60,7 +59,6 @@ export class VirtualList extends BaseElement {
 
     this.#containerEl.addEventListener('scroll', this.onScroll);
     this.#containerEl.addEventListener('wheel', this.onMouseWheel, false);
-    this.#containerEl.addEventListener('keydown', this.onKeyDown, false);
 
     // resize event observer
     this.#resizeObserver = new ResizeObserver(this.onResize);
@@ -137,15 +135,6 @@ export class VirtualList extends BaseElement {
     }
   }
 
-  private onKeyDown(e: KeyboardEvent) {
-    if (e.key === 'Enter') {
-      const index = parseInt(this.shadowRoot.activeElement.getAttribute('data-index'), 10);
-
-      this.scrollToIndex(index);
-      this.selectItems([index]);
-    }
-  }
-
   private onResize() {
     this.#cachedItemsLength = this.maxItemsOnScreen * 3;
     this.#maxBuffer = this.maxItemsOnScreen * this.itemRenderedSize;
@@ -166,6 +155,7 @@ export class VirtualList extends BaseElement {
   private createContainer() {
     const el = document.createElement('div');
     el.classList.add('virtual-container');
+    el.tabIndex = 0;
 
     return el;
   }
@@ -223,7 +213,7 @@ export class VirtualList extends BaseElement {
     // for center alignment
     let firstPadding = 0;
     if (this.#items.length < this.maxItemsOnScreen) {
-      firstPadding = this.containerSize / 2 - this.scrollingSize / 2;
+      firstPadding += this.containerSize / 2 - this.scrollingSize / 2;
     }
 
     for (let i = fromPos; i < finalItem; i++) {

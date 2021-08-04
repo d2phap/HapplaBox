@@ -18,3 +18,9 @@
   color: RGBA(getVar(colorText));
 }
 
+@mixin removeFocusRing() {
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+}
