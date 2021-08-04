@@ -8,16 +8,15 @@ import ThumbnailItem from '@/components/virtual-list/thumbnailItem';
 export interface VirtualListConfig {
   isHorizontal?: boolean;
   items: ThumbnailItem[];
+  onItemClicked?: (e: MouseEvent) => any;
 }
 
 const CLASS_SELECTED = 'is--selected';
-const CLASS_FOCUSED = 'is--focused';
 
 const styleEl = document.createElement('style');
 styleEl.textContent = styles;
 
 export class VirtualList extends BaseElement {
-  #isHorizontal = false;
   #lastRepaintPos: number = undefined;
   #maxBuffer = 0;
 
@@ -26,8 +25,13 @@ export class VirtualList extends BaseElement {
   #scrollerEl: HTMLElement;
   #resizeObserver: ResizeObserver;
 
-  #items: ThumbnailItem[] = [];
   #selectedItems: number[] = [];
+
+  #options: VirtualListConfig = {
+    isHorizontal: true,
+    items: [],
+    onItemClicked: () => undefined,
+  };
 
 
   constructor() {
@@ -82,7 +86,7 @@ export class VirtualList extends BaseElement {
   }
 
   get containerSize() {
-    if (this.#isHorizontal) {
+    if (this.#options.isHorizontal) {
       return this.#containerEl.clientWidth;
     }
 
@@ -90,7 +94,7 @@ export class VirtualList extends BaseElement {
   }
 
   get scrollingSize() {
-    return this.itemRenderedSize * this.#items.length;
+    return this.itemRenderedSize * this.#options.items.length;
   }
 
   get maxItemsOnScreen() {
@@ -172,7 +176,6 @@ export class VirtualList extends BaseElement {
   private createScroller() {
     const el = document.createElement('div');
     el.classList.add('virtual-scroller');
-    el.tabIndex = 0;
 
     el.style.top = '0';
     el.style.left = '0';
@@ -185,7 +188,7 @@ export class VirtualList extends BaseElement {
       return;
     }
 
-    if (this.#isHorizontal) {
+    if (this.#options.isHorizontal) {
       this.#scrollerEl.style.width = `${size}px`;
       this.#scrollerEl.style.height = '1px';
     }
@@ -196,7 +199,7 @@ export class VirtualList extends BaseElement {
   }
 
   private redrawItems(forced: boolean = false) {
-    const scrollPos = this.#isHorizontal
+    const scrollPos = this.#options.isHorizontal
       ? this.#containerEl.scrollLeft
       : this.#containerEl.scrollTop;
 
@@ -216,13 +219,13 @@ export class VirtualList extends BaseElement {
     fragment.appendChild(this.#scrollerEl);
 
     let finalItem = fromPos + howMany;
-    if (finalItem > this.#items.length) {
-      finalItem = this.#items.length;
+    if (finalItem > this.#options.items.length) {
+      finalItem = this.#options.items.length;
     }
 
     // for center alignment
     let firstPadding = 0;
-    if (this.#items.length < this.maxItemsOnScreen) {
+    if (this.#options.items.length < this.maxItemsOnScreen) {
       firstPadding += this.containerSize / 2 - this.scrollingSize / 2;
     }
 
@@ -232,7 +235,7 @@ export class VirtualList extends BaseElement {
       const itemPos = firstPadding + (i * this.itemRenderedSize);
 
       // set item position
-      if (this.#isHorizontal) {
+      if (this.#options.isHorizontal) {
         style = `left: ${itemPos}px`;
       }
       else {
@@ -246,7 +249,7 @@ export class VirtualList extends BaseElement {
 
       const itemEl = document.createElement('template');
       itemEl.innerHTML = compileTemplate(thumbnailItemTemplate, {
-        ...this.#items[i],
+        ...this.#options.items[i],
         style,
         class: cssClass,
         index: i,
@@ -268,8 +271,10 @@ export class VirtualList extends BaseElement {
    * Loads items
    */
   public load(config: VirtualListConfig) {
-    this.#isHorizontal = config.isHorizontal || false;
-    this.#items = config.items;
+    this.#options = {
+      ...this.#options,
+      ...config,
+    };
 
     this.#cachedItemsLength = this.maxItemsOnScreen * 3;
     this.#maxBuffer = this.maxItemsOnScreen * this.itemRenderedSize;
@@ -288,8 +293,8 @@ export class VirtualList extends BaseElement {
       - this.itemRenderedSize;
 
     this.#containerEl.scrollTo({
-      left: this.#isHorizontal ? itemPos : undefined,
-      top: this.#isHorizontal ? undefined : itemPos,
+      left: this.#options.isHorizontal ? itemPos : undefined,
+      top: this.#options.isHorizontal ? undefined : itemPos,
       behavior: 'smooth',
     });
   }
