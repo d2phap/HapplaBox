@@ -38,7 +38,7 @@ const elHeight = document.getElementById('elHeight');
 initVirtualList();
 const virtualListEl = document.querySelector('virtual-list').shadowRoot.host as unknown as VirtualList;
 const items = [];
-for (let index = 0; index < 100; index++) {
+for (let index = 0; index < 1_000; index++) {
   items.push({
     name: `Pic${index + 1}`,
     src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
@@ -51,8 +51,8 @@ virtualListEl.load({
   items,
 });
 
-virtualListEl.scrollToIndex(50);
-virtualListEl.selectItems([0, 40, 9, 50]);
+virtualListEl.scrollToIndex(500);
+virtualListEl.selectItems([0, 40, 9, 500]);
 
 
 const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {
