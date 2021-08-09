@@ -1,13 +1,15 @@
 
 import BaseElement from '@/components/BaseElement';
-import styles from '@/components/virtual-list/styles.inline.scss';
-import thumbnailItemTemplate from '@/components/virtual-list/thumbnail-item.html';
-import { compileTemplate } from '@/utils';
-import ThumbnailItem from '@/components/virtual-list/thumbnailItem';
+import styles from '@/components/gallery/styles.inline.scss';
+import itemTemplate from '@/components/gallery/item.html';
+import GalleryItem from '@/components/gallery/types';
 
-export interface VirtualListConfig {
+import { compileTemplate } from '@/utils';
+
+
+export interface HbGalleryOptions {
   isHorizontal?: boolean;
-  items: ThumbnailItem[];
+  items: GalleryItem[];
   onItemClicked?: (e: MouseEvent) => any;
 }
 
@@ -16,7 +18,7 @@ const CLASS_SELECTED = 'is--selected';
 const styleEl = document.createElement('style');
 styleEl.textContent = styles;
 
-export class VirtualList extends BaseElement {
+export class HbGallery extends BaseElement {
   #lastRepaintPos: number = undefined;
   #maxBuffer = 0;
 
@@ -27,7 +29,7 @@ export class VirtualList extends BaseElement {
 
   #selectedItems: number[] = [];
 
-  #options: VirtualListConfig = {
+  #options: HbGalleryOptions = {
     isHorizontal: true,
     items: [],
     onItemClicked: () => undefined,
@@ -167,7 +169,7 @@ export class VirtualList extends BaseElement {
 
   private createContainer() {
     const el = document.createElement('div');
-    el.classList.add('virtual-container');
+    el.classList.add('gallery-container');
     el.tabIndex = 0;
 
     return el;
@@ -175,7 +177,7 @@ export class VirtualList extends BaseElement {
 
   private createScroller() {
     const el = document.createElement('div');
-    el.classList.add('virtual-scroller');
+    el.classList.add('gallery-scroller');
 
     el.style.top = '0';
     el.style.left = '0';
@@ -248,7 +250,7 @@ export class VirtualList extends BaseElement {
       }
 
       const itemEl = document.createElement('template');
-      itemEl.innerHTML = compileTemplate(thumbnailItemTemplate, {
+      itemEl.innerHTML = compileTemplate(itemTemplate, {
         ...this.#options.items[i],
         style,
         class: cssClass,
@@ -270,7 +272,7 @@ export class VirtualList extends BaseElement {
   /**
    * Loads items
    */
-  public load(config: VirtualListConfig) {
+  public load(config: HbGalleryOptions) {
     this.#options = {
       ...this.#options,
       ...config,
@@ -342,4 +344,4 @@ export class VirtualList extends BaseElement {
 }
 
 
-export const initVirtualList = () => window.customElements.define('virtual-list', VirtualList);
+export const init = () => window.customElements.define('hb-gallery', HbGallery);

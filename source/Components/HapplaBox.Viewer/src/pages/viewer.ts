@@ -1,5 +1,5 @@
 
-import { initVirtualList, VirtualList } from '@/components/virtual-list';
+import { init, HbGallery } from '@/components/gallery';
 import {
   Board,
   InterpolationMode,
@@ -35,8 +35,8 @@ const elHeight = document.getElementById('elHeight');
 // thumbnailBarEl.scrollToItem(myEl);
 
 
-initVirtualList();
-const virtualListEl = document.querySelector('virtual-list').shadowRoot.host as unknown as VirtualList;
+init();
+const galleryEl = document.querySelector('hb-gallery').shadowRoot.host as unknown as HbGallery;
 const items = [];
 for (let index = 0; index < 2_00; index++) {
   items.push({
@@ -46,13 +46,13 @@ for (let index = 0; index < 2_00; index++) {
   });
 }
 
-virtualListEl.load({
+galleryEl.load({
   isHorizontal: true,
   items,
 });
 
-virtualListEl.scrollToIndex(100);
-virtualListEl.selectItems([0, 40, 9, 100]);
+galleryEl.scrollToIndex(100);
+galleryEl.selectItems([0, 40, 9, 100]);
 
 
 const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {

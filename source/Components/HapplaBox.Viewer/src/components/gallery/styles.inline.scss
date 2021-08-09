@@ -16,13 +16,13 @@
 }
 
 
-.virtual-scroller {
+.gallery-scroller {
   position: absolute;
   opacity: 0;
   pointer-events: none;
 }
 
-.virtual-item {
+.gallery-item {
   position: absolute;
   user-select: none;
   display: grid;
@@ -101,7 +101,7 @@
   }
 }
 
-.virtual-container {
+.gallery-container {
   position: relative;
   padding: 5px 0;
   width: 100%;
