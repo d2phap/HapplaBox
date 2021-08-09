@@ -9,10 +9,8 @@
   background-image: conic-gradient(#0000 25%, #fff1 0 50%, #0000 0 75%, #fff1 0);
   background-size: 20px 20px;
   // border-radius: 0 0 8px 8px;
-}
 
-#board:focus {
-  outline: none;
+  @include removeFocusRing();
 }
 
 #wrapper {

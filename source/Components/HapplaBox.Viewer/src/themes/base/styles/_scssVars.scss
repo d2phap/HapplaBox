@@ -12,10 +12,10 @@ $vars: (
   colorAccent: 100 100 100,
   colorBg: 255 255 255,
   colorText: 0 0 0,
-  colorBorder: 255 255 255 / 0.3,
+  colorBorder: var(--colorBg) / 0.3,
 
   scrollBarSize: 5px,
-  thumbnailSize: 50px,
+  thumbnailSize: 50,
 );
 
 

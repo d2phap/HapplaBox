@@ -1,5 +1,5 @@
 
-import { initThumbnailBar, ThumbnailBar } from '@/components/thumbnail-bar';
+import { init as initHbGallery, HbGallery } from '@/components/gallery';
 import {
   Board,
   InterpolationMode,
@@ -19,20 +19,40 @@ const elY = document.getElementById('elY');
 const elWidth = document.getElementById('elWidth');
 const elHeight = document.getElementById('elHeight');
 
-initThumbnailBar();
-const thumbnailBarEl = document.querySelector('thumbnail-bar').shadowRoot.host as ThumbnailBar;
+// initThumbnailBar();
+// const thumbnailBarEl = document.querySelector('thumbnail-bar').shadowRoot.host as ThumbnailBar;
+// const items = [];
+// for (let index = 0; index < 1000; index++) {
+//   items.push({
+//     name: `Pic${index + 1}`,
+//     src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
+//     tooltip: `Photo ${index + 1}`,
+//   });
+// }
+// thumbnailBarEl.renderItems(items, 0);
+// const myEl = thumbnailBarEl.getItem(500);
+// thumbnailBarEl.selectItem(myEl);
+// thumbnailBarEl.scrollToItem(myEl);
+
+
+initHbGallery();
+const galleryEl = document.querySelector('hb-gallery').shadowRoot.host as unknown as HbGallery;
 const items = [];
-for (let index = 0; index < 1000; index++) {
+for (let index = 0; index < 2_00; index++) {
   items.push({
     name: `Pic${index + 1}`,
     src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
     tooltip: `Photo ${index + 1}`,
   });
 }
-thumbnailBarEl.renderItems(items, 0);
-const myEl = thumbnailBarEl.getItem(500);
-thumbnailBarEl.selectItem(myEl);
-thumbnailBarEl.scrollToItem(myEl);
+
+galleryEl.load({
+  isHorizontal: true,
+  items,
+});
+
+galleryEl.scrollToIndex(100);
+galleryEl.selectItems([0, 40, 9, 100]);
 
 
 const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {

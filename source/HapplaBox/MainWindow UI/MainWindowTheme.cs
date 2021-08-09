@@ -49,8 +49,8 @@ namespace HapplaBox
             if (!IsWebviewReady) return;
 
             // color accent
-            var correctColor = CurrentTheme.Accent.Color;
-            var accentColorStr = $"{correctColor.R} {correctColor.G} {correctColor.B}";
+            var color = CurrentTheme.Accent.Color;
+            var accentColorStr = $"{color.R} {color.G} {color.B}";
 
             Web2.CoreWebView2.ExecuteScriptAsync($"document.documentElement.style.setProperty('--colorAccent', '{accentColorStr}');");
         }
@@ -74,6 +74,8 @@ namespace HapplaBox
               WinBtnMaximize.Foreground =
               WinBtnRestore.Foreground =
               WinBtnClose.Foreground = CurrentTheme.TitleBarText;
+
+            Web2.DefaultBackgroundColor = Helpers.FromColor(CurrentTheme.Background.Color);
         }
 
         private void MainWindowTheme_Deactivated(object sender, EventArgs e)
@@ -95,11 +97,13 @@ namespace HapplaBox
               WinBtnMaximize.Foreground =
               WinBtnRestore.Foreground =
               WinBtnClose.Foreground = CurrentTheme.TitleBarTextInactive;
+
+            Web2.DefaultBackgroundColor = Helpers.FromColor(CurrentTheme.BackgroundInactive.Color);
         }
 
         private void MainWindowTheme_Loaded(object sender, RoutedEventArgs e)
         {
-            AeroGlass.Apply(this);
+            //AeroGlass.Apply(this);
             UpdateTheme();
             UpdateWindowChrome();
 

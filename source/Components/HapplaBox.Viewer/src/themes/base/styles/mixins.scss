@@ -18,3 +18,15 @@
   color: RGBA(getVar(colorText));
 }
 
+@mixin removeFocusRing() {
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+@mixin setFocusStyle() {
+  &:focus-visible {
+    animation: highlightFocus 1000ms cubic-bezier(0.25, 0.1, 1, -1.07);
+  }
+}
