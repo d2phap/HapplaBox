@@ -1,5 +1,5 @@
 
-import { init, HbGallery } from '@/components/gallery';
+import { init as initHbGallery, HbGallery } from '@/components/gallery';
 import {
   Board,
   InterpolationMode,
@@ -35,7 +35,7 @@ const elHeight = document.getElementById('elHeight');
 // thumbnailBarEl.scrollToItem(myEl);
 
 
-init();
+initHbGallery();
 const galleryEl = document.querySelector('hb-gallery').shadowRoot.host as unknown as HbGallery;
 const items = [];
 for (let index = 0; index < 2_00; index++) {
