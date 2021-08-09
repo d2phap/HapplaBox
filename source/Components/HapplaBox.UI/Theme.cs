@@ -30,15 +30,17 @@ namespace HapplaBox.UI
         {
             this.Accent = WinColors.AccentBrush;
 
-            var inactiveBrush = new SolidColorBrush(Color.FromArgb(255, 180, 180, 180));
-            this.Background = WinColors.AccentAlphaBrush;
+            var activeBrush = new SolidColorBrush(Color.FromArgb(255, 235, 246, 249));
+            var inactiveBrush = new SolidColorBrush(Color.FromArgb(255, 243, 243, 243));
+
+            this.Background = activeBrush;
             this.BackgroundInactive = inactiveBrush;
 
             this.BorderWeight = new Thickness(2.5, 0, 2, 2);
             this.Border = WinColors.AccentBrush;
-            this.BorderInactive = WinColors.AccentAlphaBrush;
+            this.BorderInactive = inactiveBrush;
 
-            this.TitleBar = WinColors.AccentAlphaBrush;
+            this.TitleBar = WinColors.AccentBrush;
             this.TitleBarInactive = inactiveBrush;
             this.TitleBarText = new SolidColorBrush(Colors.White);
             this.TitleBarTextInactive = new SolidColorBrush(Color.FromArgb(200, 0, 0, 0)); // new SolidColorBrush(Color.FromArgb(130, 255, 255, 255));
