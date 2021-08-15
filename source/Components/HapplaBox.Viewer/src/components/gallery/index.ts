@@ -1,17 +1,11 @@
 
-import BaseElement from '@/components/BaseElement';
-import styles from '@/components/gallery/styles.inline.scss';
-import itemTemplate from '@/components/gallery/item.html';
-import GalleryItem from '@/components/gallery/types';
-
 import { compileTemplate } from '@/utils';
+import BaseElement from '@/components/BaseElement';
 
+import { HbGalleryOptions } from './types';
+import styles from './styles.inline.scss';
+import itemTemplate from './item.html';
 
-export interface HbGalleryOptions {
-  isHorizontal?: boolean;
-  items: GalleryItem[];
-  onItemClicked?: (e: MouseEvent) => any;
-}
 
 const CLASS_SELECTED = 'is--selected';
 
@@ -32,7 +26,11 @@ export class HbGallery extends BaseElement {
   #options: HbGalleryOptions = {
     isHorizontal: true,
     items: [],
-    onItemClicked: () => undefined,
+    isSelectOnClicked: true,
+    clickItemFn: () => undefined,
+    rightClickItemFn: () => undefined,
+    middleClickItemFn: () => undefined,
+    doubleClickItemFn: () => undefined,
   };
 
 
@@ -49,6 +47,8 @@ export class HbGallery extends BaseElement {
     this.onResize = this.onResize.bind(this);
     this.onAttrHideLabelChanged = this.onAttrHideLabelChanged.bind(this);
     this.onItemClicked = this.onItemClicked.bind(this);
+    this.onItemAuxClicked = this.onItemAuxClicked.bind(this);
+    this.onItemDoulbeClicked = this.onItemDoulbeClicked.bind(this);
 
     // bind methods
     this.renderItems = this.renderItems.bind(this);
@@ -64,9 +64,6 @@ export class HbGallery extends BaseElement {
     this.#scrollerEl = this.createScroller();
     this.#containerEl = this.createContainer();
     this.shadowRoot.appendChild(this.#containerEl);
-
-    this.#containerEl.addEventListener('scroll', this.onScroll);
-    this.#containerEl.addEventListener('wheel', this.onMouseWheel, false);
 
     // resize event observer
     this.#resizeObserver = new ResizeObserver(this.onResize);
@@ -143,11 +140,39 @@ export class HbGallery extends BaseElement {
     }
   }
 
-  private onItemClicked(e: MouseEvent) {
+  private onItemClicked(e: PointerEvent) {
+    e.stopPropagation();
     const el = e.currentTarget as HTMLElement;
     const index = parseInt(el.getAttribute('data-index'), 10);
 
-    this.selectItems([index]);
+    if (this.#options.isSelectOnClicked) {
+      this.selectItems([index]);
+    }
+
+    this.#options.clickItemFn(e, { index, el });
+  }
+
+  private onItemAuxClicked(e: PointerEvent) {
+    e.stopPropagation();
+
+    const el = e.currentTarget as HTMLElement;
+    const index = parseInt(el.getAttribute('data-index'), 10);
+
+    // middle click
+    if (e.button === 1) {
+      this.#options.middleClickItemFn(e, { index, el });
+    }
+    // right click
+    else if (e.button === 2) {
+      this.#options.rightClickItemFn(e, { index, el });
+    }
+  }
+
+  private onItemDoulbeClicked(e: MouseEvent) {
+    const el = e.currentTarget as HTMLElement;
+    const index = parseInt(el.getAttribute('data-index'), 10);
+
+    this.#options.doubleClickItemFn(e, { index, el });
   }
 
   private onResize() {
@@ -171,6 +196,11 @@ export class HbGallery extends BaseElement {
     const el = document.createElement('div');
     el.classList.add('gallery-container');
     el.tabIndex = 0;
+
+    // disable scrolling on middle click
+    el.addEventListener('mousedown', e => e.preventDefault());
+    el.addEventListener('scroll', this.onScroll);
+    el.addEventListener('wheel', this.onMouseWheel);
 
     return el;
   }
@@ -261,7 +291,14 @@ export class HbGallery extends BaseElement {
     }
 
     // add click events
-    fragment.childNodes.forEach(n => n.addEventListener('click', this.onItemClicked));
+    fragment.childNodes.forEach(n => {
+      n.addEventListener('click', this.onItemClicked, true);
+      n.addEventListener('auxclick', this.onItemAuxClicked, true);
+      n.addEventListener('dblclick', this.onItemDoulbeClicked, true);
+
+      // disable browser default context menu
+      n.addEventListener('contextmenu', e => e.preventDefault(), true);
+    });
 
     // eslint-disable-next-line no-param-reassign
     this.#containerEl.innerHTML = '';
