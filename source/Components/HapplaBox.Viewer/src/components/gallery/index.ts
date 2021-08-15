@@ -307,17 +307,17 @@ export class HbGallery extends BaseElement {
         index: i,
       });
 
-      Array.from(fragment.children).forEach(n => {
-        n.addEventListener('click', this.onItemClicked, true);
-        n.addEventListener('auxclick', this.onItemAuxClicked, true);
-        n.addEventListener('dblclick', this.onItemDoulbeClicked, true);
-
-        // disable browser default context menu
-        n.addEventListener('contextmenu', e => e.preventDefault(), true);
-      });
-
       fragment.appendChild(itemEl.content.cloneNode(true));
     }
+
+    Array.from(fragment.children).forEach(n => {
+      n.addEventListener('click', this.onItemClicked, true);
+      n.addEventListener('auxclick', this.onItemAuxClicked, true);
+      n.addEventListener('dblclick', this.onItemDoulbeClicked, true);
+
+      // disable browser default context menu
+      n.addEventListener('contextmenu', e => e.preventDefault(), true);
+    });
 
     fragment.appendChild(this.#scrollerEl);
 
