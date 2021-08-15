@@ -122,31 +122,31 @@ export class HbGallery extends BaseElement {
     this.#resizeObserver.disconnect();
   }
 
-  private async onScroll(e: Event) {
+  private onScroll(e: Event) {
     e.preventDefault();
 
-    this.addRenderRequest();
-    // this.redrawItems();
-  }
-
-  #renderRequest = 0;
-  private async addRenderRequest(force: boolean = false) {
-    this.#renderRequest += 1;
-
-    // console.log(this.#renderRequest);
-
-    while(this.#renderRequest > 0) {
-      await pause(150);
-      this.#renderRequest -= 1;
+    if (this.#isProgrammaticalylScroll) {
+      this.lazyRenderItems();
     }
-
-    if (this.#renderRequest <= 0) {
-      // console.log('*** ', this.#renderRequest);
-
-      this.redrawItems(force);
-      this.#renderRequest = 0;
+    else {
+      this.redrawItems();
     }
   }
+
+  private lazyRenderItems() {
+    clearTimeout(this.#renderTimer);
+
+    this.#renderTimer = setTimeout(async () => {
+      this.redrawItems();
+
+      await pause(500);
+      this.#isProgrammaticalylScroll = false;
+    }, 50);
+  }
+
+  #isProgrammaticalylScroll = false;
+  #renderTimer:NodeJS.Timeout = null;
+
 
   private onMouseWheel(e: WheelEvent) {
     // direction is vertical (mouse wheel)
@@ -252,12 +252,6 @@ export class HbGallery extends BaseElement {
   }
 
   private async redrawItems(forced: boolean = false) {
-    await pause(100);
-    if (this.#renderRequest) {
-      //
-    }
-
-
     const scrollPos = this.#options.isHorizontal
       ? this.#containerEl.scrollLeft
       : this.#containerEl.scrollTop;
@@ -357,6 +351,9 @@ export class HbGallery extends BaseElement {
     const itemPos = (index * this.itemRenderedSize)
       - (this.containerSize / 2)
       - this.itemRenderedSize;
+
+    // use optimal scroll
+    this.#isProgrammaticalylScroll = true;
 
     this.#containerEl.scrollTo({
       left: this.#options.isHorizontal ? itemPos : undefined,
