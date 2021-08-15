@@ -39,6 +39,17 @@
     overflow: hidden;
     transition: all 200ms ease;
 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    svg {
+      display: none;
+      width: 50%;
+      height: 100%;
+      fill: RGB(var(--colorText));
+    }
+
     img {
       display: block;
       width: 100%;
@@ -47,6 +58,11 @@
       max-height: 100%;
       object-fit: contain;
       -webkit-user-drag: none;
+
+      // hide the image that is not loaded
+      &:not([src]) {
+        display: none;
+      }
     }
   }
 
@@ -87,6 +103,19 @@
     .preview {
       transition: all 80ms ease;
       transform: scale(0.95) translateY(0);
+    }
+  }
+
+  &.is--invalid {
+    .preview {
+      svg {
+        display: block;
+      }
+
+      // hide the broken image
+      img {
+        display: none;
+      }
     }
   }
 

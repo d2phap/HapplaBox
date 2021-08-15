@@ -1,5 +1,6 @@
 
 import { init as initHbGallery, HbGallery } from '@/components/gallery';
+import { pause } from '@/utils';
 import {
   Board,
   InterpolationMode,
@@ -35,24 +36,27 @@ const elHeight = document.getElementById('elHeight');
 // thumbnailBarEl.scrollToItem(myEl);
 
 
-initHbGallery();
-const galleryEl = document.querySelector('hb-gallery').shadowRoot.host as unknown as HbGallery;
-const items = [];
-for (let index = 0; index < 2_00; index++) {
-  items.push({
-    name: `Pic${index + 1}`,
-    src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
-    tooltip: `Photo ${index + 1}`,
+function loadThumbnails() {
+  initHbGallery();
+
+  const galleryEl = document.querySelector('hb-gallery').shadowRoot.host as unknown as HbGallery;
+  const items = [];
+  for (let index = 0; index < 2_000; index++) {
+    items.push({
+      name: `Pic${index + 1}`,
+      src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
+      tooltip: `Photo ${index + 1}`,
+    });
+  }
+
+  galleryEl.load({
+    isHorizontal: true,
+    items,
   });
+
+  galleryEl.scrollToIndex(1000);
+  galleryEl.selectItems([0, 40, 9, 1000]);
 }
-
-galleryEl.load({
-  isHorizontal: true,
-  items,
-});
-
-galleryEl.scrollToIndex(100);
-galleryEl.selectItems([0, 40, 9, 100]);
 
 
 const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {
@@ -91,6 +95,8 @@ const board = new Board(elBoard, elBoardContent, {
   onBeforeContentReady,
   onContentReady,
 });
+
+pause(500).then(loadThumbnails);
 
 
 board.imageRendering = InterpolationMode.Auto;

@@ -3,7 +3,9 @@
   title="${o.tooltip}"
   style="${o.style}">
   <div class="preview">
-    <img src="${o.src}" alt="${o.name}" />
+    <img src="${o.src}" alt="${o.name}"
+      onerror="this.parentElement.parentElement.classList.add('is--invalid')" />
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path d="M11.304 9.953a.502.502 0 01-.354-.146 7.01 7.01 0 00-9.9 0A.5.5 0 01.343 9.1c3.119-3.118 8.195-3.118 11.314 0a.5.5 0 01-.353.853z"/><circle cy="2.703" cx="2.063" r=".656"/><circle cy="2.703" cx="9.938" r=".656"/></svg>
   </div>
   <div class="info">${o.name}</div>
 </div>
