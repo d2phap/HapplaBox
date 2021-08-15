@@ -1,5 +1,5 @@
 
-import { compileTemplate } from '@/utils';
+import { compileTemplate, pause } from '@/utils';
 import BaseElement from '@/components/BaseElement';
 
 import { HbGalleryOptions } from './types';
@@ -122,11 +122,30 @@ export class HbGallery extends BaseElement {
     this.#resizeObserver.disconnect();
   }
 
-
-  private onScroll(e: Event) {
+  private async onScroll(e: Event) {
     e.preventDefault();
 
-    this.redrawItems();
+    this.addRenderRequest();
+    // this.redrawItems();
+  }
+
+  #renderRequest = 0;
+  private async addRenderRequest(force: boolean = false) {
+    this.#renderRequest += 1;
+
+    // console.log(this.#renderRequest);
+
+    while(this.#renderRequest > 0) {
+      await pause(150);
+      this.#renderRequest -= 1;
+    }
+
+    if (this.#renderRequest <= 0) {
+      // console.log('*** ', this.#renderRequest);
+
+      this.redrawItems(force);
+      this.#renderRequest = 0;
+    }
   }
 
   private onMouseWheel(e: WheelEvent) {
@@ -232,7 +251,13 @@ export class HbGallery extends BaseElement {
     }
   }
 
-  private redrawItems(forced: boolean = false) {
+  private async redrawItems(forced: boolean = false) {
+    await pause(100);
+    if (this.#renderRequest) {
+      //
+    }
+
+
     const scrollPos = this.#options.isHorizontal
       ? this.#containerEl.scrollLeft
       : this.#containerEl.scrollTop;
@@ -243,8 +268,8 @@ export class HbGallery extends BaseElement {
     const isScrollChanged = Math.abs(scrollPos - this.#lastRepaintPos) > this.#maxBuffer;
 
     if (forced || !this.#lastRepaintPos || isScrollChanged) {
-      this.renderItems(first, this.#cachedItemsLength);
       this.#lastRepaintPos = scrollPos;
+      this.renderItems(first, this.#cachedItemsLength);
     }
   }
 

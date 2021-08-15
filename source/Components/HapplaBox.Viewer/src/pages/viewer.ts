@@ -41,7 +41,7 @@ function loadThumbnails() {
 
   const galleryEl = document.querySelector('hb-gallery').shadowRoot.host as unknown as HbGallery;
   const items = [];
-  for (let index = 0; index < 2_000; index++) {
+  for (let index = 0; index < 400_000; index++) {
     items.push({
       name: `Pic${index + 1}`,
       src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
@@ -54,8 +54,8 @@ function loadThumbnails() {
     items,
   });
 
-  galleryEl.scrollToIndex(1000);
-  galleryEl.selectItems([0, 40, 9, 1000]);
+  galleryEl.scrollToIndex(300_000);
+  galleryEl.selectItems([0, 40, 9, 390000]);
 }
 
 
