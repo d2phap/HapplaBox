@@ -135,7 +135,8 @@
   padding: 5px 0;
   width: 100%;
   height: calc(var(--thumbnailSize) * 1px + 12px);
-  overflow-y: auto;
+  overscroll-behavior: contain;
+  overflow: auto;
 
   @include removeFocusRing();
 }
