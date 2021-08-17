@@ -1,5 +1,6 @@
 
 import { init as initHbGallery, HbGallery } from '@/components/gallery';
+import { init as initHbLoader } from '@/components/loader';
 import { pause } from '@/utils';
 import {
   Board,
@@ -20,6 +21,7 @@ const elY = document.getElementById('elY');
 const elWidth = document.getElementById('elWidth');
 const elHeight = document.getElementById('elHeight');
 
+initHbLoader();
 
 function loadThumbnails() {
   initHbGallery();

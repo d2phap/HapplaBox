@@ -1,8 +1,8 @@
 
 import { compileTemplate, pause } from '@/utils';
-import BaseElement from '@/components/BaseElement';
-
 import { HbGalleryOptions } from './types';
+
+import BaseElement from '../BaseElement';
 import styles from './styles.inline.scss';
 import itemTemplate from './item.html';
 
