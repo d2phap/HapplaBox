@@ -41,7 +41,9 @@ export class HbGallery extends BaseElement {
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(styleEl);
 
-    // bind events
+    // private events
+    this.onContainerMouseDown = this.onContainerMouseDown.bind(this);
+    this.onContainerMouseUp = this.onContainerMouseUp.bind(this);
     this.onScroll = this.onScroll.bind(this);
     this.onMouseWheel = this.onMouseWheel.bind(this);
     this.onResize = this.onResize.bind(this);
@@ -50,13 +52,14 @@ export class HbGallery extends BaseElement {
     this.onItemAuxClicked = this.onItemAuxClicked.bind(this);
     this.onItemDoulbeClicked = this.onItemDoulbeClicked.bind(this);
 
-    // bind methods
+    // private methods
     this.renderItems = this.renderItems.bind(this);
     this.createContainer = this.createContainer.bind(this);
     this.createScroller = this.createScroller.bind(this);
     this.setScrollerSize = this.setScrollerSize.bind(this);
     this.redrawItems = this.redrawItems.bind(this);
 
+    // public methods
     this.load = this.load.bind(this);
     this.scrollToIndex = this.scrollToIndex.bind(this);
     this.selectItems = this.selectItems.bind(this);
@@ -77,7 +80,7 @@ export class HbGallery extends BaseElement {
   }
 
   get itemRenderedSize() {
-    return this.itemSize + 11;
+    return this.itemSize + 12;
   }
 
   get container() {
@@ -212,14 +215,25 @@ export class HbGallery extends BaseElement {
     }
   }
 
+  private onContainerMouseDown(e: MouseEvent) {
+    // disable scrolling on middle click
+    e.preventDefault();
+
+    this.#isProgrammaticalylScroll = true;
+  }
+
+  private onContainerMouseUp() {
+    this.#isProgrammaticalylScroll = false;
+  }
+
 
   private createContainer() {
     const el = document.createElement('div');
     el.classList.add('gallery-container');
     el.tabIndex = 0;
 
-    // disable scrolling on middle click
-    el.addEventListener('mousedown', e => e.preventDefault());
+    el.addEventListener('mousedown', this.onContainerMouseDown);
+    el.addEventListener('mouseup', this.onContainerMouseUp);
     el.addEventListener('scroll', this.onScroll);
     el.addEventListener('wheel', this.onMouseWheel);
 
@@ -288,10 +302,10 @@ export class HbGallery extends BaseElement {
 
       // set item position
       if (this.#options.isHorizontal) {
-        style = `left: ${itemPos}px`;
+        style = `transform: translateX(${itemPos}px)`;
       }
       else {
-        style = `top: ${itemPos}px`;
+        style = `transform: translateY(${itemPos}px)`;
       }
 
       // set selected item
@@ -349,8 +363,7 @@ export class HbGallery extends BaseElement {
   public scrollToIndex(index: number) {
     // get center item position
     const itemPos = (index * this.itemRenderedSize)
-      - (this.containerSize / 2)
-      - this.itemRenderedSize;
+      - (this.containerSize / 2);
 
     // use optimal scroll
     this.#isProgrammaticalylScroll = true;

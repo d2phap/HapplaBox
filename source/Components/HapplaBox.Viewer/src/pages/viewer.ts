@@ -20,28 +20,13 @@ const elY = document.getElementById('elY');
 const elWidth = document.getElementById('elWidth');
 const elHeight = document.getElementById('elHeight');
 
-// initThumbnailBar();
-// const thumbnailBarEl = document.querySelector('thumbnail-bar').shadowRoot.host as ThumbnailBar;
-// const items = [];
-// for (let index = 0; index < 1000; index++) {
-//   items.push({
-//     name: `Pic${index + 1}`,
-//     src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
-//     tooltip: `Photo ${index + 1}`,
-//   });
-// }
-// thumbnailBarEl.renderItems(items, 0);
-// const myEl = thumbnailBarEl.getItem(500);
-// thumbnailBarEl.selectItem(myEl);
-// thumbnailBarEl.scrollToItem(myEl);
-
 
 function loadThumbnails() {
   initHbGallery();
 
   const galleryEl = document.querySelector('hb-gallery').shadowRoot.host as unknown as HbGallery;
   const items = [];
-  for (let index = 0; index < 400_000; index++) {
+  for (let index = 0; index < 6000; index++) {
     items.push({
       name: `Pic${index + 1}`,
       src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
@@ -54,8 +39,8 @@ function loadThumbnails() {
     items,
   });
 
-  galleryEl.scrollToIndex(300_000);
-  galleryEl.selectItems([0, 40, 9, 390000]);
+  galleryEl.scrollToIndex(3_0);
+  galleryEl.selectItems([30]);
 }
 
 
