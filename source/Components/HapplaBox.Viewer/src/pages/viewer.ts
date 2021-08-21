@@ -1,6 +1,8 @@
 
 import { init as initHbGallery, HbGallery } from '@/components/gallery';
-import { init as initHbLoader } from '@/components/loader';
+// import { init as initHbLoader } from '@/components/loader';
+import { HbToolbar, init as initHbToolbar } from '@/components/toolbar';
+import { HbToolbarButton, HbToolbarItem } from '@/components/toolbar/types';
 import { pause } from '@/utils';
 import {
   Board,
@@ -21,7 +23,49 @@ const elY = document.getElementById('elY');
 const elWidth = document.getElementById('elWidth');
 const elHeight = document.getElementById('elHeight');
 
-initHbLoader();
+function loadToolbar() {
+  initHbToolbar();
+
+  const toolbarEl = document.querySelector('hb-toolbar').shadowRoot.host as unknown as HbToolbar;
+  const items: HbToolbarItem[] = [
+    {
+      type: 'button',
+      imageUrl: 'https://image.flaticon.com/icons/png/512/149/149334.png',
+      label: 'Open file',
+      tooltip: 'Open file... (Ctrl+O)',
+      clickFn: console.table,
+    } as HbToolbarButton,
+    {
+      type: 'button',
+      imageUrl: 'https://image.flaticon.com/icons/png/512/149/149092.png',
+      label: 'Thumbnail bar',
+      tooltip: 'Thumbnail bar... (H)',
+      clickFn: console.table,
+    } as HbToolbarButton,
+    {
+      type: 'button',
+      imageUrl: 'https://image.flaticon.com/icons/png/512/149/149402.png',
+      label: 'Checkerboard',
+      tooltip: 'Checkerboard... (B)',
+      clickFn: console.table,
+    } as HbToolbarButton,
+    { type: 'divider' },
+    {
+      type: 'button',
+      imageUrl: 'https://image.flaticon.com/icons/png/512/149/149294.png',
+      label: 'Settings',
+      tooltip: 'Settings... (Ctrl+,)',
+      clickFn: console.table,
+    } as HbToolbarButton,
+  ];
+
+  toolbarEl.load({
+    items,
+    position: 'top',
+    rightClickFn: console.log,
+  });
+}
+
 
 function loadThumbnails() {
   initHbGallery();
@@ -83,7 +127,10 @@ const board = new Board(elBoard, elBoardContent, {
   onContentReady,
 });
 
-pause(500).then(loadThumbnails);
+pause(500).then(() => {
+  loadToolbar();
+  loadThumbnails();
+});
 
 
 board.imageRendering = InterpolationMode.Auto;
