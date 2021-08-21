@@ -335,7 +335,6 @@ export class HbGallery extends BaseElement {
 
     fragment.appendChild(this.#scrollerEl);
 
-    // eslint-disable-next-line no-param-reassign
     this.#containerEl.innerHTML = '';
     this.#containerEl.appendChild(fragment);
   }

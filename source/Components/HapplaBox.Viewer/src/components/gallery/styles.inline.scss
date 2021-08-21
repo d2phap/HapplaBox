@@ -29,7 +29,6 @@
   grid-template-rows: minmax(0, 1fr) auto;
   padding: 5px;
   border-radius: getVar(borderRadius);
-  cursor: pointer;
   width: calc(var(--thumbnailSize) * 1px);
   height: calc(var(--thumbnailSize) * 1px);
   transition: all 200ms ease;
@@ -83,8 +82,7 @@
     box-shadow: inset 0 0 0 1px RGBA(getVar(colorBorder));
 
     .preview {
-      transform: scale(0.95) translateY(-2px);
-      box-shadow: 0 5px 20px -10px RGBA(getVar(colorText) / 0.5);
+      box-shadow: 0 5px 15px -10px RGBA(getVar(colorText) / 0.7);
     }
   }
 
@@ -101,8 +99,8 @@
     background-color: RGBA(getVar(colorBg) / 0.7);
 
     .preview {
-      transition: all 80ms ease;
-      transform: scale(0.95) translateY(0);
+      transition: all 50ms ease;
+      transform: scale(0.85);
     }
   }
 
