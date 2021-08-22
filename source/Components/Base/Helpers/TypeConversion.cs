@@ -1,6 +1,4 @@
 ﻿
-using System;
-using System.Windows.Media;
 
 namespace HapplaBox.Base
 {
@@ -35,27 +33,6 @@ namespace HapplaBox.Base
             {
                 return (T)Convert.ChangeType(value, type);
             }
-        }
-
-
-        /// <summary>
-        /// Convert System.Drawing.Color to System.Windows.Media.Color
-        /// </summary>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        public static Color FromColor(System.Drawing.Color color)
-        {
-            return Color.FromArgb(color.A, color.R, color.G, color.B);
-        }
-
-        /// <summary>
-        /// Convert System.Windows.Media.Color to System.Drawing.Color
-        /// </summary>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        public static System.Drawing.Color FromColor(Color color)
-        {
-            return System.Drawing.Color.FromArgb(255, color.R, color.G, color.B);
         }
     }
 }

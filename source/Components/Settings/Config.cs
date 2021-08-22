@@ -1,8 +1,6 @@
 ﻿using HapplaBox.Base;
 using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
 using System.Dynamic;
-using System.IO;
 using System.Text.Json;
 
 
@@ -50,6 +48,11 @@ namespace HapplaBox.Settings
         /// </summary>
         public static WindowState WinMainState { get; set; } = WindowState.Normal;
 
+        /// <summary>
+        /// Gets, sets window top most state
+        /// </summary>
+        public static bool IsAlwaysOnTop { get; set; } = false;
+
 
         #endregion
 
@@ -70,9 +73,12 @@ namespace HapplaBox.Settings
             WinMainWidth = items.GetValue(nameof(WinMainWidth), WinMainWidth);
             WinMainHeight = items.GetValue(nameof(WinMainHeight), WinMainHeight);
 
-            // Enum values
-            WinMainState = items.GetValue(nameof(WinMainState), WinMainState);
+            // Boolean values
+            IsAlwaysOnTop = items.GetValue(nameof(IsAlwaysOnTop), IsAlwaysOnTop);
 
+
+            // Enum value
+            WinMainState = items.GetValue(nameof(WinMainState), WinMainState);
         }
 
 
@@ -122,6 +128,9 @@ namespace HapplaBox.Settings
 
             // Enum values
             settings.TryAdd(nameof(WinMainState), WinMainState.ToString());
+
+            // Boolean values
+            settings.TryAdd(nameof(IsAlwaysOnTop), IsAlwaysOnTop.ToString());
 
 
             return settings;
