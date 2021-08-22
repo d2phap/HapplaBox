@@ -36,7 +36,7 @@
   .preview {
     border-radius: 1px;
     overflow: hidden;
-    transition: all 200ms ease;
+    transition: all 200ms ease, transform 300ms cubic-bezier(1, -0.5, 0, 3);
 
     display: flex;
     flex-direction: column;
@@ -95,11 +95,11 @@
   }
 
   &:active {
-    transition: all 80ms ease;
+    transition: all 100ms ease;
     background-color: RGBA(getVar(colorBg) / 0.7);
 
     .preview {
-      transition: all 50ms ease;
+      transition: all 100ms ease;
       transform: scale(0.85);
     }
   }
