@@ -67,16 +67,6 @@ namespace HapplaBox
             var win = new WindowSettings();
             win.SetPlacementToWindow(m_window, win.GetWinMainPlacementFromConfig());
 
-
-            //if (Config.WinMainState == WindowState.Normal)
-            //{
-            //    // load window placement from settings
-            //    MainAppWindow.MoveAndResize(new(
-            //        Config.WinMainPositionX,
-            //        Config.WinMainPositionY,
-            //        Config.WinMainWidth,
-            //        Config.WinMainHeight));
-            //}
         }
 
         private void MainWindow_SizeChanged(object sender, WindowSizeChangedEventArgs args)
@@ -89,22 +79,10 @@ namespace HapplaBox
 
         private void MainAppWindow_Closing(AppWindow sender, AppWindowClosingEventArgs args)
         {
-            // Todo: save maximize state
-            // Config.IsMaximized = ...
-
-
             // save WinMain placement
             var win = new WindowSettings();
             var wp = win.GetPlacementFromWindow(m_window);
             win.SetWinMainPlacementConfig(wp);
-
-            //if (Config.WinMainState == WindowState.Normal)
-            //{
-            //    Config.WinMainPositionX = MainAppWindow.Position.X;
-            //    Config.WinMainPositionY = MainAppWindow.Position.Y;
-            //    Config.WinMainWidth = MainAppWindow.Size.Width;
-            //    Config.WinMainHeight = MainAppWindow.Size.Height;
-            //}
 
             Config.Write();
         }
@@ -115,6 +93,18 @@ namespace HapplaBox
             _ = GetWindowIdFromWindowHandle(hWnd, out WindowId myWndId);
 
             return AppWindow.GetFromWindowId(myWndId);
+        }
+
+        private void ToggleFullscreen()
+        {
+            if (MainAppWindow.Presenter.Kind == AppWindowPresenterKind.Overlapped)
+            {
+                _ = MainAppWindow.TrySetPresenter(AppWindowPresenterKind.FullScreen);
+            }
+            else
+            {
+                _ = MainAppWindow.TrySetPresenter(AppWindowPresenterKind.Overlapped);
+            }
         }
 
 
