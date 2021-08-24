@@ -1,4 +1,6 @@
 ﻿
+using System.IO;
+
 namespace HapplaBox.Base
 {
     public partial class Helpers

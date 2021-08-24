@@ -6,7 +6,8 @@
     <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
     <UseWinUI>true</UseWinUI>
     <AssemblyName>HapplaBox.Settings</AssemblyName>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>latest</LangVersion>
+      <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

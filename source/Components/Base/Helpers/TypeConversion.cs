@@ -1,5 +1,7 @@
 ﻿
 
+using System;
+
 namespace HapplaBox.Base
 {
     public partial class Helpers

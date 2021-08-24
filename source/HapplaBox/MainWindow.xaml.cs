@@ -1,7 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Automation.Provider;
 using Microsoft.UI.Xaml.Controls;
-using System.ComponentModel;
+using System;
 using WinRT;
 using static HapplaBox.App;
 
@@ -15,7 +14,7 @@ namespace HapplaBox
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        public System.IntPtr Handle { get => this.As<IWindowNative>().WindowHandle; }
+        public IntPtr Handle { get => this.As<IWindowNative>().WindowHandle; }
 
         public MainWindow()
         {
@@ -39,10 +38,13 @@ namespace HapplaBox
             Web2.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
             Web2.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
 
-            //Title = "HapplaBox v" + Web2.CoreWebView2.Environment.BrowserVersionString;
+            Title = "HapplaBox " + Web2.CoreWebView2.Environment.BrowserVersionString;
 
-            Web2.Source = new System.Uri(@"D:\_GITHUB\HapplaBox\source\Components\HapplaBox.Viewer\public\viewer.html");
+            Web2.Source = new Uri(@"D:\_GITHUB\HapplaBox\source\Components\HapplaBox.Viewer\public\viewer.html");
 
         }
+
+
+        
     }
 }
