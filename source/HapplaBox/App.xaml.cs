@@ -67,6 +67,10 @@ namespace HapplaBox
             var win = new WindowSettings();
             win.SetPlacementToWindow(m_window, win.GetWinMainPlacementFromConfig());
 
+            if (Config.IsFullScreen)
+            {
+                ToggleFullscreen();
+            }
         }
 
         private void MainWindow_SizeChanged(object sender, WindowSizeChangedEventArgs args)
@@ -83,6 +87,9 @@ namespace HapplaBox
             var win = new WindowSettings();
             var wp = win.GetPlacementFromWindow(m_window);
             win.SetWinMainPlacementConfig(wp);
+
+            // fullscreen mode
+            Config.IsFullScreen = MainAppWindow.Presenter.Kind == AppWindowPresenterKind.FullScreen;
 
             Config.Write();
         }

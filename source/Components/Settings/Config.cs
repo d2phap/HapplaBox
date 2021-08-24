@@ -55,6 +55,11 @@ namespace HapplaBox.Settings
         /// </summary>
         public static bool IsAlwaysOnTop { get; set; } = false;
 
+        /// <summary>
+        /// Gets, sets window Full screen mode
+        /// </summary>
+        public static bool IsFullScreen { get; set; } = false;
+
 
         #endregion
 
@@ -77,6 +82,7 @@ namespace HapplaBox.Settings
 
             // Boolean values
             IsAlwaysOnTop = items.GetValue(nameof(IsAlwaysOnTop), IsAlwaysOnTop);
+            IsFullScreen = items.GetValue(nameof(IsFullScreen), IsFullScreen);
 
 
             // Enum value
@@ -133,6 +139,7 @@ namespace HapplaBox.Settings
 
             // Boolean values
             settings.TryAdd(nameof(IsAlwaysOnTop), IsAlwaysOnTop.ToString());
+            settings.TryAdd(nameof(IsFullScreen), IsFullScreen.ToString());
 
 
             return settings;
