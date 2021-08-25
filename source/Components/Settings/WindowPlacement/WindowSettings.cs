@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml;
+using System;
 using System.Runtime.InteropServices;
-using System.Windows;
-using System.Windows.Interop;
+using WinRT;
 
 namespace HapplaBox.Settings
 {
-
     /// <summary>
     /// Provides extra and correct settings for Window
     /// </summary>
@@ -18,6 +17,14 @@ namespace HapplaBox.Settings
         private static extern bool GetWindowPlacement(IntPtr hWnd, out WindowPlacement lpwndpl);
 
 
+        [ComImport]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [Guid("EECDBF0E-BAE9-4CB6-A68E-9598E1CB57BB")]
+        public interface IWindowNative
+        {
+            IntPtr WindowHandle { get; }
+        }
+
         #region General window placement get/set functions
         /// <summary>
         /// Gets placement value of the given window using WinAPI
@@ -26,8 +33,8 @@ namespace HapplaBox.Settings
         /// <returns></returns>
         public WindowPlacement GetPlacementFromWindow(Window win)
         {
-            var hwnd = new WindowInteropHelper(win).Handle;
-            _ = GetWindowPlacement(hwnd, out WindowPlacement wp);
+            var handle = win.As<IWindowNative>().WindowHandle;
+            _ = GetWindowPlacement(handle, out WindowPlacement wp);
 
             return wp;
         }
@@ -47,9 +54,8 @@ namespace HapplaBox.Settings
 
             try
             {
-                var hwnd = new WindowInteropHelper(win).Handle;
-
-                _ = SetWindowPlacement(hwnd, ref wp);
+                var handle = win.As<IWindowNative>().WindowHandle;
+                _ = SetWindowPlacement(handle, ref wp);
             }
             catch { }
         }

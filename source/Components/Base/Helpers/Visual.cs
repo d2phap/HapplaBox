@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿
+using Windows.UI;
 
 namespace HapplaBox.Base
 {
@@ -16,9 +17,9 @@ namespace HapplaBox.Base
         /// </returns>
         public static Color ChangeColorBrightness(Color color, float correctionFactor)
         {
-            float red = (float)color.R;
-            float green = (float)color.G;
-            float blue = (float)color.B;
+            float red = color.R;
+            float green = color.G;
+            float blue = color.B;
 
             if (correctionFactor < 0)
             {

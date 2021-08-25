@@ -50,6 +50,16 @@ namespace HapplaBox.Settings
         /// </summary>
         public static WindowState WinMainState { get; set; } = WindowState.Normal;
 
+        /// <summary>
+        /// Gets, sets window top most state
+        /// </summary>
+        public static bool IsAlwaysOnTop { get; set; } = false;
+
+        /// <summary>
+        /// Gets, sets window Full screen mode
+        /// </summary>
+        public static bool IsFullScreen { get; set; } = false;
+
 
         #endregion
 
@@ -70,9 +80,13 @@ namespace HapplaBox.Settings
             WinMainWidth = items.GetValue(nameof(WinMainWidth), WinMainWidth);
             WinMainHeight = items.GetValue(nameof(WinMainHeight), WinMainHeight);
 
-            // Enum values
-            WinMainState = items.GetValue(nameof(WinMainState), WinMainState);
+            // Boolean values
+            IsAlwaysOnTop = items.GetValue(nameof(IsAlwaysOnTop), IsAlwaysOnTop);
+            IsFullScreen = items.GetValue(nameof(IsFullScreen), IsFullScreen);
 
+
+            // Enum value
+            WinMainState = items.GetValue(nameof(WinMainState), WinMainState);
         }
 
 
@@ -122,6 +136,10 @@ namespace HapplaBox.Settings
 
             // Enum values
             settings.TryAdd(nameof(WinMainState), WinMainState.ToString());
+
+            // Boolean values
+            settings.TryAdd(nameof(IsAlwaysOnTop), IsAlwaysOnTop.ToString());
+            settings.TryAdd(nameof(IsFullScreen), IsFullScreen.ToString());
 
 
             return settings;
