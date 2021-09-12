@@ -7,16 +7,16 @@ $vars: (
   focusShadow: inset 0 0 0 2px RGBA(var(--colorAccent) / 50%),
   borderRadius: 5px,
   fluentBlur: 20px,
-  fluentOpacity: 0.6,
+  fluentOpacity: 0.7,
 
   colorAccent: 35 121 139,
   colorBg: 255 255 255,
   colorText: 0 0 0,
-  colorBorder: var(--colorBg) / 0.3,
+  colorBorder: var(--colorText) / 0.15,
 
   scrollBarSize: 5px,
   thumbnailSize: 50,
-  toolbarSize: 35,
+  toolbarSize: 40,
 );
 
 

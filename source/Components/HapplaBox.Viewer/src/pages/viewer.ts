@@ -30,21 +30,21 @@ function loadToolbar() {
   const items: HbToolbarItem[] = [
     {
       type: 'button',
-      imageUrl: 'https://image.flaticon.com/icons/png/512/149/149334.png',
+      imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/2017%20(Light%20Gray)/OpenFile.svg',
       label: 'Open file',
       tooltip: 'Open file... (Ctrl+O)',
       clickFn: console.table,
     } as HbToolbarButton,
     {
       type: 'button',
-      imageUrl: 'https://image.flaticon.com/icons/png/512/149/149092.png',
+      imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/2017%20(Light%20Gray)/ThumbnailBar.svg',
       label: 'Thumbnail bar',
       tooltip: 'Thumbnail bar... (H)',
       clickFn: console.table,
     } as HbToolbarButton,
     {
       type: 'button',
-      imageUrl: 'https://image.flaticon.com/icons/png/512/149/149402.png',
+      imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/2017%20(Light%20Gray)/Checkerboard.svg',
       label: 'Checkerboard',
       tooltip: 'Checkerboard... (B)',
       clickFn: console.table,
@@ -52,7 +52,7 @@ function loadToolbar() {
     { type: 'divider' },
     {
       type: 'button',
-      imageUrl: 'https://image.flaticon.com/icons/png/512/149/149294.png',
+      imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/2017%20(Light%20Gray)/Menu.svg',
       label: 'Settings',
       tooltip: 'Settings... (Ctrl+,)',
       clickFn: console.table,
