@@ -79,8 +79,13 @@ export class HbGallery extends BaseElement {
     return parseInt(rootStyle.getPropertyValue('--thumbnailSize').trim(), 10);
   }
 
+  get padding() {
+    return this.itemSize / 10; // var(--padding)
+  }
+
   get itemRenderedSize() {
-    return this.itemSize + 12;
+    // [<padding>🖼️<padding>]<padding>[<padding>🖼️<padding>]...
+    return this.itemSize + (this.padding * 3);
   }
 
   get container() {

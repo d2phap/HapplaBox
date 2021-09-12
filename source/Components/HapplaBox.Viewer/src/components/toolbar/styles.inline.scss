@@ -34,12 +34,11 @@
   height: var(--size);
   padding: var(--itemPadding);
   margin: 0 calc(var(--size) / 14);
-  transition: all 200ms ease;
+  transition: all 400ms ease;
 
   .item-content {
     border-radius: 1px;
     overflow: hidden;
-    transition: all 200ms ease;
 
     display: flex;
     flex-direction: column;
@@ -80,8 +79,8 @@
     }
 
     &:active {
-      transition: all 100ms ease;
-      background-color: RGBA(getVar(colorAccent) / 0.4);
+      transition: all 200ms ease;
+      background-color: RGBA(getVar(colorAccent) / 0.5);
     }
 
     &.is--selected {

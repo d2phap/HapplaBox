@@ -4,10 +4,14 @@
 @import "../../themes/base/styles/scrollbar.scss";
 
 :host {
+  --size: calc(var(--thumbnailSize) * 1px);
+  --padding: calc(var(--size) / 10);
+  --scrollBarSize: var(--padding);
+
   @include panel(99);
   bottom: 20px;
   left: 50%;
-  padding: 0 5px;
+  padding: 0 var(--padding);
   max-width: 90vw;
   width: 100vw;
   height: auto;
@@ -27,16 +31,15 @@
   user-select: none;
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
-  padding: 5px;
+  padding: var(--padding);
   border-radius: getVar(borderRadius);
-  width: calc(var(--thumbnailSize) * 1px);
-  height: calc(var(--thumbnailSize) * 1px);
-  transition: all 200ms ease;
+  width: var(--size);
+  height: var(--size);
+  transition: all 400ms ease;
 
   .preview {
     border-radius: 1px;
     overflow: hidden;
-    transition: all 200ms ease, transform 300ms cubic-bezier(1, -0.5, 0, 3);
 
     display: flex;
     flex-direction: column;
@@ -78,30 +81,13 @@
   }
 
   &:hover {
-    background-color: RGBA(getVar(colorBg) / 0.5);
-    box-shadow: inset 0 0 0 1px RGBA(getVar(colorBorder));
-
-    .preview {
-      box-shadow: 0 5px 15px -10px RGBA(getVar(colorText) / 0.7);
-    }
-  }
-
-  @include removeFocusRing();
-
-  &:focus-visible,
-  &.is--focused {
-    background-color: RGBA(getVar(colorBg) / 0.5);
-    box-shadow: var(--focusShadow);
+    background-color: RGBA(getVar(colorAccent) / 0.2);
+    box-shadow: inset 0 0 0 1px RGBA(getVar(colorAccent) / 0.4);
   }
 
   &:active {
-    transition: all 100ms ease;
-    background-color: RGBA(getVar(colorBg) / 0.7);
-
-    .preview {
-      transition: all 100ms ease;
-      transform: scale(0.85);
-    }
+    transition: all 200ms ease;
+    background-color: RGBA(getVar(colorAccent) / 0.5);
   }
 
   &.is--invalid {
@@ -121,6 +107,14 @@
     background-color: RGBA(getVar(colorBg) / 0.7);
     box-shadow: inset 0 0 0 2px RGBA(getVar(colorAccent));
 
+    &:hover {
+      background-color: RGBA(getVar(colorAccent) / 0.2);
+    }
+
+    &:active {
+      background-color: RGBA(getVar(colorAccent) / 0.4);
+    }
+
     &:focus-visible,
     &.is--focused {
       box-shadow: var(--focusShadow), inset 0 0 0 2px RGBA(getVar(colorAccent));
@@ -130,11 +124,9 @@
 
 .gallery-container {
   position: relative;
-  padding: 5px 0;
+  padding: var(--padding) 0;
   width: 100%;
-  height: calc(var(--thumbnailSize) * 1px + 12px);
+  height: calc(var(--size) + (var(--padding) * 2) + (var(--scrollBarSize) / 2));
   overscroll-behavior: contain;
   overflow: auto;
-
-  @include removeFocusRing();
 }
