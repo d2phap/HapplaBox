@@ -14,10 +14,9 @@ styleEl.textContent = styles;
 
 export class HbToolbar extends BaseElement {
   #containerEl: HTMLDivElement;
-  #groupTopEl: HTMLDivElement;
-  #groupCenterEl: HTMLDivElement;
+  #groupListEl: HTMLDivElement;
   #groupBottomEl: HTMLDivElement;
-
+  #overflowEl: HTMLDivElement;
   #resizeObserver: ResizeObserver;
 
   #options: HbToolbarOptions = {
@@ -28,10 +27,6 @@ export class HbToolbar extends BaseElement {
 
   constructor() {
     super();
-
-    // initialize component
-    this.attachShadow({ mode: 'open' });
-    this.shadowRoot.appendChild(styleEl);
 
     // private methods
     this.createTemplate = this.createTemplate.bind(this);
@@ -44,8 +39,8 @@ export class HbToolbar extends BaseElement {
     // public methods
     this.load = this.load.bind(this);
 
+    // initialize template
     this.createTemplate();
-    this.shadowRoot.appendChild(this.#containerEl);
 
     // resize event observer
     this.#resizeObserver = new ResizeObserver(this.onResize);
@@ -57,33 +52,39 @@ export class HbToolbar extends BaseElement {
   }
 
   private createTemplate() {
-    // top group
-    const groupTopEl = document.createElement('div');
-    groupTopEl.classList.add('group', 'group-top');
+    // initialize component
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.appendChild(styleEl);
 
-    // center group
-    const groupCenterEl = document.createElement('div');
-    groupCenterEl.classList.add('group', 'group-center');
+    // items list
+    const groupListEl = document.createElement('div');
+    groupListEl.classList.add('group', 'group-list');
 
     // bottom group
     const groupBottomEl = document.createElement('div');
     groupBottomEl.classList.add('group', 'group-bottom');
 
+    // overflow dropdown
+    const overflowEl = document.createElement('div');
+    overflowEl.classList.add('menu', 'menu-overflow');
+
     // toolbar container
     const containerEl = document.createElement('div');
     containerEl.classList.add('toolbar-container');
-    containerEl.appendChild(groupTopEl);
-    containerEl.appendChild(groupCenterEl);
+    containerEl.appendChild(groupListEl);
     containerEl.appendChild(groupBottomEl);
 
     // disable browser default context menu
     containerEl.addEventListener('contextmenu', e => e.preventDefault(), true);
     containerEl.addEventListener('auxclick', this.onAuxClicked, true);
 
-    this.#containerEl = containerEl;
-    this.#groupTopEl = groupTopEl;
-    this.#groupCenterEl = groupCenterEl;
+    this.#groupListEl = groupListEl;
     this.#groupBottomEl = groupBottomEl;
+    this.#containerEl = containerEl;
+    this.#overflowEl = overflowEl;
+
+    this.shadowRoot.appendChild(this.#containerEl);
+    this.shadowRoot.appendChild(this.#overflowEl);
   }
 
   private onAuxClicked(e: PointerEvent) {
@@ -96,13 +97,30 @@ export class HbToolbar extends BaseElement {
   }
 
   private onResize() {
-    // todo
+    const { offsetLeft } = this.#groupBottomEl;
+    this.#overflowEl.innerHTML = '';
+
+    Array.from(this.#groupListEl.children).forEach(item => {
+      const el = item as HTMLElement;
+      const itemIndex = parseInt(el.getAttribute('data-index'), 10);
+
+      if (el.offsetLeft + el.clientWidth >= offsetLeft) {
+        const clonedItem = el.cloneNode(true);
+        el.classList.add('is--overflow');
+
+        this.#options.items[itemIndex].overflow = true;
+        this.#overflowEl.appendChild(clonedItem);
+      }
+      else {
+        el.classList.remove('is--overflow');
+        this.#options.items[itemIndex].overflow = false;
+      }
+    });
   }
 
   private renderItems() {
-    const topFragment = document.createDocumentFragment();
-    const centerFragment = document.createDocumentFragment();
-    const bottomFragment = document.createDocumentFragment();
+    const listFragment = document.createDocumentFragment();
+    const overflowFragment = document.createDocumentFragment();
 
     for (let i = 0; i < this.#options.items.length; i++) {
       const item = this.#options.items[i];
@@ -116,27 +134,24 @@ export class HbToolbar extends BaseElement {
         template = dividerTemplate;
       }
 
-      itemEl.innerHTML = compileTemplate(template, item);
+      itemEl.innerHTML = compileTemplate(template, {
+        ...item,
+        index: i,
+      });
 
-      if (item.group === 'top') {
-        topFragment.appendChild(itemEl.content.cloneNode(true));
-      }
-      else if (item.group === 'bottom') {
-        bottomFragment.appendChild(itemEl.content.cloneNode(true));
+      if (item.group === 'bottom') {
+        overflowFragment.appendChild(itemEl.content.cloneNode(true));
       }
       else {
-        centerFragment.appendChild(itemEl.content.cloneNode(true));
+        listFragment.appendChild(itemEl.content.cloneNode(true));
       }
     }
 
-    this.#groupTopEl.innerHTML = '';
-    this.#groupTopEl.appendChild(topFragment);
-
-    this.#groupCenterEl.innerHTML = '';
-    this.#groupCenterEl.appendChild(centerFragment);
-
     this.#groupBottomEl.innerHTML = '';
-    this.#groupBottomEl.appendChild(bottomFragment);
+    this.#groupBottomEl.appendChild(overflowFragment);
+
+    this.#groupListEl.innerHTML = '';
+    this.#groupListEl.appendChild(listFragment);
   }
 
 
@@ -147,6 +162,15 @@ export class HbToolbar extends BaseElement {
     };
 
     this.renderItems();
+  }
+
+  public toggleOverflowDropdown(show = true) {
+    if (show) {
+      this.#overflowEl.classList.add('show');
+    }
+    else {
+      this.#overflowEl.classList.remove('show');
+    }
   }
 }
 

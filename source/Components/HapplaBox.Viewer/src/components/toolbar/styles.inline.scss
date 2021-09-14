@@ -4,15 +4,18 @@
 @import "../../themes/base/styles/scrollbar.scss";
 
 :host {
-  --size: calc(var(--toolbarSize) * 1px);
-  --itemPadding: calc(var(--size) / 5);
+  --maxSize: 90;
+  --itemSize: calc(var(--toolbarSize) * 1px);
+  --itemPadding: calc(var(--itemSize) / 5);
+  --containerPadding: calc(var(--itemSize) / 8);
 
-  @include panel(100);
+  position: fixed;
+  z-index: 100;
   top: 20px;
   left: 50%;
   transform: translate(-50%, 0);
 
-  max-width: 90vw;
+  max-width: calc(var(--maxSize) * 1vw);
   -webkit-user-drag: none;
 
   * {
@@ -30,10 +33,10 @@
   user-select: none;
   border: 0;
   border-radius: getVar(borderRadius);
-  width: var(--size);
-  height: var(--size);
+  width: var(--itemSize);
+  height: var(--itemSize);
   padding: var(--itemPadding);
-  margin: 0 calc(var(--size) / 14);
+  margin: 0 calc(var(--itemSize) / 14);
   transition: all 400ms ease;
 
   .item-content {
@@ -95,7 +98,7 @@
 
   // space
   &.item-space {
-    width: calc(var(--size) / 2);
+    width: calc(var(--itemSize) / 2);
     margin: 0;
     padding: 0;
     pointer-events: none;
@@ -103,7 +106,7 @@
 
   // divider
   &.item-divider {
-    width: calc(var(--size) / 2);
+    width: calc(var(--itemSize) / 2);
     margin: 0;
     padding: 0;
     pointer-events: none;
@@ -111,7 +114,7 @@
     &::before {
       content: "";
       display: inline-block;
-      height: calc(var(--size) - (var(--itemPadding) * 2));
+      height: calc(var(--itemSize) - (var(--itemPadding) * 2));
       width: 0;
       border-left: 0.5px solid RGBA(getVar(colorBorder));
       border-radius: 5px;
@@ -120,20 +123,48 @@
 }
 
 .toolbar-container {
-  display: grid;
-  grid-template-columns: min-content minmax(auto, 1fr) min-content;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-  justify-items: center;
+  @include panel(0);
+  position: static;
 
-  padding: calc(var(--size) / 8);
+  display: flex;
+  padding: var(--containerPadding);
   margin: 0 -1px;
 
   .group {
     display: flex;
     flex-wrap: nowrap;
-    max-width: 100%;
-    overflow: auto;
+
+    &.group-list {
+      flex: 0 1 auto;
+      overflow: hidden;
+    }
+
+    &.group-overflow {
+      flex: 1 0 auto;
+    }
+  }
+
+  .toolbar-item {
+    // item is moved to overflow dropdown
+    &.is--overflow {
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
+}
+
+
+.menu-overflow {
+  @include panel(99999);
+
+  display: none;
+  position: absolute;
+  right: 0;
+  margin-top: var(--containerPadding);
+  padding: var(--containerPadding);
+  transition: all 400ms ease;
+
+  &.show {
+    display: block;
   }
 }

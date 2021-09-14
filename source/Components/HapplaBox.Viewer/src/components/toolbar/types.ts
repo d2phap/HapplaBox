@@ -1,10 +1,14 @@
 
 export type HbToolbarItemType = 'button' | 'divider' | 'space';
-export type HbToolbarGroup = 'top' | 'center' | 'bottom';
+export type HbToolbarGroup = 'center' | 'bottom';
 export type HbToolbarClickFunc = (e: PointerEvent) => any;
 export interface HbToolbarItem {
   type: HbToolbarItemType;
   group?: HbToolbarGroup; // center is default
+  /**
+   * Returns true if the item is moved to Overflow dropdown
+   */
+  overflow?: boolean;
 }
 export interface HbToolbarDivider extends HbToolbarItem {};
 export interface HbToolbarButton extends HbToolbarItem {
@@ -18,7 +22,7 @@ export interface HbToolbarButton extends HbToolbarItem {
 };
 
 
-export type HbToolbarPosition = 'top' | 'bottom' | 'left' | 'right';
+export type HbToolbarPosition = 'top' | 'bottom';
 export interface HbToolbarOptions {
   items: HbToolbarItem[];
   position: HbToolbarPosition;
