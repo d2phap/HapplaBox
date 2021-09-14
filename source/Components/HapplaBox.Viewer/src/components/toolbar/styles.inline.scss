@@ -165,9 +165,11 @@
   padding: var(--containerPadding);
   transition: all 400ms ease;
 
-  &.show {
-    visibility: visible;
-    opacity: 1;
-    z-index: 99999;
+  &:not(:empty) {
+    &.show {
+      visibility: visible;
+      opacity: 1;
+      z-index: 99999;
+    }
   }
 }

@@ -187,6 +187,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/menu.svg',
       label: 'Settings',
       tooltip: 'Settings... (Ctrl+,)',
+      checkable: true,
       clickFn: () => toolbarEl.toggleOverflowDropdown(),
     } as HbToolbarButton,
   ];

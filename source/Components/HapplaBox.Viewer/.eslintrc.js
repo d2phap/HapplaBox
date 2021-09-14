@@ -38,5 +38,6 @@ module.exports = {
     'no-debugger': 'off',
     'arrow-parens': 'off',
     'no-plusplus': 'off',
+    'no-param-reassign': 'off',
   },
 };

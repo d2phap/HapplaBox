@@ -36,6 +36,8 @@ export class HbToolbar extends BaseElement {
     // private events
     this.onAuxClicked = this.onAuxClicked.bind(this);
     this.onResize = this.onResize.bind(this);
+    this.addItemEvents = this.addItemEvents.bind(this);
+    this.onItemClicked = this.onItemClicked.bind(this);
 
     // public methods
     this.load = this.load.bind(this);
@@ -123,6 +125,38 @@ export class HbToolbar extends BaseElement {
     });
   }
 
+  private onItemClicked(e: PointerEvent, index: number) {
+    const el = e.currentTarget as HTMLElement;
+    const item = this.#options.items[index] as HbToolbarButton;
+
+    if (item.checkable) {
+      item.isChecked = !item.isChecked;
+
+      if (item.isChecked) {
+        el.classList.add('is--selected');
+      }
+      else {
+        el.classList.remove('is--selected');
+      }
+    }
+
+    item.clickFn(e, index);
+  }
+
+  private addItemEvents() {
+    const list = this.#containerEl.querySelectorAll('.toolbar-item');
+
+    list.forEach(n => {
+      const el = n as HTMLElement;
+      const itemIndex = parseInt(el.getAttribute('data-index'), 10);
+      const toolbarItem = this.#options.items[itemIndex];
+
+      if (toolbarItem.type === 'button') {
+        n.addEventListener('click', (e: PointerEvent) => this.onItemClicked(e, itemIndex), true);
+      }
+    });
+  }
+
   private renderItems() {
     const listFragment = document.createDocumentFragment();
     const overflowFragment = document.createDocumentFragment();
@@ -152,24 +186,13 @@ export class HbToolbar extends BaseElement {
       }
     }
 
-    Array.from([
-      ...listFragment.children,
-      ...overflowFragment.children,
-    ]).forEach(n => {
-      const el = n as HTMLElement;
-      const itemIndex = parseInt(el.getAttribute('data-index'), 10);
-      const item = this.#options.items[itemIndex];
-
-      if (item.type === 'button') {
-        n.addEventListener('click', (item as HbToolbarButton).clickFn, true);
-      }
-    });
-
     this.#groupBottomEl.innerHTML = '';
     this.#groupBottomEl.appendChild(overflowFragment);
 
     this.#groupListEl.innerHTML = '';
     this.#groupListEl.appendChild(listFragment);
+
+    this.addItemEvents();
   }
 
 
