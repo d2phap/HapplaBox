@@ -93,10 +93,20 @@
     }
   }
 
+  // space
+  &.item-space {
+    width: calc(var(--size) / 2);
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+  }
+
   // divider
   &.item-divider {
     width: calc(var(--size) / 2);
     margin: 0;
+    padding: 0;
+    pointer-events: none;
 
     &::before {
       content: "";

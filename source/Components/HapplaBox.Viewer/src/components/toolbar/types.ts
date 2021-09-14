@@ -1,5 +1,5 @@
 
-export type HbToolbarItemType = 'button' | 'divider';
+export type HbToolbarItemType = 'button' | 'divider' | 'space';
 export type HbToolbarClickFunc = (e: PointerEvent) => any;
 export interface HbToolbarItem {
   type: HbToolbarItemType;

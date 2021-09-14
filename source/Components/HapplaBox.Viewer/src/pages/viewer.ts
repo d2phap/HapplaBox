@@ -35,6 +35,7 @@ function loadToolbar() {
       tooltip: 'Open file... (Ctrl+O)',
       clickFn: console.table,
     } as HbToolbarButton,
+    { type: 'space' },
     {
       type: 'button',
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/2017%20(Light%20Gray)/ThumbnailBar.svg',

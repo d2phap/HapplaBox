@@ -87,7 +87,7 @@ export class HbToolbar extends BaseElement {
       if (item.type === 'button') {
         template = buttonTemplate;
       }
-      else if (item.type === 'divider') {
+      else if (item.type === 'divider' || item.type === 'space') {
         template = dividerTemplate;
       }
 
