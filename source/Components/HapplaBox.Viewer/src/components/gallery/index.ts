@@ -176,8 +176,6 @@ export class HbGallery extends BaseElement {
       this.selectItems([index]);
     }
 
-    console.log('clicked');
-
     this.#options.clickItemFn(e, { index, el });
   }
 
@@ -395,7 +393,10 @@ export class HbGallery extends BaseElement {
         .join(',');
 
       const els = this.#containerEl.querySelectorAll(oldSelectionQuery);
-      els.forEach(el => el.classList.remove(CLASS_SELECTED));
+      els.forEach(el => {
+        el.classList.remove(CLASS_SELECTED);
+        el.setAttribute('tabindex', '-1');
+      });
     }
 
     // select the new items
@@ -405,7 +406,13 @@ export class HbGallery extends BaseElement {
         .join(',');
 
       const els = this.#containerEl.querySelectorAll(newSelectionQuery);
-      els.forEach(el => el.classList.add(CLASS_SELECTED));
+      els.forEach((el, index) => {
+        el.classList.add(CLASS_SELECTED);
+
+        if (index === 0) {
+          el.setAttribute('tabindex', '0');
+        }
+      });
     }
 
     // update selection list
