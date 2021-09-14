@@ -14,6 +14,10 @@ styleEl.textContent = styles;
 
 export class HbToolbar extends BaseElement {
   #containerEl: HTMLDivElement;
+  #groupTopEl: HTMLDivElement;
+  #groupCenterEl: HTMLDivElement;
+  #groupBottomEl: HTMLDivElement;
+
   #resizeObserver: ResizeObserver;
 
   #options: HbToolbarOptions = {
@@ -30,7 +34,7 @@ export class HbToolbar extends BaseElement {
     this.shadowRoot.appendChild(styleEl);
 
     // private methods
-    this.createContainer = this.createContainer.bind(this);
+    this.createTemplate = this.createTemplate.bind(this);
     this.renderItems = this.renderItems.bind(this);
 
     // private events
@@ -40,7 +44,7 @@ export class HbToolbar extends BaseElement {
     // public methods
     this.load = this.load.bind(this);
 
-    this.#containerEl = this.createContainer();
+    this.createTemplate();
     this.shadowRoot.appendChild(this.#containerEl);
 
     // resize event observer
@@ -52,15 +56,34 @@ export class HbToolbar extends BaseElement {
     this.#resizeObserver.disconnect();
   }
 
-  private createContainer() {
-    const el = document.createElement('div');
-    el.classList.add('toolbar-container');
+  private createTemplate() {
+    // top group
+    const groupTopEl = document.createElement('div');
+    groupTopEl.classList.add('group', 'group-top');
+
+    // center group
+    const groupCenterEl = document.createElement('div');
+    groupCenterEl.classList.add('group', 'group-center');
+
+    // bottom group
+    const groupBottomEl = document.createElement('div');
+    groupBottomEl.classList.add('group', 'group-bottom');
+
+    // toolbar container
+    const containerEl = document.createElement('div');
+    containerEl.classList.add('toolbar-container');
+    containerEl.appendChild(groupTopEl);
+    containerEl.appendChild(groupCenterEl);
+    containerEl.appendChild(groupBottomEl);
 
     // disable browser default context menu
-    el.addEventListener('contextmenu', e => e.preventDefault(), true);
-    el.addEventListener('auxclick', this.onAuxClicked, true);
+    containerEl.addEventListener('contextmenu', e => e.preventDefault(), true);
+    containerEl.addEventListener('auxclick', this.onAuxClicked, true);
 
-    return el;
+    this.#containerEl = containerEl;
+    this.#groupTopEl = groupTopEl;
+    this.#groupCenterEl = groupCenterEl;
+    this.#groupBottomEl = groupBottomEl;
   }
 
   private onAuxClicked(e: PointerEvent) {
@@ -77,7 +100,9 @@ export class HbToolbar extends BaseElement {
   }
 
   private renderItems() {
-    const fragment = document.createDocumentFragment();
+    const topFragment = document.createDocumentFragment();
+    const centerFragment = document.createDocumentFragment();
+    const bottomFragment = document.createDocumentFragment();
 
     for (let i = 0; i < this.#options.items.length; i++) {
       const item = this.#options.items[i];
@@ -93,11 +118,25 @@ export class HbToolbar extends BaseElement {
 
       itemEl.innerHTML = compileTemplate(template, item);
 
-      fragment.appendChild(itemEl.content.cloneNode(true));
+      if (item.group === 'top') {
+        topFragment.appendChild(itemEl.content.cloneNode(true));
+      }
+      else if (item.group === 'bottom') {
+        bottomFragment.appendChild(itemEl.content.cloneNode(true));
+      }
+      else {
+        centerFragment.appendChild(itemEl.content.cloneNode(true));
+      }
     }
 
-    this.#containerEl.innerHTML = '';
-    this.#containerEl.appendChild(fragment);
+    this.#groupTopEl.innerHTML = '';
+    this.#groupTopEl.appendChild(topFragment);
+
+    this.#groupCenterEl.innerHTML = '';
+    this.#groupCenterEl.appendChild(centerFragment);
+
+    this.#groupBottomEl.innerHTML = '';
+    this.#groupBottomEl.appendChild(bottomFragment);
   }
 
 

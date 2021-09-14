@@ -1,8 +1,10 @@
 
 export type HbToolbarItemType = 'button' | 'divider' | 'space';
+export type HbToolbarGroup = 'top' | 'center' | 'bottom';
 export type HbToolbarClickFunc = (e: PointerEvent) => any;
 export interface HbToolbarItem {
   type: HbToolbarItemType;
+  group?: HbToolbarGroup; // center is default
 }
 export interface HbToolbarDivider extends HbToolbarItem {};
 export interface HbToolbarButton extends HbToolbarItem {

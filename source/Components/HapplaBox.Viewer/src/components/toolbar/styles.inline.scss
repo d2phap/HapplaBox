@@ -5,6 +5,7 @@
 
 :host {
   --size: calc(var(--toolbarSize) * 1px);
+  --itemPadding: calc(var(--size) / 5);
 
   @include panel(100);
   top: 20px;
@@ -20,11 +21,10 @@
 }
 
 .toolbar-item {
-  --itemPadding: calc(var(--size) / 5);
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 1 0 auto;
   appearance: none;
   background-color: transparent;
   user-select: none;
@@ -120,7 +120,20 @@
 }
 
 .toolbar-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: min-content minmax(auto, 1fr) min-content;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+
   padding: calc(var(--size) / 8);
   margin: 0 -1px;
+
+  .group {
+    display: flex;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow: auto;
+  }
 }
