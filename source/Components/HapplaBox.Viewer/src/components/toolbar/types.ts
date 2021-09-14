@@ -18,7 +18,6 @@ export interface HbToolbarButton extends HbToolbarItem {
   checkable?: boolean;
   disabled?: boolean;
   clickFn?: HbToolbarClickFunc;
-  rightClickFn?: HbToolbarClickFunc;
 };
 
 

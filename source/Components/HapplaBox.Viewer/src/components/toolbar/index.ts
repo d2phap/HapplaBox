@@ -1,6 +1,6 @@
 
 import { compileTemplate } from '@/utils';
-import { HbToolbarOptions } from './types';
+import { HbToolbarOptions, HbToolbarButton } from './types';
 
 import BaseElement from '../BaseElement';
 import styles from './styles.inline.scss';
@@ -18,6 +18,7 @@ export class HbToolbar extends BaseElement {
   #groupBottomEl: HTMLDivElement;
   #overflowEl: HTMLDivElement;
   #resizeObserver: ResizeObserver;
+  #isOverflowOpen = false;
 
   #options: HbToolbarOptions = {
     items: [],
@@ -67,6 +68,10 @@ export class HbToolbar extends BaseElement {
     // overflow dropdown
     const overflowEl = document.createElement('div');
     overflowEl.classList.add('menu', 'menu-overflow');
+
+    // disable browser default context menu
+    overflowEl.addEventListener('contextmenu', e => e.preventDefault(), true);
+    overflowEl.addEventListener('auxclick', this.onAuxClicked, true);
 
     // toolbar container
     const containerEl = document.createElement('div');
@@ -147,6 +152,19 @@ export class HbToolbar extends BaseElement {
       }
     }
 
+    Array.from([
+      ...listFragment.children,
+      ...overflowFragment.children,
+    ]).forEach(n => {
+      const el = n as HTMLElement;
+      const itemIndex = parseInt(el.getAttribute('data-index'), 10);
+      const item = this.#options.items[itemIndex];
+
+      if (item.type === 'button') {
+        n.addEventListener('click', (item as HbToolbarButton).clickFn, true);
+      }
+    });
+
     this.#groupBottomEl.innerHTML = '';
     this.#groupBottomEl.appendChild(overflowFragment);
 
@@ -164,8 +182,10 @@ export class HbToolbar extends BaseElement {
     this.renderItems();
   }
 
-  public toggleOverflowDropdown(show = true) {
-    if (show) {
+  public toggleOverflowDropdown() {
+    this.#isOverflowOpen = !this.#isOverflowOpen;
+
+    if (this.#isOverflowOpen) {
       this.#overflowEl.classList.add('show');
     }
     else {
