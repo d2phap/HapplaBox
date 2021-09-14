@@ -123,6 +123,9 @@ export class HbToolbar extends BaseElement {
         this.#options.items[itemIndex].overflow = false;
       }
     });
+
+    // add event for overflow items
+    this.addItemEvents(true);
   }
 
   private onItemClicked(e: PointerEvent, index: number) {
@@ -143,16 +146,26 @@ export class HbToolbar extends BaseElement {
     item.clickFn(e, index);
   }
 
-  private addItemEvents() {
-    const list = this.#containerEl.querySelectorAll('.toolbar-item');
+  private addItemEvents(overflowItemsOnly = false) {
+    let list: NodeListOf<Element>;
+
+    if (overflowItemsOnly) {
+      list = this.#overflowEl.querySelectorAll('.toolbar-item');
+    }
+    else {
+      list = this.#containerEl.querySelectorAll('.toolbar-item');
+    }
 
     list.forEach(n => {
       const el = n as HTMLElement;
       const itemIndex = parseInt(el.getAttribute('data-index'), 10);
       const toolbarItem = this.#options.items[itemIndex];
 
+      const clickEvent = (e: PointerEvent) => this.onItemClicked(e, itemIndex);
+
       if (toolbarItem.type === 'button') {
-        n.addEventListener('click', (e: PointerEvent) => this.onItemClicked(e, itemIndex), true);
+        n.removeEventListener('click', clickEvent, true);
+        n.addEventListener('click', clickEvent, true);
       }
     });
   }
