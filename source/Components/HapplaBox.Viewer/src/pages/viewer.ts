@@ -30,7 +30,6 @@ function loadToolbar() {
   const items: HbToolbarItem[] = [
     {
       type: 'button',
-      group: 'top',
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/back.svg',
       label: 'Previous',
       tooltip: 'Previous (Left arrow)',
@@ -38,13 +37,12 @@ function loadToolbar() {
     } as HbToolbarButton,
     {
       type: 'button',
-      group: 'top',
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/next.svg',
       label: 'Next',
       tooltip: 'Next (Right arrow)',
       clickFn: console.table,
     } as HbToolbarButton,
-    { type: 'divider', group: 'top' },
+    { type: 'divider' },
     {
       type: 'button',
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/leftrotate.svg',
@@ -182,14 +180,14 @@ function loadToolbar() {
       tooltip: 'Delete (Delete)',
       clickFn: console.table,
     } as HbToolbarButton,
-    { type: 'divider', group: 'bottom' },
+    { type: 'space', group: 'bottom' },
     {
       type: 'button',
       group: 'bottom',
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/menu.svg',
       label: 'Settings',
       tooltip: 'Settings... (Ctrl+,)',
-      clickFn: console.table,
+      clickFn: () => toolbarEl.toggleOverflowDropdown(),
     } as HbToolbarButton,
   ];
 
