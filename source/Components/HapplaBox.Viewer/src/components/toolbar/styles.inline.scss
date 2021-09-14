@@ -93,6 +93,10 @@
       &:hover {
         background-color: RGBA(getVar(colorAccent) / 0.2);
       }
+
+      &:active {
+        background-color: RGBA(getVar(colorAccent) / 0.5);
+      }
     }
   }
 
