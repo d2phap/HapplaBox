@@ -98,6 +98,12 @@
         background-color: RGBA(getVar(colorAccent) / 0.5);
       }
     }
+
+    &.hide {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 
   // space

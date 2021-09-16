@@ -1,12 +1,14 @@
 
 import { compileTemplate } from '@/utils';
-import { HbToolbarOptions, HbToolbarButton } from './types';
+import { HbToolbarOptions, HbToolbarItem } from './types';
 
 import BaseElement from '../BaseElement';
 import styles from './styles.inline.scss';
 import buttonTemplate from './button.html';
 import dividerTemplate from './divider.html';
 
+const BTN_SHOW_MORE = 'btnShowMore';
+const BTN_MENU = 'btnMenu';
 
 const styleEl = document.createElement('style');
 styleEl.textContent = styles;
@@ -16,10 +18,12 @@ export class HbToolbar extends BaseElement {
   #containerEl: HTMLDivElement;
   #groupListEl: HTMLDivElement;
   #groupBottomEl: HTMLDivElement;
-  #overflowBtnEl: HTMLButtonElement;
   #overflowDropdownEl: HTMLDivElement;
+
   #resizeObserver: ResizeObserver;
+  #isOverflow = false;
   #isOverflowOpen = false;
+  #allItems: HbToolbarItem[] = [];
 
   #options: HbToolbarOptions = {
     items: [],
@@ -49,6 +53,32 @@ export class HbToolbar extends BaseElement {
     // resize event observer
     this.#resizeObserver = new ResizeObserver(this.onResize);
     this.#resizeObserver.observe(this.shadowRoot.host);
+  }
+
+  private get builtInItems(): HbToolbarItem[] {
+    return [
+      { type: 'space', group: 'bottom' },
+      {
+        type: 'button',
+        name: BTN_SHOW_MORE,
+        group: 'bottom',
+        cssClass: 'hide',
+        imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/gotoimage.svg',
+        label: 'Show more items',
+        tooltip: 'Show more items',
+        checkable: true,
+        clickFn: () => this.toggleOverflowDropdown(),
+      },
+      {
+        type: 'button',
+        name: BTN_MENU,
+        group: 'bottom',
+        imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/menu.svg',
+        label: 'Menu',
+        tooltip: 'Menu... (`)',
+        clickFn: console.log,
+      },
+    ];
   }
 
   private disconnectedCallback() {
@@ -108,30 +138,47 @@ export class HbToolbar extends BaseElement {
     const { offsetLeft } = this.#groupBottomEl;
     this.#overflowDropdownEl.innerHTML = '';
 
-    Array.from(this.#groupListEl.children).forEach(item => {
-      const el = item as HTMLElement;
-      const itemIndex = parseInt(el.getAttribute('data-index'), 10);
+    Array.from(this.#groupListEl.children).forEach(el => {
+      const itemEl = el as HTMLElement;
+      const itemName = itemEl.getAttribute('name');
+      const isItemOverflow = itemEl.offsetLeft >= offsetLeft - itemEl.clientWidth;
 
-      if (el.offsetLeft + el.clientWidth >= offsetLeft) {
-        const clonedItem = el.cloneNode(true);
-        el.classList.add('is--overflow');
+      if (isItemOverflow) {
+        const clonedItem = itemEl.cloneNode(true);
+        itemEl.classList.add('is--overflow');
 
-        this.#options.items[itemIndex].overflow = true;
         this.#overflowDropdownEl.appendChild(clonedItem);
       }
       else {
-        el.classList.remove('is--overflow');
-        this.#options.items[itemIndex].overflow = false;
+        itemEl.classList.remove('is--overflow');
+      }
+
+      const item = this.#options.items.find(i => i.name === itemName);
+      if (item) {
+        item.overflow = isItemOverflow;
       }
     });
 
     // add event for overflow items
     this.addItemEvents(true);
+
+    this.#isOverflow = this.#overflowDropdownEl.children.length > 0;
+    const btnEl = this.#groupBottomEl.querySelector(`[name="${BTN_SHOW_MORE}"]`);
+
+    // show BTN_SHOW_MORE button if it's overflow
+    if (btnEl && this.#isOverflow) {
+      btnEl.classList.remove('hide');
+    }
+    else {
+      btnEl.classList.add('hide');
+    }
   }
 
-  private onItemClicked(e: PointerEvent, index: number) {
+  private onItemClicked(e: PointerEvent, itemName: string) {
     const el = e.currentTarget as HTMLElement;
-    const item = this.#options.items[index] as HbToolbarButton;
+    const item = this.#allItems.find(i => i.name === itemName);
+
+    if (!item) return;
 
     if (item.checkable) {
       item.isChecked = !item.isChecked;
@@ -144,7 +191,7 @@ export class HbToolbar extends BaseElement {
       }
     }
 
-    item.clickFn(e, index);
+    item.clickFn(e, itemName);
   }
 
   private addItemEvents(overflowItemsOnly = false) {
@@ -159,24 +206,26 @@ export class HbToolbar extends BaseElement {
 
     list.forEach(n => {
       const el = n as HTMLElement;
-      const itemIndex = parseInt(el.getAttribute('data-index'), 10);
-      const toolbarItem = this.#options.items[itemIndex];
+      const itemName = el.getAttribute('name');
+      const toolbarItem = this.#allItems.find(i => i.name === itemName);
 
-      const clickEvent = (e: PointerEvent) => this.onItemClicked(e, itemIndex);
+      if (toolbarItem) {
+        const clickEvent = (e: PointerEvent) => this.onItemClicked(e, itemName);
 
-      if (toolbarItem.type === 'button') {
-        n.removeEventListener('click', clickEvent, true);
-        n.addEventListener('click', clickEvent, true);
+        if (toolbarItem.type === 'button') {
+          n.removeEventListener('click', clickEvent, true);
+          n.addEventListener('click', clickEvent, true);
+        }
       }
     });
   }
 
   private renderItems() {
-    const listFragment = document.createDocumentFragment();
-    const overflowFragment = document.createDocumentFragment();
+    const groupListFragment = document.createDocumentFragment();
+    const groupBottomFragment = document.createDocumentFragment();
 
-    for (let i = 0; i < this.#options.items.length; i++) {
-      const item = this.#options.items[i];
+    for (let i = 0; i < this.#allItems.length; i++) {
+      const item = this.#allItems[i];
       const itemEl = document.createElement('template');
       let template = '';
 
@@ -187,34 +236,35 @@ export class HbToolbar extends BaseElement {
         template = dividerTemplate;
       }
 
-      itemEl.innerHTML = compileTemplate(template, {
-        ...item,
-        index: i,
-      });
+      itemEl.innerHTML = compileTemplate(template, item);
 
       if (item.group === 'bottom') {
-        overflowFragment.appendChild(itemEl.content.cloneNode(true));
+        groupBottomFragment.appendChild(itemEl.content.cloneNode(true));
       }
       else {
-        listFragment.appendChild(itemEl.content.cloneNode(true));
+        groupListFragment.appendChild(itemEl.content.cloneNode(true));
       }
     }
 
-    this.#groupBottomEl.innerHTML = '';
-    this.#groupBottomEl.appendChild(overflowFragment);
-
     this.#groupListEl.innerHTML = '';
-    this.#groupListEl.appendChild(listFragment);
+    this.#groupListEl.appendChild(groupListFragment);
+
+    this.#groupBottomEl.innerHTML = '';
+    this.#groupBottomEl.appendChild(groupBottomFragment);
 
     this.addItemEvents();
   }
-
 
   public load(options: HbToolbarOptions) {
     this.#options = {
       ...this.#options,
       ...options,
     };
+
+    this.#allItems = [
+      ...this.#options.items,
+      ...this.builtInItems,
+    ];
 
     this.renderItems();
   }
