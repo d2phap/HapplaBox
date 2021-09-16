@@ -8,6 +8,7 @@
   --itemSize: calc(var(--toolbarSize) * 1px);
   --itemPadding: calc(var(--itemSize) / 5);
   --itemMargin: calc(var(--itemSize) / 14);
+  --itemBorderRadius: calc(var(--borderRadius) / 2);
   --containerPadding: calc(var(--itemSize) / 8);
 
   position: fixed;
@@ -33,7 +34,7 @@
   background-color: transparent;
   user-select: none;
   border: 0;
-  border-radius: getVar(borderRadius);
+  border-radius: var(--itemBorderRadius);
   width: var(--itemSize);
   height: var(--itemSize);
   padding: var(--itemPadding);

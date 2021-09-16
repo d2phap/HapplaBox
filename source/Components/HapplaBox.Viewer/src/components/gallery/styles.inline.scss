@@ -7,6 +7,7 @@
   --size: calc(var(--thumbnailSize) * 1px);
   --padding: calc(var(--size) / 10);
   --scrollBarSize: var(--padding);
+  --itemBorderRadius: calc(var(--borderRadius) / 2);
 
   @include panel(99);
   bottom: 20px;
@@ -32,7 +33,7 @@
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
   padding: var(--padding);
-  border-radius: getVar(borderRadius);
+  border-radius: var(--itemBorderRadius);
   width: var(--size);
   height: var(--size);
   transition: all 400ms ease;
