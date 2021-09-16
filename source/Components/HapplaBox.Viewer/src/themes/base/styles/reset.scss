@@ -10,7 +10,7 @@
 }
 
 html {
-  font-family: getVar(fontBase);
+  font-family: var(--fontBase);
 
   // remove eslastic scrolling
   overflow: hidden;
@@ -28,7 +28,7 @@ pre,
 code,
 kbd,
 samp {
-  font-family: getVar(fontCode);
+  font-family: var(--fontCode);
   font-size: 1em;
 }
 

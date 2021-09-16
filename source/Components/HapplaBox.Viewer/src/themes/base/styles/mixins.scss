@@ -1,7 +1,7 @@
 
-@mixin fluentBackground($color: getVar(colorBg)) {
-  background-color: RGBA($color / getVar(fluentOpacity));
-  backdrop-filter: blur(getVar(fluentBlur));
+@mixin fluentBackground($color: var(--colorBg)) {
+  background-color: RGBA($color / var(--fluentOpacity));
+  backdrop-filter: blur(var(--fluentBlur));
 }
 
 
@@ -10,11 +10,11 @@
   position: fixed;
   z-index: $zIndex;
 
-  border: 1px solid RGBA(getVar(colorBorder));
-  border-radius: getVar(borderRadius);
-  box-shadow: getVar(shadow);
+  border: 1px solid RGBA(var(--colorBorder));
+  border-radius: var(--borderRadius);
+  box-shadow: var(--shadow);
 
-  color: RGBA(getVar(colorText));
+  color: RGBA(var(--colorText));
 }
 
 @mixin removeFocusRing() {
