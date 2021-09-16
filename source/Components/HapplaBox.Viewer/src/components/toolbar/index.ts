@@ -16,7 +16,8 @@ export class HbToolbar extends BaseElement {
   #containerEl: HTMLDivElement;
   #groupListEl: HTMLDivElement;
   #groupBottomEl: HTMLDivElement;
-  #overflowEl: HTMLDivElement;
+  #overflowBtnEl: HTMLButtonElement;
+  #overflowDropdownEl: HTMLDivElement;
   #resizeObserver: ResizeObserver;
   #isOverflowOpen = false;
 
@@ -88,10 +89,10 @@ export class HbToolbar extends BaseElement {
     this.#groupListEl = groupListEl;
     this.#groupBottomEl = groupBottomEl;
     this.#containerEl = containerEl;
-    this.#overflowEl = overflowEl;
+    this.#overflowDropdownEl = overflowEl;
 
     this.shadowRoot.appendChild(this.#containerEl);
-    this.shadowRoot.appendChild(this.#overflowEl);
+    this.shadowRoot.appendChild(this.#overflowDropdownEl);
   }
 
   private onAuxClicked(e: PointerEvent) {
@@ -105,7 +106,7 @@ export class HbToolbar extends BaseElement {
 
   private onResize() {
     const { offsetLeft } = this.#groupBottomEl;
-    this.#overflowEl.innerHTML = '';
+    this.#overflowDropdownEl.innerHTML = '';
 
     Array.from(this.#groupListEl.children).forEach(item => {
       const el = item as HTMLElement;
@@ -116,7 +117,7 @@ export class HbToolbar extends BaseElement {
         el.classList.add('is--overflow');
 
         this.#options.items[itemIndex].overflow = true;
-        this.#overflowEl.appendChild(clonedItem);
+        this.#overflowDropdownEl.appendChild(clonedItem);
       }
       else {
         el.classList.remove('is--overflow');
@@ -150,7 +151,7 @@ export class HbToolbar extends BaseElement {
     let list: NodeListOf<Element>;
 
     if (overflowItemsOnly) {
-      list = this.#overflowEl.querySelectorAll('.toolbar-item');
+      list = this.#overflowDropdownEl.querySelectorAll('.toolbar-item');
     }
     else {
       list = this.#containerEl.querySelectorAll('.toolbar-item');
@@ -222,10 +223,10 @@ export class HbToolbar extends BaseElement {
     this.#isOverflowOpen = !this.#isOverflowOpen;
 
     if (this.#isOverflowOpen) {
-      this.#overflowEl.classList.add('show');
+      this.#overflowDropdownEl.classList.add('show');
     }
     else {
-      this.#overflowEl.classList.remove('show');
+      this.#overflowDropdownEl.classList.remove('show');
     }
   }
 }
