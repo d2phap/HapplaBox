@@ -8,6 +8,7 @@
 
   // background-image: conic-gradient(#0000 25%, #fff1 0 50%, #0000 0 75%, #fff1 0);
   background-size: 20px 20px;
+  background-color: RGBA(var(--colorBg) / 0.95);
 
   @include removeFocusRing();
 }

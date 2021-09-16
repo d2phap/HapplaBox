@@ -7,6 +7,7 @@
   --maxSize: 90;
   --itemSize: calc(var(--toolbarSize) * 1px);
   --itemPadding: calc(var(--itemSize) / 5);
+  --itemMargin: calc(var(--itemSize) / 14);
   --containerPadding: calc(var(--itemSize) / 8);
 
   position: fixed;
@@ -36,7 +37,7 @@
   width: var(--itemSize);
   height: var(--itemSize);
   padding: var(--itemPadding);
-  margin: 0 calc(var(--itemSize) / 14);
+  margin: 0 var(--itemMargin);
   transition: all 400ms ease;
 
   .item-content {
@@ -72,6 +73,13 @@
     margin-top: 2px;
 
     display: var(--infoDisplay, none);
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+  &:last-child {
+    margin-right: 0;
   }
 
   // button
@@ -138,7 +146,6 @@
 
   display: flex;
   padding: var(--containerPadding);
-  margin: 0 -1px;
 
   .group {
     display: flex;

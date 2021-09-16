@@ -141,7 +141,7 @@ export class HbToolbar extends BaseElement {
     Array.from(this.#groupListEl.children).forEach(el => {
       const itemEl = el as HTMLElement;
       const itemName = itemEl.getAttribute('name');
-      const isItemOverflow = itemEl.offsetLeft >= offsetLeft - itemEl.clientWidth;
+      const isItemOverflow = itemEl.offsetLeft + itemEl.clientWidth > offsetLeft;
 
       if (isItemOverflow) {
         const clonedItem = itemEl.cloneNode(true);

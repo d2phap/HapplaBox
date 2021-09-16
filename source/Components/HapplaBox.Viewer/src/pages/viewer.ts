@@ -201,26 +201,6 @@ function loadToolbar() {
       tooltip: 'Delete (Delete)',
       clickFn: console.log,
     },
-    // { type: 'space', group: 'bottom' },
-    // {
-    //   type: 'button',
-    //   name: 'btnShowMore',
-    //   group: 'bottom',
-    //   imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/gotoimage.svg',
-    //   label: 'Show more items',
-    //   tooltip: 'Show more items',
-    //   checkable: true,
-    //   clickFn: () => toolbarEl.toggleOverflowDropdown(),
-    // },
-    // {
-    //   type: 'button',
-    //   name: 'btnMenu',
-    //   group: 'bottom',
-    //   imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/menu.svg',
-    //   label: 'Settings',
-    //   tooltip: 'Settings... (Ctrl+,)',
-    //   clickFn: console.log,
-    // },
   ];
 
   toolbarEl.load({
