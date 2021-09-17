@@ -271,7 +271,7 @@ const board = new Board(elBoard, elBoardContent, {
   onContentReady,
 });
 
-pause(500).then(() => {
+pause(0).then(() => {
   loadToolbar();
   loadThumbnails();
 });
