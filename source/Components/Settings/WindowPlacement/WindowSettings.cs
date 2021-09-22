@@ -1,7 +1,6 @@
-﻿using Microsoft.UI.Xaml;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
-using WinRT;
+using System.Windows.Forms;
 
 namespace HapplaBox.Settings
 {
@@ -17,24 +16,15 @@ namespace HapplaBox.Settings
         private static extern bool GetWindowPlacement(IntPtr hWnd, out WindowPlacement lpwndpl);
 
 
-        [ComImport]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [Guid("EECDBF0E-BAE9-4CB6-A68E-9598E1CB57BB")]
-        public interface IWindowNative
-        {
-            IntPtr WindowHandle { get; }
-        }
-
         #region General window placement get/set functions
         /// <summary>
         /// Gets placement value of the given window using WinAPI
         /// </summary>
         /// <param name="win">A window</param>
         /// <returns></returns>
-        public WindowPlacement GetPlacementFromWindow(Window win)
+        public WindowPlacement GetPlacementFromWindow(Form win)
         {
-            var handle = win.As<IWindowNative>().WindowHandle;
-            _ = GetWindowPlacement(handle, out WindowPlacement wp);
+            _ = GetWindowPlacement(win.Handle, out WindowPlacement wp);
 
             return wp;
         }
@@ -47,15 +37,14 @@ namespace HapplaBox.Settings
         ///       this function will place the window onto a visible monitor.
         /// </summary>
         /// <param name="win">A window</param>
-        public void SetPlacementToWindow(Window win, WindowPlacement wp)
+        public void SetPlacementToWindow(Form win, WindowPlacement wp)
         {
             // change window state 'Minimized' to 'Normal'
             wp.showCmd = wp.showCmd == WindowState.Minimized ? WindowState.Normal : wp.showCmd;
 
             try
             {
-                var handle = win.As<IWindowNative>().WindowHandle;
-                _ = SetWindowPlacement(handle, ref wp);
+                _ = SetWindowPlacement(win.Handle, ref wp);
             }
             catch { }
         }
@@ -63,20 +52,20 @@ namespace HapplaBox.Settings
         #endregion
 
 
-        #region WinMain placement
+        #region FrmMain placement
 
         /// <summary>
-        /// Updates the given WindowPlacement object to WinMain config
+        /// Updates the given WindowPlacement object to FrmMain config
         /// </summary>
         /// <param name="wp"></param>
-        public void SetWinMainPlacementConfig(WindowPlacement wp)
+        public void SetFrmMainPlacementConfig(WindowPlacement wp)
         {
-            Config.WinMainPositionX = wp.normalPosition.Left;
-            Config.WinMainPositionY = wp.normalPosition.Top;
-            Config.WinMainWidth = wp.normalPosition.Right - wp.normalPosition.Left;
-            Config.WinMainHeight = wp.normalPosition.Bottom - wp.normalPosition.Top;
+            Config.FrmMainPositionX = wp.normalPosition.Left;
+            Config.FrmMainPositionY = wp.normalPosition.Top;
+            Config.FrmMainWidth = wp.normalPosition.Right - wp.normalPosition.Left;
+            Config.FrmMainHeight = wp.normalPosition.Bottom - wp.normalPosition.Top;
 
-            Config.WinMainState = wp.showCmd;
+            Config.FrmMainState = wp.showCmd;
         }
 
 
@@ -84,14 +73,14 @@ namespace HapplaBox.Settings
         /// Retrieves WindowPlacement object from WinMain config
         /// </summary>
         /// <returns></returns>
-        public WindowPlacement GetWinMainPlacementFromConfig()
+        public WindowPlacement GetFrmMainPlacementFromConfig()
         {
             return new WindowPlacement(new Rect(
-                Config.WinMainPositionX,
-                Config.WinMainPositionY,
-                Config.WinMainPositionX + Config.WinMainWidth,
-                Config.WinMainPositionY + Config.WinMainHeight
-              ), Config.WinMainState);
+                Config.FrmMainPositionX,
+                Config.FrmMainPositionY,
+                Config.FrmMainPositionX + Config.FrmMainWidth,
+                Config.FrmMainPositionY + Config.FrmMainHeight
+              ), Config.FrmMainState);
         }
 
         #endregion

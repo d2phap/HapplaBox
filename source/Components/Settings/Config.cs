@@ -28,27 +28,27 @@ namespace HapplaBox.Settings
         /// <summary>
         /// Gets, sets 'Left' position of WinMain
         /// </summary>
-        public static int WinMainPositionX { get; set; } = 200;
+        public static int FrmMainPositionX { get; set; } = 200;
 
         /// <summary>
         /// Gets, sets 'Top' position of WinMain
         /// </summary>
-        public static int WinMainPositionY { get; set; } = 200;
+        public static int FrmMainPositionY { get; set; } = 200;
 
         /// <summary>
         /// Gets, sets width of WinMain
         /// </summary>
-        public static int WinMainWidth { get; set; } = 1200;
+        public static int FrmMainWidth { get; set; } = 1200;
 
         /// <summary>
         /// Gets, sets height of WinMain
         /// </summary>
-        public static int WinMainHeight { get; set; } = 800;
+        public static int FrmMainHeight { get; set; } = 800;
 
         /// <summary>
         /// Gets, sets window state of WinMain
         /// </summary>
-        public static WindowState WinMainState { get; set; } = WindowState.Normal;
+        public static WindowState FrmMainState { get; set; } = WindowState.Normal;
 
         /// <summary>
         /// Gets, sets window top most state
@@ -75,10 +75,10 @@ namespace HapplaBox.Settings
 
 
             // Number values
-            WinMainPositionX = items.GetValue(nameof(WinMainPositionX), WinMainPositionX);
-            WinMainPositionY = items.GetValue(nameof(WinMainPositionY), WinMainPositionY);
-            WinMainWidth = items.GetValue(nameof(WinMainWidth), WinMainWidth);
-            WinMainHeight = items.GetValue(nameof(WinMainHeight), WinMainHeight);
+            FrmMainPositionX = items.GetValue(nameof(FrmMainPositionX), FrmMainPositionX);
+            FrmMainPositionY = items.GetValue(nameof(FrmMainPositionY), FrmMainPositionY);
+            FrmMainWidth = items.GetValue(nameof(FrmMainWidth), FrmMainWidth);
+            FrmMainHeight = items.GetValue(nameof(FrmMainHeight), FrmMainHeight);
 
             // Boolean values
             IsAlwaysOnTop = items.GetValue(nameof(IsAlwaysOnTop), IsAlwaysOnTop);
@@ -86,7 +86,7 @@ namespace HapplaBox.Settings
 
 
             // Enum value
-            WinMainState = items.GetValue(nameof(WinMainState), WinMainState);
+            FrmMainState = items.GetValue(nameof(FrmMainState), FrmMainState);
         }
 
 
@@ -129,13 +129,13 @@ namespace HapplaBox.Settings
 
 
             // Number values
-            settings.TryAdd(nameof(WinMainPositionX), WinMainPositionX);
-            settings.TryAdd(nameof(WinMainPositionY), WinMainPositionY);
-            settings.TryAdd(nameof(WinMainWidth), WinMainWidth);
-            settings.TryAdd(nameof(WinMainHeight), WinMainHeight);
+            settings.TryAdd(nameof(FrmMainPositionX), FrmMainPositionX);
+            settings.TryAdd(nameof(FrmMainPositionY), FrmMainPositionY);
+            settings.TryAdd(nameof(FrmMainWidth), FrmMainWidth);
+            settings.TryAdd(nameof(FrmMainHeight), FrmMainHeight);
 
             // Enum values
-            settings.TryAdd(nameof(WinMainState), WinMainState.ToString());
+            settings.TryAdd(nameof(FrmMainState), FrmMainState.ToString());
 
             // Boolean values
             settings.TryAdd(nameof(IsAlwaysOnTop), IsAlwaysOnTop.ToString());
