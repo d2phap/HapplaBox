@@ -1,29 +1,19 @@
-﻿using Microsoft.Win32;
+﻿using HapplaBox.UI;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HapplaBox
 {
     public partial class FrmMain: Form
     {
+        private Theme CurrentTheme = new();
+
         public void SetUpFrmMainTheme()
         {
             this.Load += FrmMainTheme_Load;
         }
 
-
-        public enum WindowsTheme
-        {
-            Unknown,
-            Light,
-            Dark
-        }
 
 
         private void FrmMainTheme_Load(object? sender, EventArgs e)
@@ -32,16 +22,16 @@ namespace HapplaBox
         }
 
 
-        private void UpdateTheme(WindowsTheme theme = WindowsTheme.Unknown)
+        private void UpdateTheme(SystemTheme theme = SystemTheme.Unknown)
         {
             var newTheme = theme;
 
-            if (theme == WindowsTheme.Unknown)
+            if (theme == SystemTheme.Unknown)
             {
-                newTheme = GetWindowsThemeMode();
+                newTheme = ThemeUtils.GetSystemTheme();
             }
 
-            if (newTheme == WindowsTheme.Light)
+            if (newTheme == SystemTheme.Light)
             {
                 this.BackColor = Color.FromArgb(255, 237, 245, 249);
             }
@@ -49,29 +39,21 @@ namespace HapplaBox
             {
                 this.BackColor = Color.FromArgb(255, 26, 34, 39);
             }
+
+            UpdateWebviewTheme();
         }
 
-        public WindowsTheme GetWindowsThemeMode()
+        private void UpdateWebviewTheme()
         {
-            const string regPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
-            const string regKeyAppTheme = "AppsUseLightTheme";
+            if (!IsWeb2Ready) return;
 
-            using var key = Registry.CurrentUser.OpenSubKey(regPath);
-            var regValue = key?.GetValue(regKeyAppTheme);
-            var themeMode = WindowsTheme.Dark;
+            // color accent
+            var color = CurrentTheme.AccentColor;
+            var accentColorStr = $"{color.R} {color.G} {color.B}";
 
-            if (regValue != null)
-            {
-                var themeValue = (int)regValue;
-
-                if (themeValue > 0)
-                {
-                    themeMode = WindowsTheme.Light;
-                }
-            }
-
-
-            return themeMode;
+            Web2.CoreWebView2.ExecuteScriptAsync($"document.documentElement.style.setProperty('--colorAccent', '{accentColorStr}');");
         }
+
+
     }
 }

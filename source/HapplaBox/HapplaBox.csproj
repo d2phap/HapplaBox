@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Components\Base\Base.csproj" />
     <ProjectReference Include="..\Components\Settings\Settings.csproj" />
+    <ProjectReference Include="..\Components\UI\UI.csproj" />
   </ItemGroup>
 
 </Project>

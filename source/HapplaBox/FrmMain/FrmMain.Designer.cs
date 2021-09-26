@@ -44,6 +44,7 @@
             this.Web2.TabIndex = 0;
             this.Web2.ZoomFactor = 1D;
             this.Web2.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.Web2_CoreWebView2InitializationCompleted);
+            this.Web2.NavigationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs>(this.Web2_NavigationCompleted);
             // 
             // FrmMain
             // 
@@ -53,6 +54,7 @@
             this.Controls.Add(this.Web2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMain";
+            this.Text = "HapplaBox";
             ((System.ComponentModel.ISupportInitialize)(this.Web2)).EndInit();
             this.ResumeLayout(false);
 
