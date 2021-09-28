@@ -1,3 +1,4 @@
+import webview2, { Webview2Event } from '@/modules/webview2';
 
 console.log('base');
 
@@ -7,7 +8,10 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
 
   console.log(newColorScheme);
 
-  // @ts-ignore
-  window.chrome.webview.postMessage(newColorScheme);
+  webview2.post('system-theme-changed', newColorScheme);
 });
 
+
+webview2.on('message', (e: Webview2Event) => {
+  console.log(e.data);
+});
