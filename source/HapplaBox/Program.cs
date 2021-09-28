@@ -10,6 +10,12 @@ Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
 Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 Application.ThreadException += Application_ThreadException;
 
+// load application configs
+Config.Load();
+
+Application.Run(new FrmMain());
+
+
 void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 {
     TaskDialog.ShowDialog(new()
@@ -31,7 +37,4 @@ void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 }
 
 
-// load application configs
-Config.Load();
 
-Application.Run(new FrmMain());

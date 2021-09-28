@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace HapplaBox
 {
-    public partial class FrmMain: Form
+    internal partial class FrmMain: Form
     {
         private Theme CurrentTheme = new();
 

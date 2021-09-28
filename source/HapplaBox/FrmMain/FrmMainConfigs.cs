@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace HapplaBox
 {
-    public partial class FrmMain
+    internal partial class FrmMain
     {
         private void SetUpFrmMainConfigs()
         {
