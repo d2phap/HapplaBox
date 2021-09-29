@@ -1,5 +1,7 @@
 ﻿using HapplaBox.Base;
+using HapplaBox.Core.Codec;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
@@ -24,6 +26,10 @@ namespace HapplaBox.Settings
 
 
         #region HapplaBox settings
+        /// <summary>
+        /// Gets, sets default codec to use.
+        /// </summary>
+        public static ICodec DefaultCodec { get; set; }
 
         /// <summary>
         /// Gets, sets 'Left' position of WinMain
@@ -73,7 +79,6 @@ namespace HapplaBox.Settings
         {
             var items = _source.LoadUserConfigs();
 
-
             // Number values
             FrmMainPositionX = items.GetValue(nameof(FrmMainPositionX), FrmMainPositionX);
             FrmMainPositionY = items.GetValue(nameof(FrmMainPositionY), FrmMainPositionY);
@@ -84,9 +89,28 @@ namespace HapplaBox.Settings
             IsAlwaysOnTop = items.GetValue(nameof(IsAlwaysOnTop), IsAlwaysOnTop);
             IsFullScreen = items.GetValue(nameof(IsFullScreen), IsFullScreen);
 
+            // String values
+            #region DefaultCodec
+            var str = items.GetValue(nameof(DefaultCodec), string.Empty);
 
-            // Enum value
+            var codecMnger = new CodecManager();
+            codecMnger.LoadAllCodecs(MyApp.StartUpDir(Dir.Codecs));
+            var codec = codecMnger.Get(str);
+
+            if (codecMnger.Items.Count > 0 || codec is not null)
+            {
+                DefaultCodec = codec ?? codecMnger.Items[0];
+            }
+            else
+            {
+                throw new FileNotFoundException("Image codec is not found.");
+            }
+            #endregion
+
+
+            // Enum values
             FrmMainState = items.GetValue(nameof(FrmMainState), FrmMainState);
+
         }
 
 
@@ -136,6 +160,9 @@ namespace HapplaBox.Settings
 
             // Enum values
             settings.TryAdd(nameof(FrmMainState), FrmMainState.ToString());
+
+            // String values
+            settings.TryAdd(nameof(DefaultCodec), DefaultCodec.CodecId);
 
             // Boolean values
             settings.TryAdd(nameof(IsAlwaysOnTop), IsAlwaysOnTop.ToString());
