@@ -1,14 +1,13 @@
 
-using System.Threading;
+using System;
 using System.Windows.Forms;
 using HapplaBox;
 using HapplaBox.Settings;
 
+AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs e) => HandleException((Exception)e.ExceptionObject);
+
 ApplicationConfiguration.Initialize();
 Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
-
-Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-Application.ThreadException += Application_ThreadException;
 
 // load application configs
 Config.Load();
@@ -16,17 +15,18 @@ Config.Load();
 Application.Run(new FrmMain());
 
 
-void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+
+static void HandleException(Exception ex)
 {
     TaskDialog.ShowDialog(new()
     {
         Icon = TaskDialogIcon.Error,
         Caption = $"Oops! {Application.ProductName} is encountering an error.",
 
-        Heading = e.Exception.Message,
+        Heading = ex.Message,
         Text = "Unhandled exception has occurred." +
                 "\r\nYou can click Continue to ignore this error, Copy to copy the error details, or Quit to exit the application.",
-        Expander = new(e.Exception.ToString()),
+        Expander = new(ex.ToString()),
         Buttons = new TaskDialogButtonCollection
         {
             new TaskDialogButton("Continue", allowCloseDialog: true),
@@ -35,6 +35,4 @@ void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         },
     });
 }
-
-
 
