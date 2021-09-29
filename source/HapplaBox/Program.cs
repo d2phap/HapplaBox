@@ -1,13 +1,18 @@
 
 using System;
+using System.Threading;
 using System.Windows.Forms;
 using HapplaBox;
 using HapplaBox.Settings;
 
-AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs e) => HandleException((Exception)e.ExceptionObject);
 
 ApplicationConfiguration.Initialize();
+Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
+
+// App-level exception handler
+AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs e) => HandleException((Exception)e.ExceptionObject);
+Application.ThreadException += (object sender, ThreadExceptionEventArgs e) => HandleException(e.Exception);
 
 // load application configs
 Config.Load();
@@ -18,21 +23,41 @@ Application.Run(new FrmMain());
 
 static void HandleException(Exception ex)
 {
+    var appInfo = Application.ProductName + " v" + Application.ProductVersion.ToString();
+    var osInfo = Environment.OSVersion.VersionString + " " + (Environment.Is64BitOperatingSystem ? "x64" : "x86");
+
+    var btnContinue = new TaskDialogButton("Continue", allowCloseDialog: true);
+    var btnCopy = new TaskDialogButton("Copy", allowCloseDialog: false);
+    var btnQuit = new TaskDialogButton("Quit", allowCloseDialog: true);
+
+
+    btnCopy.Click += (object? sender, EventArgs e) => Clipboard.SetText(
+        ex.Message + "\r\n" +
+        "\r\n" +
+        appInfo + "\r\n" +
+        osInfo + "\r\n" +
+        "\r\n" +
+        ex.ToString()
+    ); ;
+    btnQuit.Click += (object? sender, EventArgs e) => Application.Exit();
+
+
     TaskDialog.ShowDialog(new()
     {
         Icon = TaskDialogIcon.Error,
-        Caption = $"Oops! {Application.ProductName} is encountering an error.",
+        Caption = "Error",
 
         Heading = ex.Message,
-        Text = "Unhandled exception has occurred." +
-                "\r\nYou can click Continue to ignore this error, Copy to copy the error details, or Quit to exit the application.",
+        Text = "Unhandled exception has occurred.\r\n" +
+            "You can click" + "\r\n" +
+            "- Continue to ignore this error," + "\r\n" + 
+            "- Copy to copy the error details for bug report, or " + "\r\n" + 
+            "- Quit to exit the application.\r\n\r\n" +
+            appInfo + "\r\n" +
+            osInfo,
+
         Expander = new(ex.ToString()),
-        Buttons = new TaskDialogButtonCollection
-        {
-            new TaskDialogButton("Continue", allowCloseDialog: true),
-            new TaskDialogButton("Copy", allowCloseDialog: false),
-            new TaskDialogButton("Quit", allowCloseDialog: true),
-        },
+        Buttons = new TaskDialogButtonCollection { btnContinue, btnCopy, btnQuit },
     });
 }
 
