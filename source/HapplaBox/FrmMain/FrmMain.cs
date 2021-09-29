@@ -1,10 +1,8 @@
 ﻿using HapplaBox.Base;
+using HapplaBox.Settings;
 using HapplaBox.UI;
 using Microsoft.Web.WebView2.Core;
 using System;
-using System.Drawing;
-using System.Dynamic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
