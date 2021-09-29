@@ -10,7 +10,7 @@ namespace HapplaBox.Base
         /// <summary>
         /// Event name
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        public WebMessageName Name { get; set; } = WebMessageName.Unknown;
 
         /// <summary>
         /// Message data

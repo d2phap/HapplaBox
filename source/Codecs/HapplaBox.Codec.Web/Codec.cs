@@ -19,13 +19,13 @@ namespace HapplaBox.Codec.Web
         {
             ".apng",
             ".avif",
+            ".bmp",
             ".gif",
+            ".ico", ".cur",
             ".jpg,", ".jpeg,", ".jfif,", ".pjpeg,", ".pjp",
             ".png",
             ".svg",
             ".webp",
-            ".bmp",
-            ".ico", ".cur",
         };
 
 

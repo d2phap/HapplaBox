@@ -1,5 +1,4 @@
 ﻿using HapplaBox.Base;
-using HapplaBox.Settings;
 using HapplaBox.UI;
 using Microsoft.Web.WebView2.Core;
 using System;
@@ -26,7 +25,7 @@ namespace HapplaBox
             var msg = e.WebMessageAsJson;
             var json = Json.Parse<string>(msg);
 
-            if (json?.Name == "system-theme-changed")
+            if (json?.Name == WebMessageName.SystemThemeChanged)
             {
                 bool isLightTheme = json?.Data == "light";
 
