@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Settings", "Components\Sett
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "Components\UI\UI.csproj", "{43F48A51-B8BE-4F3A-856B-86E0951510C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Components\Codec\Core.csproj", "{28AB49D9-F486-446E-A14D-6CA24A76E63C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Components\Core\Core.csproj", "{28AB49D9-F486-446E-A14D-6CA24A76E63C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0CFB254A-261B-4063-A46C-E058883A225C}"
 	ProjectSection(SolutionItems) = preProject
