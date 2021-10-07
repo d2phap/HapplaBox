@@ -5,8 +5,8 @@
 }
 
 
-@mixin panel($zIndex) {
-  @include fluentBackground();
+@mixin panel($zIndex, $color: var(--colorBg)) {
+  @include fluentBackground($color);
   position: fixed;
   z-index: $zIndex;
 

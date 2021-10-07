@@ -139,7 +139,7 @@
 }
 
 .toolbar-container {
-  @include panel(0);
+  @include panel(0, #{var(--colorToolbar)});
   position: static;
 
   display: flex;
@@ -170,7 +170,7 @@
 
 
 .menu-overflow {
-  @include panel(-1);
+  @include panel(-1, #{var(--colorToolbar)});
 
   visibility: hidden;
   opacity: 0;

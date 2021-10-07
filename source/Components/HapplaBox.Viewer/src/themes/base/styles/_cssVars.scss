@@ -3,8 +3,11 @@
   color-scheme: dark light;
 
   // theme colors (dark is default)
-  --colorBg: 26 34 39;
+  --colorBg: 21 27 31;
   --colorText: 255 255 255;
+
+  --colorToolbar: 37 46 53;
+  --colorGallery: 37 46 53;
 
   --colorAccent: 0 99 177;
   --colorBorder: var(--colorText) / 0.1;
@@ -25,7 +28,10 @@
 
 @media (prefers-color-scheme: light) {
   :root {
-    --colorBg: 237 245 249;
+    --colorBg: 255 255 255;
     --colorText: 0 0 0;
+
+    --colorToolbar: 242 242 242;
+    --colorGallery: 242 242 242;
   }
 }
