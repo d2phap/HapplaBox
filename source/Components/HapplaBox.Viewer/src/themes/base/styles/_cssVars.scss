@@ -6,8 +6,14 @@
   --colorBg: 21 27 31;
   --colorText: 255 255 255;
 
-  --colorToolbar: 37 46 53;
-  --colorGallery: 37 46 53;
+  --colorMenu: 255 255 255;
+  --colorMenuBackground: 37 46 53;
+  --colorMenuHover: RGBA(var(--colorMenu) / 0.13);
+  --colorMenuActive: RGBA(var(--colorMenu) / 0.23);
+  --colorMenuSelected: RGBA(var(--colorMenu) / 0.45);
+  --colorMenuSelectedHover: RGBA(var(--colorMenu) / 0.3);
+  --colorMenuSelectedActive: RGBA(var(--colorMenu) / 0.5);
+
 
   --colorAccent: 0 99 177;
   --colorBorder: var(--colorText) / 0.1;
@@ -31,7 +37,12 @@
     --colorBg: 255 255 255;
     --colorText: 0 0 0;
 
-    --colorToolbar: 242 242 242;
-    --colorGallery: 242 242 242;
+    --colorMenu: 0 0 0;
+    --colorMenuBackground: 242 242 242;
+    --colorMenuHover: RGBA(var(--colorMenu) / 0.15);
+    --colorMenuActive: RGBA(var(--colorMenu) / 0.25);
+    --colorMenuSelected: RGBA(var(--colorMenu) / 0.4);
+    --colorMenuSelectedHover: RGBA(var(--colorMenu) / 0.3);
+    --colorMenuSelectedActive: RGBA(var(--colorMenu) / 0.45);
   }
 }

@@ -1,6 +1,6 @@
 
 import { init as initHbGallery, HbGallery } from '@/components/gallery';
-// import { init as initHbLoader } from '@/components/loader';
+import { init as initHbLoader } from '@/components/loader';
 import { HbToolbar, init as initHbToolbar } from '@/components/toolbar';
 import { HbToolbarItem } from '@/components/toolbar/types';
 import { pause } from '@/utils';
@@ -22,6 +22,8 @@ const elX = document.getElementById('elX');
 const elY = document.getElementById('elY');
 const elWidth = document.getElementById('elWidth');
 const elHeight = document.getElementById('elHeight');
+
+initHbLoader();
 
 function loadToolbar() {
   initHbToolbar();
@@ -265,6 +267,8 @@ const onContentReady = () => {
 
 
 const board = new Board(elBoard, elBoardContent, {
+  minZoom: 0.02,
+  maxZoom: 50,
   onAfterZoomChanged,
   onPanning,
   onBeforeContentReady,

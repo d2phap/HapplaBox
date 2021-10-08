@@ -83,25 +83,23 @@
   // button
   &.item-button {
     &:hover {
-      background-color: RGBA(var(--colorAccent) / 0.6);
-      box-shadow: inset 0 0 0 1px RGBA(var(--colorAccent) / 1);
+      background-color: var(--colorMenuHover) ;
     }
 
     &:active {
       transition: all 200ms ease;
-      background-color: RGBA(var(--colorAccent) / 0.4);
+      background-color: var(--colorMenuActive) ;
     }
 
     &.is--selected {
-      background-color: RGBA(var(--colorAccent) / 0.8);
-      box-shadow: inset 0 0 0 2px RGBA(var(--colorAccent));
+      background-color: var(--colorMenuSelected) ;
 
       &:hover {
-        background-color: RGBA(var(--colorAccent) / 1);
+        background-color: var(--colorMenuSelectedHover);
       }
 
       &:active {
-        background-color: RGBA(var(--colorAccent) / 0.6);
+        background-color: var(--colorMenuSelectedActive);
       }
     }
 
@@ -139,7 +137,7 @@
 }
 
 .toolbar-container {
-  @include panel(0, #{var(--colorToolbar)});
+  @include panel(0, #{var(--colorMenuBackground)});
   position: static;
 
   display: flex;
@@ -170,7 +168,7 @@
 
 
 .menu-overflow {
-  @include panel(-1, #{var(--colorToolbar)});
+  @include panel(-1, #{var(--colorMenuBackground)});
 
   visibility: hidden;
   opacity: 0;
