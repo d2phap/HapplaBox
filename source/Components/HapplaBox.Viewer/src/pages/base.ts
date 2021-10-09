@@ -8,7 +8,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
 
   console.log(newColorScheme);
 
-  webview2.post('system-theme-changed', newColorScheme);
+  webview2.post('UI_SystemThemeChanged', newColorScheme);
 });
 
 

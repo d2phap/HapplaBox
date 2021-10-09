@@ -1,6 +1,6 @@
 
 export interface WebMessageModel {
-  name: string;
+  code: string;
   data: any;
 }
 
@@ -11,11 +11,11 @@ export interface Webview2Event extends Event {
 
 /**
  * Send a event to backend
- * @param name Event name
+ * @param code Event code
  * @param data Data to send to backend
  */
-export const post = (name: string, data: any) => {
-  const payload: WebMessageModel = { name, data };
+export const post = (code: string, data: any) => {
+  const payload: WebMessageModel = { code, data };
 
   // @ts-ignore
   window.chrome.webview.postMessage(payload);
@@ -24,12 +24,12 @@ export const post = (name: string, data: any) => {
 
 /**
  * Add event listerner from backend
- * @param name Event name
+ * @param code Event code
  * @param handler Function to handle the event
  */
-export const on = (name: string, handler: (e: Webview2Event) => void) => {
+export const on = (code: string, handler: (e: Webview2Event) => void) => {
   // @ts-ignore
-  window.chrome.webview.addEventListener(name, handler);
+  window.chrome.webview?.addEventListener(code, handler);
 };
 
 
