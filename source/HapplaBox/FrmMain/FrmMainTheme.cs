@@ -33,7 +33,7 @@ namespace HapplaBox
 
             if (newTheme == SystemTheme.Light)
             {
-                this.BackColor = Color.FromArgb(255, 237, 245, 249);
+                this.BackColor = Color.FromArgb(255, 255, 255, 255);
             }
             else
             {
