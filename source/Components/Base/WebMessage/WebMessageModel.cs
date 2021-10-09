@@ -8,13 +8,21 @@ namespace HapplaBox.Base
     public class WebMessageModel<T>
     {
         /// <summary>
-        /// Event name
+        /// Event code
         /// </summary>
-        public WebMessageName Name { get; set; } = WebMessageName.Unknown;
+        public string Code { get; set; }
+
 
         /// <summary>
         /// Message data
         /// </summary>
         public T? Data { get; set; }
+
+
+        public WebMessageModel(string code, T? data)
+        {
+            Code = code;
+            Data = data;
+        }
     }
 }
