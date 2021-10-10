@@ -1,29 +1,52 @@
 
-import { init as initHbGallery, HbGallery } from '@/components/gallery';
-import { init as initHbLoader } from '@/components/loader';
-import { HbToolbar, init as initHbToolbar } from '@/components/toolbar';
-import { HbToolbarItem } from '@/components/toolbar/types';
 import { pause } from '@/utils';
-import {
-  Board,
-  InterpolationMode,
-  PanEventFunction,
-  ZoomEventFunction,
-} from '@d2phap/happla';
+import webview2, { WebMessageModel, Webview2Event } from '@/modules/webview2';
+import { PanEventFunction, ZoomEventFunction } from '@/components/board/types';
+import { HbToolbarItem } from '../components/toolbar/types';
+
+import { init as initHbGallery, HbGallery } from '../components/gallery';
+import { init as initHbLoader } from '../components/loader';
+import { HbToolbar, init as initHbToolbar } from '../components/toolbar';
+import { HbBoard, init as initHbBoard } from '../components/board';
 
 
-const elBoard = document.getElementById('board');
-const elWrapper = document.getElementById('wrapper');
-const elBoardContent = document.getElementById('boardContent');
+// const elScaleRatio = document.getElementById('elScaleRatio');
+// const elZoom = document.getElementById('elZoom');
+// const elX = document.getElementById('elX');
+// const elY = document.getElementById('elY');
+// const elWidth = document.getElementById('elWidth');
+// const elHeight = document.getElementById('elHeight');
 
-const elScaleRatio = document.getElementById('elScaleRatio');
-const elZoom = document.getElementById('elZoom');
-const elX = document.getElementById('elX');
-const elY = document.getElementById('elY');
-const elWidth = document.getElementById('elWidth');
-const elHeight = document.getElementById('elHeight');
+initHbBoard();
+const boardEl = document.querySelector('hb-board').shadowRoot.host as unknown as HbBoard;
 
-initHbLoader();
+function loadBoard() {
+  const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {
+    console.log(factor);
+  };
+
+  const onPanning: PanEventFunction = (x: number, y: number) => {
+    //
+  };
+
+  const onBeforeContentReady = () => {
+    // elWrapper.style.opacity = '0';
+    // elWrapper.style.transition = 'opacity ease 300ms';
+  };
+
+  const onContentReady = () => {
+    // elBoardContent.style.opacity = 1;
+    // elBoardContent.style.transition = '';
+  };
+
+  boardEl.initBoard({
+    zoomFactor: 1,
+    onAfterZoomChanged,
+    onPanning,
+    onBeforeContentReady,
+    onContentReady,
+  });
+}
 
 function loadToolbar() {
   initHbToolbar();
@@ -236,71 +259,27 @@ function loadThumbnails() {
 }
 
 
-const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {
-  elZoom.innerText = factor.toString();
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  elScaleRatio.innerText = board.scaleRatio.toFixed(2);
-  elX.innerText = x.toFixed(2);
-  elY.innerText = y.toFixed(2);
+initHbLoader();
+loadBoard();
 
-  const w = (elBoardContent.clientWidth * factor).toFixed(2);
-  const h = (elBoardContent.clientHeight * factor).toFixed(2);
+boardEl.loadImage('file:///E:/WALLPAPER/NEW/dark/surroundings_by_bisbiswas_dbs1qwp.jpg');
 
-  elWidth.innerText = `${w}px (${elBoardContent.clientWidth}px)`;
-  elHeight.innerText = `${h}px (${elBoardContent.clientHeight}px)`;
-};
-
-const onPanning: PanEventFunction = (x: number, y: number) => {
-  elX.innerText = x.toString();
-  elY.innerText = y.toString();
-};
-
-const onBeforeContentReady = () => {
-  elWrapper.style.opacity = '0';
-  elWrapper.style.transition = 'opacity ease 300ms';
-};
-
-const onContentReady = () => {
-  // elBoardContent.style.opacity = 1;
-  // elBoardContent.style.transition = '';
-};
-
-
-const board = new Board(elBoard, elBoardContent, {
-  minZoom: 0.02,
-  maxZoom: 50,
-  onAfterZoomChanged,
-  onPanning,
-  onBeforeContentReady,
-  onContentReady,
-});
 
 pause(0).then(() => {
   loadToolbar();
   loadThumbnails();
 });
 
+webview2.on('message', (e: Webview2Event) => {
+  console.log(e.data);
 
-board.imageRendering = InterpolationMode.Auto;
-board.waitForContentReady()
-  .then(async () => {
-    board.enable();
+  const msg = JSON.parse(e.data || '{}') as WebMessageModel;
 
-    const w = elBoardContent.scrollWidth / board.scaleRatio;
-    const h = elBoardContent.scrollHeight / board.scaleRatio;
+  if (msg.code === 'BE_LoadFile') {
+    boardEl.loadImage(msg.data);
+  }
+});
 
-    const widthScale = elBoard.clientWidth / w;
-    const heightScale = elBoard.clientHeight / h;
-    const scale = Math.min(widthScale, heightScale);
-
-    const x = (elBoard.offsetWidth - (w * scale)) / 2;
-    const y = (elBoard.offsetHeight - (h * scale)) / 2;
-
-    await board.panTo(-w / 2, -h / 2);
-    board.zoomTo(scale, x, y);
-
-    elWrapper.style.opacity = '1';
-  });
 
 // const img = document.getElementById('img');
 
