@@ -1,6 +1,7 @@
 import webview2, { Webview2Event } from '@/modules/webview2';
+import { isProductionMode } from '@/utils';
 
-console.log('base');
+console.log('base', isProductionMode());
 
 // on system theme changed
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {

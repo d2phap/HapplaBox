@@ -21,3 +21,9 @@ export const compileTemplate = (template: string, o: any): string => {
 export const pause = <T>(duration: number, data?: T) => new Promise((resolve) => {
   setTimeout(() => resolve(data), duration);
 }) as Promise<T>;
+
+
+/**
+ * Checks if the source code is built for production
+ */
+export const isProductionMode = () => process.env.NODE_ENV === 'production';
