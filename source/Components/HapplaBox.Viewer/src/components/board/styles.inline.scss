@@ -1,0 +1,37 @@
+@import "../../themes/base/styles/mixins.scss";
+@import "../../themes/base/styles/scrollbar.scss";
+@import "../../themes/base/styles/reset.scss";
+
+:host {
+  
+  * {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+}
+
+
+.board-container {
+  margin: auto;
+  max-width: 100vw;
+  max-height: 100vh;
+  width: 100vw;
+  height: 100vh;
+
+  // background-image: conic-gradient(rgb(255 255 255 / 3%) 25%, rgb(0 0 0 / 6%) 0 50%, rgb(255 255 255 / 3%) 0 75%, rgb(0 0 0 / 6%) 0);
+  background-size: 20px 20px;
+  background-color: RGB(var(--colorBg));
+
+  @include removeFocusRing();
+}
+
+.board-wrapper {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: all 100ms ease;
+}
+
+.board-content {
+  display: inline-flex;
+}
