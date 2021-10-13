@@ -27,3 +27,15 @@ export const pause = <T>(duration: number, data?: T) => new Promise((resolve) =>
  * Checks if the source code is built for production
  */
 export const isProductionMode = () => process.env.NODE_ENV === 'production';
+
+
+/**
+ * Get CSS variable value
+ * @param name CSS variable name, example: --itemSize
+ * @returns 
+ */
+export const getCssVar = (name: string) => {
+  const rootStyle = getComputedStyle(document.body);
+
+  return rootStyle.getPropertyValue(name).trim();
+};

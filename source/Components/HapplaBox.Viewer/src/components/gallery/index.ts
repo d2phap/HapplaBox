@@ -1,5 +1,5 @@
 
-import { compileTemplate, pause } from '@/utils';
+import { compileTemplate, getCssVar, pause } from '@/utils';
 import { HbGalleryOptions } from './types';
 
 import BaseElement from '../BaseElement';
@@ -74,9 +74,7 @@ export class HbGallery extends BaseElement {
   }
 
   get itemSize() {
-    const rootStyle = getComputedStyle(document.body);
-
-    return parseInt(rootStyle.getPropertyValue('--thumbnailSize').trim(), 10);
+    return parseInt(getCssVar('--thumbnailSize'), 10);
   }
 
   get padding() {
