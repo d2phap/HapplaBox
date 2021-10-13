@@ -123,7 +123,8 @@
 
 .gallery-container {
   position: relative;
-  padding: var(--padding) 0;
+  padding-top: var(--scrollBarSize);
+  padding-bottom: var(--padding);
   width: 100%;
   height: calc(var(--size) + (var(--padding) * 2) + (var(--scrollBarSize) / 2));
   overscroll-behavior: contain;
