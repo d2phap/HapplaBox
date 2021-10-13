@@ -5,7 +5,7 @@
 :host {
   --size: calc(var(--thumbnailSize) * 1px);
   --padding: calc(var(--size) / 10);
-  --scrollBarSize: var(--padding);
+  --scrollBarSize: calc(var(--size) / 7);
   --itemBorderRadius: calc(var(--borderRadius) / 2);
 
   @include panel(99, #{var(--colorMenuBackground)});
