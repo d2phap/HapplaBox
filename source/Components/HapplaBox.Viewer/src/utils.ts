@@ -32,10 +32,10 @@ export const isProductionMode = () => process.env.NODE_ENV === 'production';
 /**
  * Get CSS variable value
  * @param name CSS variable name, example: --itemSize
- * @returns 
+ * @param el Element to get variable, default is document.body
  */
-export const getCssVar = (name: string) => {
-  const rootStyle = getComputedStyle(document.body);
+export const getCssVar = (name: string, el?: HTMLElement) => {
+  const rootStyle = getComputedStyle(el || document.body);
 
   return rootStyle.getPropertyValue(name).trim();
 };
