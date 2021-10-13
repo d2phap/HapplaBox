@@ -168,9 +168,11 @@ export class HbToolbar extends BaseElement {
     // show BTN_SHOW_MORE button if it's overflow
     if (btnEl && this.#isOverflow) {
       btnEl.classList.remove('hide');
+      this.#containerEl.classList.add('is--overflow');
     }
     else {
       btnEl.classList.add('hide');
+      this.#containerEl.classList.remove('is--overflow');
     }
   }
 

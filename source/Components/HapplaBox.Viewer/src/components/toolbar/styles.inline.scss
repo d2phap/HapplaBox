@@ -3,7 +3,7 @@
 @import "../../themes/base/styles/scrollbar.scss";
 
 :host {
-  --maxSize: 90;
+  --maxSize: 100;
   --itemSize: calc(var(--toolbarSize) * 1px);
   --itemPadding: calc(var(--itemSize) / 5);
   --itemMargin: calc(var(--itemSize) / 14);
@@ -12,10 +12,11 @@
 
   position: fixed;
   z-index: 100;
-  top: 20px;
+  top: 0;
   left: 50%;
   transform: translate(-50%, 0);
 
+  width: 100vw;
   max-width: calc(var(--maxSize) * 1vw);
   -webkit-user-drag: none;
 
@@ -83,6 +84,8 @@
 
   // button
   &.item-button {
+    max-width: var(--itemSize);
+
     &:hover {
       background-color: var(--colorMenuHover) ;
     }
@@ -114,6 +117,7 @@
   // space
   &.item-space {
     width: calc(var(--itemSize) / 2);
+    max-width: calc(var(--itemSize) / 2);
     margin: 0;
     padding: 0;
     pointer-events: none;
@@ -122,6 +126,7 @@
   // divider
   &.item-divider {
     width: calc(var(--itemSize) / 2);
+    max-width: calc(var(--itemSize) / 2);
     margin: 0;
     padding: 0;
     pointer-events: none;
@@ -140,6 +145,8 @@
 .toolbar-container {
   @include panel(0, #{var(--colorMenuBackground)});
   position: static;
+  border-bottom: 1px solid RGBA(var(--colorBorder));
+  justify-content: center;
 
   display: flex;
   padding: var(--containerPadding);
@@ -150,7 +157,13 @@
 
     &.group-list {
       flex: 0 1 auto;
+      width: 100%;
+      justify-content: center;
       overflow: hidden;
+    }
+
+    &.group-bottom {
+      margin-left: auto;
     }
 
     &.group-overflow {
@@ -165,6 +178,12 @@
       opacity: 0;
     }
   }
+
+  &.is--overflow {
+    .group-list {
+      justify-content: start;
+    }
+  }
 }
 
 
@@ -175,7 +194,10 @@
   opacity: 0;
   position: absolute;
   right: 0;
-  margin-top: var(--containerPadding);
+  border: 1px solid RGBA(var(--colorBorder));
+  border-top: 0;
+  border-radius: 0 0 0 var(--itemBorderRadius);
+  margin-top: -0.5px;
   padding: var(--containerPadding);
   transition: all 400ms ease;
 

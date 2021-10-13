@@ -10,10 +10,7 @@
   position: fixed;
   z-index: $zIndex;
 
-  border: 1px solid RGBA(var(--colorBorder));
-  border-radius: var(--borderRadius);
   box-shadow: var(--shadow);
-
   color: RGBA(var(--colorText));
 }
 

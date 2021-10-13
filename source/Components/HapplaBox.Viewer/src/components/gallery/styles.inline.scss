@@ -9,10 +9,11 @@
   --itemBorderRadius: calc(var(--borderRadius) / 2);
 
   @include panel(99, #{var(--colorMenuBackground)});
-  bottom: 20px;
+  border-top: 1px solid RGBA(var(--colorBorder));
+  bottom: 0;
   left: 50%;
   padding: 0 var(--padding);
-  max-width: 90vw;
+  max-width: 100vw;
   width: 100vw;
   height: auto;
 
