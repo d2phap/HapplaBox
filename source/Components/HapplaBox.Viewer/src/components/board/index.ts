@@ -73,6 +73,7 @@ export class HbBoard extends BaseElement {
 
     // container
     const containerEl = document.createElement('div');
+    containerEl.tabIndex = 0;
     containerEl.classList.add('board-container');
     containerEl.appendChild(wrapperEl);
 
