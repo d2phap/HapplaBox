@@ -1,5 +1,5 @@
 
-import { compileTemplate } from '@/utils';
+import { compileTemplate, getCssVar, pause } from '@/utils';
 import { HbToolbarOptions, HbToolbarItem } from './types';
 
 import BaseElement from '../BaseElement';
@@ -138,6 +138,10 @@ export class HbToolbar extends BaseElement {
     const { offsetLeft } = this.#groupBottomEl;
     this.#overflowDropdownEl.innerHTML = '';
 
+    // set left alignment by default to get correct offsets
+    this.#containerEl.classList.add('item-align-start');
+
+
     Array.from(this.#groupListEl.children).forEach(el => {
       const itemEl = el as HTMLElement;
       const itemName = itemEl.getAttribute('name');
@@ -168,11 +172,11 @@ export class HbToolbar extends BaseElement {
     // show BTN_SHOW_MORE button if it's overflow
     if (btnEl && this.#isOverflow) {
       btnEl.classList.remove('hide');
-      this.#containerEl.classList.add('is--overflow');
+      this.#containerEl.classList.add('is--overflow', 'item-align-start');
     }
     else {
       btnEl.classList.add('hide');
-      this.#containerEl.classList.remove('is--overflow');
+      this.#containerEl.classList.remove('is--overflow', 'item-align-start');
     }
   }
 
