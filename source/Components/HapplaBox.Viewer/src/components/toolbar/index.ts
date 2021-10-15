@@ -62,7 +62,7 @@ export class HbToolbar extends BaseElement {
         type: 'button',
         name: BTN_SHOW_MORE,
         group: 'bottom',
-        cssClass: 'hide',
+        cssClass: 'item-show-more hide',
         imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/gotoimage.svg',
         label: 'Show more items',
         tooltip: 'Show more items',

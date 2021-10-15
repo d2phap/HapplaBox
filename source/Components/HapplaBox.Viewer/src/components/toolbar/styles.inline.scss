@@ -107,10 +107,14 @@
       }
     }
 
-    &.hide {
-      visibility: hidden;
-      opacity: 0;
-      pointer-events: none;
+    // show hidden overflown buttons
+    &.item-show-more {
+      &.hide {
+        position: absolute;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+      }
     }
   }
 
