@@ -29,6 +29,7 @@ export class HbToolbar extends BaseElement {
     items: [],
     position: 'top',
     rightClickFn: () => undefined,
+    onMenuButtonClicked: () => undefined,
   };
 
   constructor() {
@@ -76,7 +77,7 @@ export class HbToolbar extends BaseElement {
         imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/menu.svg',
         label: 'Menu',
         tooltip: 'Menu... (`)',
-        clickFn: console.log,
+        clickFn: this.#options.onMenuButtonClicked,
       },
     ];
   }

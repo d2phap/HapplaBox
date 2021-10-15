@@ -28,5 +28,6 @@ export interface HbToolbarOptions {
   items: HbToolbarItem[];
   position: HbToolbarPosition;
   rightClickFn?: HbToolbarRightClickFunc;
+  onMenuButtonClicked?: HbToolbarClickFunc;
 }
 
