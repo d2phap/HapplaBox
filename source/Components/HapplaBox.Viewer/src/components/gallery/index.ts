@@ -15,6 +15,8 @@ styleEl.textContent = styles;
 export class HbGallery extends BaseElement {
   #lastRepaintPos: number = undefined;
   #maxBuffer = 0;
+  #isProgrammaticalylScroll = false;
+  #renderTimer: NodeJS.Timeout = null;
 
   #cachedItemsLength = 0;
   #containerEl: HTMLElement;
@@ -150,10 +152,6 @@ export class HbGallery extends BaseElement {
     }, 50);
   }
 
-  #isProgrammaticalylScroll = false;
-  #renderTimer:NodeJS.Timeout = null;
-
-
   private onMouseWheel(e: WheelEvent) {
     // direction is vertical (mouse wheel)
     if (e.deltaX === 0) {
@@ -278,6 +276,10 @@ export class HbGallery extends BaseElement {
 
     if (forced || !this.#lastRepaintPos || isScrollChanged) {
       this.#lastRepaintPos = scrollPos;
+
+      //// TODO
+      // this.#options.onItemRenderRequested();
+
       this.renderItems(first, this.#cachedItemsLength);
     }
   }
@@ -362,8 +364,7 @@ export class HbGallery extends BaseElement {
    */
   public scrollToIndex(index: number) {
     // get center item position
-    const itemPos = (index * this.itemRenderedSize)
-      - (this.containerSize / 2);
+    const itemPos = (index * this.itemRenderedSize) - (this.containerSize / 2);
 
     // use optimal scroll
     this.#isProgrammaticalylScroll = true;

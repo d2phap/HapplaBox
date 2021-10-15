@@ -90,7 +90,7 @@ export class HbBoard extends BaseElement {
   }
 
 
-  public async initBoard(options: BoardOptions = {}) {
+  public initBoard(options: BoardOptions = {}) {
     this.#board = new Board(this.#containerEl, this.#contentEl, options);
 
     this.#board.enable();

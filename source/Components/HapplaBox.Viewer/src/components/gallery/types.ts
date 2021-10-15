@@ -22,5 +22,6 @@ export interface HbGalleryOptions {
   rightClickItemFn?: GalleryItemClickFunc;
   middleClickItemFn?: GalleryItemClickFunc;
   doubleClickItemFn?: GalleryItemDblClickFunc;
+  // onItemRenderRequested?: () => undefined; // TODO
 }
 

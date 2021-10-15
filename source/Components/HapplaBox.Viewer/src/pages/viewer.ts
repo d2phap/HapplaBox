@@ -18,6 +18,7 @@ import { HbBoard, init as initHbBoard } from '../components/board';
 // const elHeight = document.getElementById('elHeight');
 
 initHbBoard();
+initHbLoader();
 const boardEl = document.querySelector('hb-board').shadowRoot.host as unknown as HbBoard;
 
 function loadBoard() {
@@ -59,7 +60,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/back.svg',
       label: 'Previous',
       tooltip: 'Previous (Left arrow)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     {
       type: 'button',
@@ -67,48 +68,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/next.svg',
       label: 'Next',
       tooltip: 'Next (Right arrow)',
-      clickFn: console.log,
-    },
-    { type: 'divider' },
-    {
-      type: 'button',
-      name: 'btnRotateLeft',
-      imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/leftrotate.svg',
-      label: 'Rotate left',
-      tooltip: 'Rotate left (Ctrl+,)',
-      clickFn: console.log,
-    },
-    {
-      type: 'button',
-      name: 'btnRotateRight',
-      imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/rightrotate.svg',
-      label: 'Rotate right',
-      tooltip: 'Rotate right (Ctrl+.)',
-      clickFn: console.log,
-    },
-    {
-      type: 'button',
-      name: 'btnFlipHorizontal',
-      imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/fliphorz.svg',
-      label: 'Flip horizontal',
-      tooltip: 'Flip horizontal (Ctrl+;)',
-      clickFn: console.log,
-    },
-    {
-      type: 'button',
-      name: 'btnFlipVertical',
-      imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/flipvert.svg',
-      label: 'Flip vertical',
-      tooltip: 'Flip vertical (Ctrl+\')',
-      clickFn: console.log,
-    },
-    {
-      type: 'button',
-      name: 'btnCrop',
-      imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/crop.svg',
-      label: 'Crop',
-      tooltip: 'Crop... (C)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     { type: 'divider' },
     {
@@ -117,7 +77,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/autozoom.svg',
       label: 'Autozoom',
       tooltip: 'Autozoom (1)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     {
       type: 'button',
@@ -125,7 +85,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/zoomlock.svg',
       label: 'Lock zoom ratio',
       tooltip: 'Lock zoom ratio (2)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     {
       type: 'button',
@@ -133,7 +93,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/scaletowidth.svg',
       label: 'Scale to width',
       tooltip: 'Scale to width (3)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     {
       type: 'button',
@@ -141,7 +101,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/scaletoheight.svg',
       label: 'Scale to height',
       tooltip: 'Scale to height (4)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     {
       type: 'button',
@@ -149,7 +109,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/zoomtofit.svg',
       label: 'Scale to fit',
       tooltip: 'Scale to fit (5)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     {
       type: 'button',
@@ -157,7 +117,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/scaletofill.svg',
       label: 'Scale to fill',
       tooltip: 'Scale to fill (6)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     { type: 'divider' },
     {
@@ -166,7 +126,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/open.svg',
       label: 'Open file',
       tooltip: 'Open file... (Ctrl+O)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     {
       type: 'button',
@@ -174,7 +134,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/refresh.svg',
       label: 'Refresh',
       tooltip: 'Refresh (R)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     { type: 'divider' },
     {
@@ -183,7 +143,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/autosizewindow.svg',
       label: 'Window fit',
       tooltip: 'Window fit (F9)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     {
       type: 'button',
@@ -191,7 +151,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/fullscreen.svg',
       label: 'Full screen',
       tooltip: 'Full screen (F11)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     {
       type: 'button',
@@ -199,7 +159,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/slideshow.svg',
       label: 'Start slideshow',
       tooltip: 'Start slideshow (F12)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     { type: 'divider' },
     {
@@ -208,7 +168,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/thumbnail.svg',
       label: 'Gallery',
       tooltip: 'Gallery (H)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     {
       type: 'button',
@@ -216,7 +176,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/checkerboard.svg',
       label: 'Checkerboard',
       tooltip: 'Checkerboard (B)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
     {
       type: 'button',
@@ -224,7 +184,7 @@ function loadToolbar() {
       imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/delete.svg',
       label: 'Delete',
       tooltip: 'Delete (Delete)',
-      clickFn: console.log,
+      clickFn: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
     },
   ];
 
@@ -232,6 +192,7 @@ function loadToolbar() {
     items,
     position: 'top',
     rightClickFn: console.log,
+    onMenuButtonClicked: (e: PointerEvent, itemName) => console.log(itemName, e.currentTarget),
   });
 }
 
@@ -241,7 +202,7 @@ function loadThumbnails() {
 
   const galleryEl = document.querySelector('hb-gallery').shadowRoot.host as unknown as HbGallery;
   const items = [];
-  for (let index = 0; index < 600; index++) {
+  for (let index = 0; index < 50; index++) {
     items.push({
       name: `Pic${index + 1}`,
       src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
@@ -254,21 +215,13 @@ function loadThumbnails() {
     items,
   });
 
-  galleryEl.scrollToIndex(3_0);
-  galleryEl.selectItems([30]);
+  galleryEl.scrollToIndex(30);
+  galleryEl.selectItems([5, 30]);
 }
 
-
-initHbLoader();
 loadBoard();
+// boardEl.loadImage('file:///E:/WALLPAPER/NEW/dark/surroundings_by_bisbiswas_dbs1qwp.jpg');
 
-boardEl.loadImage('file:///E:/WALLPAPER/NEW/dark/surroundings_by_bisbiswas_dbs1qwp.jpg');
-
-
-pause(0).then(() => {
-  loadToolbar();
-  loadThumbnails();
-});
 
 webview2.on('message', (e: Webview2Event) => {
   console.log(e.data);
@@ -279,3 +232,6 @@ webview2.on('message', (e: Webview2Event) => {
     boardEl.loadImage(msg.data);
   }
 });
+
+pause(0).then(loadToolbar);
+pause(0).then(loadThumbnails);
