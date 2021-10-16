@@ -68,7 +68,7 @@ namespace HapplaBox
             var msg = e.WebMessageAsJson;
             var json = WebMessage.FromJson<string>(msg);
 
-            if (json?.Code == WebMessageCode.UI_SystemThemeChanged)
+            if (json?.Code == WebMessageCodes.UI_SystemThemeChanged)
             {
                 bool isLightTheme = json?.Data == "light";
 
@@ -111,7 +111,7 @@ namespace HapplaBox
             if (!string.IsNullOrEmpty(filename))
             {
                 var url = new Uri(filename).AbsoluteUri;
-                var msgJson = WebMessage.ToJson(WebMessageCode.BE_LoadFile, url);
+                var msgJson = WebMessage.ToJson(WebMessageCodes.BE_LoadFile, url);
 
                 Web2.CoreWebView2.PostWebMessageAsString(msgJson);
                 this.Text = "HapplaBox " + Web2.CoreWebView2.Environment.BrowserVersionString +
