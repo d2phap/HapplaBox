@@ -1,5 +1,6 @@
 import webview2, { Webview2Event } from '@/modules/webview2';
 import { isProductionMode } from '@/utils';
+import webMessageCodes from '@/modules/webMessageCodes';
 
 console.log('base', isProductionMode());
 
@@ -9,7 +10,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
 
   console.log(newColorScheme);
 
-  webview2.post('UI_SystemThemeChanged', newColorScheme);
+  webview2.post(webMessageCodes.UI_SystemThemeChanged, newColorScheme);
 });
 
 

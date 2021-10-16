@@ -1,8 +1,10 @@
 
 import { pause } from '@/utils';
+import webMessageCodes from '@/modules/webMessageCodes';
 import webview2, { WebMessageModel, Webview2Event } from '@/modules/webview2';
 import { PanEventFunction, ZoomEventFunction } from '@/components/board/types';
 import { HbToolbarItem } from '../components/toolbar/types';
+
 
 import { init as initHbGallery, HbGallery } from '../components/gallery';
 import { init as initHbLoader } from '../components/loader';
@@ -228,7 +230,7 @@ webview2.on('message', (e: Webview2Event) => {
 
   const msg = JSON.parse(e.data || '{}') as WebMessageModel;
 
-  if (msg.code === 'BE_LoadFile') {
+  if (msg.code === webMessageCodes.BE_LoadFile) {
     boardEl.loadImage(msg.data);
   }
 });

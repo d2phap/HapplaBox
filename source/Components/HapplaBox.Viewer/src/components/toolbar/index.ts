@@ -76,7 +76,7 @@ export class HbToolbar extends BaseElement {
         group: 'bottom',
         imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/menu.svg',
         label: 'Menu',
-        tooltip: 'Menu... (`)',
+        tooltip: 'Menu... (Alt+F)',
         clickFn: this.#options.onMenuButtonClicked,
       },
     ];

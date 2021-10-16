@@ -277,7 +277,7 @@ export class HbGallery extends BaseElement {
     if (forced || !this.#lastRepaintPos || isScrollChanged) {
       this.#lastRepaintPos = scrollPos;
 
-      //// TODO
+      // TODO
       // this.#options.onItemRenderRequested();
 
       this.renderItems(first, this.#cachedItemsLength);
