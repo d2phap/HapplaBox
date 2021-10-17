@@ -22,7 +22,7 @@ const copyright = () => `
 const configs = {
   entry: {
     base: ['./src/pages/base.ts', './src/themes/base/styles/main.scss'],
-    viewer: ['./src/pages/viewer.ts', './src/themes/default/styles/pages/viewer.scss'],
+    viewer: ['./src/pages/viewer/_viewer.ts', './src/themes/default/styles/pages/viewer.scss'],
     about: ['./src/pages/about.ts', './src/themes/default/styles/pages/about.scss'],
   },
   output: {
