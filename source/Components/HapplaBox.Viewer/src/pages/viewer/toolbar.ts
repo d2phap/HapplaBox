@@ -3,11 +3,8 @@ import { HbToolbarClickFunc, HbToolbarItem } from '@/components/toolbar/types';
 import webMessageCodes from '@/utils/webMessageCodes';
 import webview2 from '@/utils/webview2';
 
-init();
-const el = document.querySelector('hb-toolbar').shadowRoot.host as unknown as HbToolbar;
-
 // Main menu clicked
-const onMenuButtonClicked: HbToolbarClickFunc = (e) => {
+export const onMenuButtonClicked: HbToolbarClickFunc = (e) => {
   webview2.post(webMessageCodes.UI_OpenMainMenu, {
     x: e.clientX,
     y: e.clientY,
@@ -15,7 +12,7 @@ const onMenuButtonClicked: HbToolbarClickFunc = (e) => {
 };
 
 
-const onToolbarButtonClicked: HbToolbarClickFunc = (e, itemName) => {
+export const onToolbarButtonClicked: HbToolbarClickFunc = (e, itemName) => {
   console.log(itemName, e.currentTarget);
 };
 
@@ -156,9 +153,18 @@ const items: HbToolbarItem[] = [
 ];
 
 
-// load toolbar
-el.load({
-  items,
-  position: 'top',
-  onMenuButtonClicked,
-});
+export class Toolbar {
+  public static el: HbToolbar;
+
+  public static initialize() {
+    // initialize the web component
+    init();
+    Toolbar.el = document.querySelector('hb-toolbar').shadowRoot.host as unknown as HbToolbar;
+
+    Toolbar.el.load({
+      items,
+      position: 'top',
+      onMenuButtonClicked,
+    });
+  }
+}

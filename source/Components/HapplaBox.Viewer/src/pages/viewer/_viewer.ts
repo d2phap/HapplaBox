@@ -1,20 +1,16 @@
 
 import '@/modules/themeListener';
-import '@/pages/viewer/toolbar';
+import { Toolbar } from '@/pages/viewer/toolbar';
+import { Gallery } from '@/pages/viewer/gallery';
 
-import { pause } from '@/utils';
 import webMessageCodes from '@/utils/webMessageCodes';
 import webview2, { WebMessageModel, Webview2Event } from '@/utils/webview2';
 import { PanEventFunction, ZoomEventFunction } from '@/components/board/types';
 
 
-import { init as initHbGallery, HbGallery } from '@/components/gallery';
-import { init as initHbLoader } from '@/components/loader';
 import { HbBoard, init as initHbBoard } from '@/components/board';
 
-
 initHbBoard();
-initHbLoader();
 const boardEl = document.querySelector('hb-board').shadowRoot.host as unknown as HbBoard;
 
 function loadBoard() {
@@ -46,29 +42,14 @@ function loadBoard() {
 }
 
 
-function loadThumbnails() {
-  initHbGallery();
-
-  const galleryEl = document.querySelector('hb-gallery').shadowRoot.host as unknown as HbGallery;
-  const items = [];
-  for (let index = 0; index < 50; index++) {
-    items.push({
-      name: `Pic${index + 1}`,
-      src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
-      tooltip: `Photo ${index + 1}`,
-    });
-  }
-
-  galleryEl.load({
-    isHorizontal: true,
-    items,
-  });
-
-  galleryEl.scrollToIndex(30);
-  galleryEl.selectItems([5, 30]);
-}
-
 loadBoard();
+
+
+Toolbar.initialize();
+
+Gallery.initialize();
+Gallery.el.scrollToIndex(30);
+Gallery.el.selectItems([5, 30]);
 
 
 webview2.on('message', (e: Webview2Event) => {
@@ -80,5 +61,3 @@ webview2.on('message', (e: Webview2Event) => {
     boardEl.loadImage(msg.data);
   }
 });
-
-pause(0).then(loadThumbnails);

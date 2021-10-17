@@ -1,5 +1,5 @@
 
-import { compileTemplate, getCssVar, pause } from '@/utils';
+import { compileTemplate } from '@/utils';
 import { HbToolbarOptions, HbToolbarItem } from './types';
 
 import BaseElement from '../BaseElement';
