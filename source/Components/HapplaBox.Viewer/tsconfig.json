@@ -7,7 +7,7 @@
     "module": "ESNext",
     "target": "ESNext",
     "allowJs": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
@@ -17,5 +17,5 @@
   "include": [
     "src/**/*"
   ],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist"],
 }

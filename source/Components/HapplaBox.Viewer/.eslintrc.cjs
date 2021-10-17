@@ -25,6 +25,7 @@ module.exports = {
     },
   },
   rules: {
+    'react/jsx-filename-extension': 'off',
     'no-multiple-empty-lines': ['error', {
       max: 2,
       maxEOF: 1,
@@ -39,5 +40,6 @@ module.exports = {
     'arrow-parens': 'off',
     'no-plusplus': 'off',
     'no-param-reassign': 'off',
+    'import/extensions': 'off',
   },
 };

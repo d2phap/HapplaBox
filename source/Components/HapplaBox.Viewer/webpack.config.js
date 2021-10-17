@@ -1,28 +1,21 @@
-const webpack = require('webpack');
-const path = require('path');
-const ESLintPlugin = require('eslint-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const pkJson = require('./package.json');
+import path from 'path';
+import ESLintPlugin from 'eslint-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-const copyright = () => `
-  ${pkJson.displayName} v${pkJson.version}
-  ----------------------------------------
-  Copyright (c) ${new Date().getFullYear()} ${pkJson.author}.
-  Homepage: ${pkJson.homepage}
-  Released under the ${pkJson.license} License.
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-  Full license information can be found at:
-  https://github.com/d2phap/HapplaBox/blob/main/LICENSE.
-`;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 
 const configs = {
   entry: {
     base: ['./src/pages/base.ts', './src/themes/base/styles/main.scss'],
-    viewer: ['./src/pages/viewer/_viewer.ts', './src/themes/default/styles/pages/viewer.scss'],
+    winMain: ['./src/pages/WinMain/_winMain.ts', './src/themes/default/styles/pages/winMain.scss'],
     about: ['./src/pages/about.ts', './src/themes/default/styles/pages/about.scss'],
   },
   output: {
@@ -86,10 +79,8 @@ const configs = {
     new MiniCssExtractPlugin({
       filename: './css/[name].main.css',
     }),
-    new webpack.BannerPlugin(copyright),
     new ESLintPlugin({
       cache: true,
-      eslintPath: require.resolve('eslint'),
       resolvePluginsRelativeTo: __dirname,
       ignore: true,
       useEslintrc: true,
@@ -103,7 +94,7 @@ const configs = {
 };
 
 
-module.exports = (env, argv) => {
+export default function (env, argv) {
   const isProduction = argv.mode === 'production';
 
   return {
@@ -116,10 +107,6 @@ module.exports = (env, argv) => {
           terserOptions: {
             sourceMap: true,
             compress: isProduction,
-          },
-          extractComments: {
-            filename: 'LICENSE.txt',
-            banner: copyright,
           },
         }),
       ],
