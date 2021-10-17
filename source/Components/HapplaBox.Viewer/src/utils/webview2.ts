@@ -14,11 +14,11 @@ export interface Webview2Event extends Event {
  * @param code Event code
  * @param data Data to send to backend
  */
-export const post = (code: string, data: any) => {
+export const post = (code: string, data?: any) => {
   const payload: WebMessageModel = { code, data };
 
   // @ts-ignore
-  window.chrome.webview.postMessage(payload);
+  window.chrome.webview?.postMessage(payload);
 };
 
 

@@ -47,6 +47,7 @@ const uiMessages = {
   UI_SendFeedback: 'UI_SendFeedback',
 
   // Menu
+  UI_OpenMainMenu: 'UI_OpenMainMenu',
   UI_ExitApp: 'UI_ExitApp',
 };
 
