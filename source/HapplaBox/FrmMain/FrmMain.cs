@@ -51,7 +51,7 @@ namespace HapplaBox
 
             Web2.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
 
-            Web2.Source = new Uri(@"D:\_GITHUB\HapplaBox\source\Components\HapplaBox.Viewer\public\viewer.html");
+            Web2.Source = new Uri(@"D:\_GITHUB\HapplaBox\source\Components\HapplaBox.Viewer\public\winMain.html");
         }
 
 

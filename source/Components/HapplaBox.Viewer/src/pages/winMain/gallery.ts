@@ -5,7 +5,7 @@ import { GalleryItem } from '@/components/gallery/types';
 export const loadItems = () => {
   const items: GalleryItem[] = [];
 
-  for (let index = 0; index < 50; index++) {
+  for (let index = 0; index < 500; index++) {
     items.push({
       name: `Pic${index + 1}`,
       src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
