@@ -48,6 +48,7 @@ namespace HapplaBox
             Web2.CoreWebView2.Settings.IsPinchZoomEnabled = false;
             Web2.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
             Web2.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+            //Web2.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
 
             Web2.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
 

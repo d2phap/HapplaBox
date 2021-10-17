@@ -34,5 +34,22 @@ export class Viewer {
     });
 
     listenToBackendMsg(Viewer.el);
+
+    Viewer.el.addEventListener('dragenter', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+    });
+
+    Viewer.el.addEventListener('dragover', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+    });
+
+    Viewer.el.addEventListener('drop', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      console.log(e.dataTransfer.files);
+    });
   }
 }
