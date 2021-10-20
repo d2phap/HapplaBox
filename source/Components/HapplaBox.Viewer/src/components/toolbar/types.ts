@@ -1,7 +1,7 @@
 
 export type HbToolbarItemType = 'button' | 'divider' | 'space';
 export type HbToolbarGroup = 'center' | 'bottom';
-export type HbToolbarClickFunc = (e: PointerEvent, itemName: string) => any;
+export type HbToolbarClickFunc = (e: PointerEvent, toolbarItem: HbToolbarItem) => any;
 export type HbToolbarRightClickFunc = (e: PointerEvent) => any;
 
 export interface HbToolbarItem {
@@ -11,7 +11,7 @@ export interface HbToolbarItem {
    * Returns true if the item is moved to Overflow dropdown
    */
   overflow?: boolean;
-  cssClass?: string;
+  cssClass?: string[];
 
   name?: string;
   label?: string;
@@ -20,6 +20,10 @@ export interface HbToolbarItem {
   checkable?: boolean;
   isChecked?: boolean;
   disabled?: boolean;
+  data?: {
+    code: string,
+    params?: any,
+  };
   clickFn?: HbToolbarClickFunc;
 }
 
@@ -27,7 +31,8 @@ export type HbToolbarPosition = 'top' | 'bottom';
 export interface HbToolbarOptions {
   items: HbToolbarItem[];
   position: HbToolbarPosition;
+  menuButtonClickFn?: HbToolbarClickFunc;
+  defaultItemClickFn?: HbToolbarClickFunc;
   rightClickFn?: HbToolbarRightClickFunc;
-  onMenuButtonClicked?: HbToolbarClickFunc;
 }
 

@@ -7,6 +7,7 @@ import styles from './styles.inline.scss';
 import buttonTemplate from './button.html';
 import dividerTemplate from './divider.html';
 
+const CLASS_SELECTED = 'is--selected';
 const BTN_SHOW_MORE = 'btnShowMore';
 const BTN_MENU = 'btnMenu';
 
@@ -28,8 +29,6 @@ export class HbToolbar extends BaseElement {
   #options: HbToolbarOptions = {
     items: [],
     position: 'top',
-    rightClickFn: () => undefined,
-    onMenuButtonClicked: () => undefined,
   };
 
   constructor() {
@@ -63,7 +62,7 @@ export class HbToolbar extends BaseElement {
         type: 'button',
         name: BTN_SHOW_MORE,
         group: 'bottom',
-        cssClass: 'item-show-more hide',
+        cssClass: ['item-show-more', 'hide'],
         imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/gotoimage.svg',
         label: 'Show more items',
         tooltip: 'Show more items',
@@ -77,7 +76,7 @@ export class HbToolbar extends BaseElement {
         imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/menu.svg',
         label: 'Menu',
         tooltip: 'Menu... (Alt+F)',
-        clickFn: this.#options.onMenuButtonClicked,
+        clickFn: this.#options.menuButtonClickFn,
       },
     ];
   }
@@ -131,7 +130,7 @@ export class HbToolbar extends BaseElement {
 
     // right click
     if (e.button === 2) {
-      this.#options.rightClickFn(e);
+      this.#options.rightClickFn?.call(this, e);
     }
   }
 
@@ -181,24 +180,23 @@ export class HbToolbar extends BaseElement {
     }
   }
 
-  private onItemClicked(e: PointerEvent, itemName: string) {
+  private onItemClicked(e: PointerEvent, toolbarItem: HbToolbarItem) {
+    if (!toolbarItem) return;
     const el = e.currentTarget as HTMLElement;
-    const item = this.#allItems.find(i => i.name === itemName);
 
-    if (!item) return;
+    if (toolbarItem.checkable) {
+      toolbarItem.isChecked = !toolbarItem.isChecked;
 
-    if (item.checkable) {
-      item.isChecked = !item.isChecked;
-
-      if (item.isChecked) {
-        el.classList.add('is--selected');
+      if (toolbarItem.isChecked) {
+        el.classList.add(CLASS_SELECTED);
       }
       else {
-        el.classList.remove('is--selected');
+        el.classList.remove(CLASS_SELECTED);
       }
     }
 
-    item.clickFn(e, itemName);
+    this.#options.defaultItemClickFn?.call(this, e, toolbarItem);
+    toolbarItem.clickFn?.call(this, e, toolbarItem);
   }
 
   private addItemEvents(overflowItemsOnly = false) {
@@ -217,11 +215,11 @@ export class HbToolbar extends BaseElement {
       const toolbarItem = this.#allItems.find(i => i.name === itemName);
 
       if (toolbarItem) {
-        const clickEvent = (e: PointerEvent) => this.onItemClicked(e, itemName);
+        const clickEvent = (e: PointerEvent) => this.onItemClicked(e, toolbarItem);
 
         if (toolbarItem.type === 'button') {
-          n.removeEventListener('click', clickEvent, true);
-          n.addEventListener('click', clickEvent, true);
+          n.removeEventListener('click', clickEvent, false);
+          n.addEventListener('click', clickEvent, false);
         }
       }
     });
@@ -235,6 +233,7 @@ export class HbToolbar extends BaseElement {
       const item = this.#allItems[i];
       const itemEl = document.createElement('template');
       let template = '';
+      let cssClass: string[] = [];
 
       if (item.type === 'button') {
         template = buttonTemplate;
@@ -243,7 +242,14 @@ export class HbToolbar extends BaseElement {
         template = dividerTemplate;
       }
 
-      itemEl.innerHTML = compileTemplate(template, item);
+      if (item.isChecked === true) {
+        cssClass.push(CLASS_SELECTED);
+      }
+
+      itemEl.innerHTML = compileTemplate(template, {
+        ...item,
+        cssClass: [...item.cssClass || [], cssClass].join(' '),
+      });
 
       if (item.group === 'bottom') {
         groupBottomFragment.appendChild(itemEl.content.cloneNode(true));

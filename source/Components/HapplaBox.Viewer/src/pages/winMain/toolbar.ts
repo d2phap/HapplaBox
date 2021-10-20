@@ -2,9 +2,12 @@ import { HbToolbar, init } from '@/components/toolbar';
 import { HbToolbarClickFunc, HbToolbarItem } from '@/components/toolbar/types';
 import webMessageCodes from '@/utils/webMessageCodes';
 import webview2 from '@/utils/webview2';
+import zoomModes from '@/utils/zoomModes';
 
 // Main menu clicked
-export const onMenuButtonClicked: HbToolbarClickFunc = (e) => {
+export const onMenuButtonClicked: HbToolbarClickFunc = (e, btn) => {
+  console.log(btn.name, e.currentTarget);
+
   webview2.post(webMessageCodes.UI_OpenMainMenu, {
     x: e.clientX,
     y: e.clientY,
@@ -12,8 +15,13 @@ export const onMenuButtonClicked: HbToolbarClickFunc = (e) => {
 };
 
 
-export const onToolbarButtonClicked: HbToolbarClickFunc = (e, itemName) => {
-  console.log(itemName, e.currentTarget);
+export const onToolbarButtonClicked: HbToolbarClickFunc = (e, btn) => {
+  console.log(btn.name, btn.isChecked, e.currentTarget);
+
+  webview2.post(btn.data?.code, {
+    source: btn.name,
+    params: btn.data?.params,
+  });
 };
 
 
@@ -24,7 +32,7 @@ const items: HbToolbarItem[] = [
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/back.svg',
     label: 'Previous',
     tooltip: 'Previous (Left arrow)',
-    clickFn: onToolbarButtonClicked,
+    data: { code: webMessageCodes.UI_ViewPrevious },
   },
   {
     type: 'button',
@@ -32,7 +40,7 @@ const items: HbToolbarItem[] = [
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/next.svg',
     label: 'Next',
     tooltip: 'Next (Right arrow)',
-    clickFn: onToolbarButtonClicked,
+    data: { code: webMessageCodes.UI_ViewNext },
   },
   { type: 'divider' },
   {
@@ -41,7 +49,9 @@ const items: HbToolbarItem[] = [
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/autozoom.svg',
     label: 'Autozoom',
     tooltip: 'Autozoom (1)',
-    clickFn: onToolbarButtonClicked,
+    checkable: true,
+    isChecked: true,
+    data: { code: webMessageCodes.UI_SetZoomMode, params: zoomModes.autoZoom },
   },
   {
     type: 'button',
@@ -49,7 +59,8 @@ const items: HbToolbarItem[] = [
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/zoomlock.svg',
     label: 'Lock zoom ratio',
     tooltip: 'Lock zoom ratio (2)',
-    clickFn: onToolbarButtonClicked,
+    checkable: true,
+    data: { code: webMessageCodes.UI_SetZoomMode, params: zoomModes.lockZoom },
   },
   {
     type: 'button',
@@ -57,7 +68,8 @@ const items: HbToolbarItem[] = [
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/scaletowidth.svg',
     label: 'Scale to width',
     tooltip: 'Scale to width (3)',
-    clickFn: onToolbarButtonClicked,
+    checkable: true,
+    data: { code: webMessageCodes.UI_SetZoomMode, params: zoomModes.scaleToWidth },
   },
   {
     type: 'button',
@@ -65,23 +77,26 @@ const items: HbToolbarItem[] = [
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/scaletoheight.svg',
     label: 'Scale to height',
     tooltip: 'Scale to height (4)',
-    clickFn: onToolbarButtonClicked,
+    checkable: true,
+    data: { code: webMessageCodes.UI_SetZoomMode, params: zoomModes.scaleToHeight },
   },
   {
     type: 'button',
-    name: 'btnZoomToFit',
+    name: 'btnScaleToFit',
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/zoomtofit.svg',
     label: 'Scale to fit',
     tooltip: 'Scale to fit (5)',
-    clickFn: onToolbarButtonClicked,
+    checkable: true,
+    data: { code: webMessageCodes.UI_SetZoomMode, params: zoomModes.scaleToFit },
   },
   {
     type: 'button',
-    name: 'btnZoomToFill',
+    name: 'btnScaleToFill',
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/scaletofill.svg',
     label: 'Scale to fill',
     tooltip: 'Scale to fill (6)',
-    clickFn: onToolbarButtonClicked,
+    checkable: true,
+    data: { code: webMessageCodes.UI_SetZoomMode, params: zoomModes.scaleToFill },
   },
   { type: 'divider' },
   {
@@ -90,7 +105,7 @@ const items: HbToolbarItem[] = [
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/open.svg',
     label: 'Open file',
     tooltip: 'Open file... (Ctrl+O)',
-    clickFn: onToolbarButtonClicked,
+    data: { code: webMessageCodes.UI_OpenFile },
   },
   {
     type: 'button',
@@ -98,32 +113,7 @@ const items: HbToolbarItem[] = [
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/refresh.svg',
     label: 'Refresh',
     tooltip: 'Refresh (R)',
-    clickFn: onToolbarButtonClicked,
-  },
-  { type: 'divider' },
-  {
-    type: 'button',
-    name: 'btnWindowFit',
-    imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/autosizewindow.svg',
-    label: 'Window fit',
-    tooltip: 'Window fit (F9)',
-    clickFn: onToolbarButtonClicked,
-  },
-  {
-    type: 'button',
-    name: 'btnFullScreen',
-    imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/fullscreen.svg',
-    label: 'Full screen',
-    tooltip: 'Full screen (F11)',
-    clickFn: onToolbarButtonClicked,
-  },
-  {
-    type: 'button',
-    name: 'btnSlideshow',
-    imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/slideshow.svg',
-    label: 'Start slideshow',
-    tooltip: 'Start slideshow (F12)',
-    clickFn: onToolbarButtonClicked,
+    data: { code: webMessageCodes.UI_Refresh },
   },
   { type: 'divider' },
   {
@@ -132,7 +122,8 @@ const items: HbToolbarItem[] = [
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/thumbnail.svg',
     label: 'Gallery',
     tooltip: 'Gallery (H)',
-    clickFn: onToolbarButtonClicked,
+    checkable: true,
+    data: { code: webMessageCodes.UI_ToggleGallery },
   },
   {
     type: 'button',
@@ -140,7 +131,8 @@ const items: HbToolbarItem[] = [
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/checkerboard.svg',
     label: 'Checkerboard',
     tooltip: 'Checkerboard (B)',
-    clickFn: onToolbarButtonClicked,
+    checkable: true,
+    data: { code: webMessageCodes.UI_ToggleCheckerboard },
   },
   {
     type: 'button',
@@ -148,7 +140,7 @@ const items: HbToolbarItem[] = [
     imageUrl: 'file:///D:/_GITHUB/ImageGlass/Source/ImageGlass/bin/x64/Debug/Themes/Colibre-24.Amir-H-Jahangard/delete.svg',
     label: 'Delete',
     tooltip: 'Delete (Delete)',
-    clickFn: onToolbarButtonClicked,
+    data: { code: webMessageCodes.UI_MoveToRecycleBin },
   },
 ];
 
@@ -164,7 +156,8 @@ export class Toolbar {
     Toolbar.el.load({
       items,
       position: 'top',
-      onMenuButtonClicked,
+      menuButtonClickFn: onMenuButtonClicked,
+      defaultItemClickFn: onToolbarButtonClicked,
     });
   }
 }
