@@ -185,6 +185,23 @@ export class HbToolbar extends BaseElement {
     const el = e.currentTarget as HTMLElement;
 
     if (toolbarItem.checkable) {
+      const { checkableGroup } = toolbarItem;
+
+      // group items: uncheck all same-group items
+      if (checkableGroup) {
+        // ui
+        const sameGroupEls = this.shadowRoot.querySelectorAll(`[data-checkable-group="${checkableGroup}"]`);
+        sameGroupEls.forEach(iEl => iEl.classList.remove(CLASS_SELECTED));
+
+        // logic
+        for (const item of this.#allItems) {
+          if (item.checkableGroup === checkableGroup) {
+            item.isChecked = false;
+          }
+        }
+      }
+
+      // current item
       toolbarItem.isChecked = !toolbarItem.isChecked;
 
       if (toolbarItem.isChecked) {

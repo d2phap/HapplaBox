@@ -18,6 +18,7 @@ export interface HbToolbarItem {
   imageUrl?: string;
   tooltip?: string;
   checkable?: boolean;
+  checkableGroup?: string;
   isChecked?: boolean;
   disabled?: boolean;
   data?: {

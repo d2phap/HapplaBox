@@ -16,7 +16,7 @@ export const onMenuButtonClicked: HbToolbarClickFunc = (e, btn) => {
 
 
 export const onToolbarButtonClicked: HbToolbarClickFunc = (e, btn) => {
-  console.log(btn.name, btn.isChecked, e.currentTarget);
+  console.log(btn.name, btn.data, btn.isChecked, e.currentTarget);
 
   webview2.post(btn.data?.code, {
     source: btn.name,
@@ -51,6 +51,7 @@ const items: HbToolbarItem[] = [
     tooltip: 'Autozoom (1)',
     checkable: true,
     isChecked: true,
+    checkableGroup: '_zoom_mode_',
     data: { code: webMessageCodes.UI_SetZoomMode, params: zoomModes.autoZoom },
   },
   {
@@ -60,6 +61,7 @@ const items: HbToolbarItem[] = [
     label: 'Lock zoom ratio',
     tooltip: 'Lock zoom ratio (2)',
     checkable: true,
+    checkableGroup: '_zoom_mode_',
     data: { code: webMessageCodes.UI_SetZoomMode, params: zoomModes.lockZoom },
   },
   {
@@ -69,6 +71,7 @@ const items: HbToolbarItem[] = [
     label: 'Scale to width',
     tooltip: 'Scale to width (3)',
     checkable: true,
+    checkableGroup: '_zoom_mode_',
     data: { code: webMessageCodes.UI_SetZoomMode, params: zoomModes.scaleToWidth },
   },
   {
@@ -78,6 +81,7 @@ const items: HbToolbarItem[] = [
     label: 'Scale to height',
     tooltip: 'Scale to height (4)',
     checkable: true,
+    checkableGroup: '_zoom_mode_',
     data: { code: webMessageCodes.UI_SetZoomMode, params: zoomModes.scaleToHeight },
   },
   {
@@ -87,6 +91,7 @@ const items: HbToolbarItem[] = [
     label: 'Scale to fit',
     tooltip: 'Scale to fit (5)',
     checkable: true,
+    checkableGroup: '_zoom_mode_',
     data: { code: webMessageCodes.UI_SetZoomMode, params: zoomModes.scaleToFit },
   },
   {
@@ -96,6 +101,7 @@ const items: HbToolbarItem[] = [
     label: 'Scale to fill',
     tooltip: 'Scale to fill (6)',
     checkable: true,
+    checkableGroup: '_zoom_mode_',
     data: { code: webMessageCodes.UI_SetZoomMode, params: zoomModes.scaleToFill },
   },
   { type: 'divider' },
