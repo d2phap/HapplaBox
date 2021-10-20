@@ -136,6 +136,7 @@ export class HbToolbar extends BaseElement {
   }
 
   private onResize() {
+    const btnEl = this.#groupBottomEl.querySelector(`[name="${BTN_SHOW_MORE}"]`);
     const { offsetLeft } = this.#groupBottomEl;
     this.#overflowDropdownEl.innerHTML = '';
 
@@ -146,7 +147,7 @@ export class HbToolbar extends BaseElement {
     Array.from(this.#groupListEl.children).forEach(el => {
       const itemEl = el as HTMLElement;
       const itemName = itemEl.getAttribute('name');
-      const isItemOverflow = itemEl.offsetLeft + itemEl.clientWidth > offsetLeft;
+      const isItemOverflow = itemEl.offsetLeft + itemEl.clientWidth > offsetLeft - btnEl.clientWidth;
 
       if (isItemOverflow) {
         const clonedItem = itemEl.cloneNode(true);
@@ -168,7 +169,6 @@ export class HbToolbar extends BaseElement {
     this.addItemEvents(true);
 
     this.#isOverflow = this.#overflowDropdownEl.children.length > 0;
-    const btnEl = this.#groupBottomEl.querySelector(`[name="${BTN_SHOW_MORE}"]`);
 
     // show BTN_SHOW_MORE button if it's overflow
     if (btnEl && this.#isOverflow) {
