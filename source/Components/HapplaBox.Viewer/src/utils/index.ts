@@ -2,16 +2,10 @@
 /**
  * Compile HTML string with Js variable into plain HTML string
  * @param template HTML-Js string
- * @param o Object variable to render
+ * @param obj Object variable to render
  * @returns Plain HTML string
  */
-export const compileTemplate = (template: string, o: any): string => {
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval, prefer-template
-  const handler = new Function('o', 'const tagged = (o) => `' + template + '`; return tagged(o)');
-
-  return handler(o);
-};
-
+export const compileTemplate = (template: string, obj: Record<string, any>) => template.replace(/\${(.*?)}/g, (_, g) => obj[g]);
 
 /**
  * Pause and return the given data
