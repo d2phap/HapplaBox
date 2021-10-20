@@ -21,6 +21,7 @@ const configs = {
   output: {
     path: path.resolve(__dirname, './public'),
     filename: './js/[name].bundle.js',
+    hashFunction: 'xxhash64',
   },
   module: {
     rules: [
@@ -33,6 +34,13 @@ const configs = {
       {
         test: /\.html$/i,
         loader: 'html-loader',
+        options: {
+          minimize: {
+            // this causes stripping off 'style' attribute
+            removeStyleLinkTypeAttributes: false,
+            removeRedundantAttributes: false,
+          },
+        },
       },
       {
         // css loader for web component
