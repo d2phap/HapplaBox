@@ -13,7 +13,7 @@ export type PanEventFunction = (x: number, y: number) => void;
 export enum InterpolationMode {
   Pixelated = 'pixelated',
   Auto = 'auto',
-  CrispEdges = '-webkit-optimize-contrast', // crisp-edges
+  CrispEdges = 'auto', // 'crisp-edges',
 }
 
 export enum ZoomMode {

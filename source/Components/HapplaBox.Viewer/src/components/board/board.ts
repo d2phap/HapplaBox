@@ -17,7 +17,7 @@ export class Board {
 
   private options: BoardOptions;
   private defaultOptions: BoardOptions = {
-    imageRendering: InterpolationMode.Pixelated,
+    imageRendering: InterpolationMode.Auto,
 
     allowZoom: true,
     minZoom: 0.02,
