@@ -57,7 +57,6 @@ export class HbToolbar extends BaseElement {
 
   private get builtInItems(): HbToolbarItem[] {
     return [
-      { type: 'space', group: 'bottom' },
       {
         type: 'button',
         name: BTN_SHOW_MORE,
@@ -135,18 +134,20 @@ export class HbToolbar extends BaseElement {
   }
 
   private onResize() {
-    const btnEl = this.#groupBottomEl.querySelector(`[name="${BTN_SHOW_MORE}"]`);
+    const btnShowMoreEl = this.#groupBottomEl.querySelector(`[name="${BTN_SHOW_MORE}"]`);
     const { offsetLeft } = this.#groupBottomEl;
     this.#overflowDropdownEl.innerHTML = '';
 
     // set left alignment by default to get correct offsets
     this.#containerEl.classList.add('item-align-start');
 
+    const isBtnShowMoreHidden = btnShowMoreEl.className.includes('hide');
+    const gap = isBtnShowMoreHidden ? btnShowMoreEl.clientWidth : btnShowMoreEl.clientWidth / 2;
 
     Array.from(this.#groupListEl.children).forEach(el => {
       const itemEl = el as HTMLElement;
       const itemName = itemEl.getAttribute('name');
-      const isItemOverflow = itemEl.offsetLeft + itemEl.clientWidth > offsetLeft - btnEl.clientWidth;
+      const isItemOverflow = itemEl.offsetLeft + itemEl.clientWidth > offsetLeft - gap;
 
       if (isItemOverflow) {
         const clonedItem = itemEl.cloneNode(true);
@@ -170,12 +171,12 @@ export class HbToolbar extends BaseElement {
     this.#isOverflow = this.#overflowDropdownEl.children.length > 0;
 
     // show BTN_SHOW_MORE button if it's overflow
-    if (btnEl && this.#isOverflow) {
-      btnEl.classList.remove('hide');
+    if (btnShowMoreEl && this.#isOverflow) {
+      btnShowMoreEl.classList.remove('hide');
       this.#containerEl.classList.add('is--overflow', 'item-align-start');
     }
     else {
-      btnEl.classList.add('hide');
+      btnShowMoreEl.classList.add('hide');
       this.#containerEl.classList.remove('is--overflow', 'item-align-start');
     }
   }
