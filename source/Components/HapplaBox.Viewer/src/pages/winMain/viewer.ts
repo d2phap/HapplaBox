@@ -1,6 +1,6 @@
 
 import { HbBoard, init } from '@/components/board';
-import { ZoomEventFunction } from '@/components/board/types';
+import { ZoomEventFunction, ZoomMode } from '@/components/board/types';
 import webMessageCodes from '@/utils/webMessageCodes';
 import webview2, { WebMessageModel, Webview2Event } from '@/utils/webview2';
 
@@ -14,7 +14,7 @@ export const listenToBackendMsg = (el: HbBoard) => {
     const msg = JSON.parse(e.data || '{}') as WebMessageModel;
 
     if (msg.code === webMessageCodes.BE_LoadFile) {
-      el.loadImage(msg.data);
+      el.loadImage(msg.data, ZoomMode.ScaleToFit);
     }
   });
 };

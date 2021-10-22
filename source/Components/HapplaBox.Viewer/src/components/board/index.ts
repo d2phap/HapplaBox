@@ -96,7 +96,7 @@ export class HbBoard extends BaseElement {
     this.#board.enable();
   }
 
-  public async loadImage(url: string) {
+  public async loadImage(url: string, zoomMode: ZoomMode = ZoomMode.AutoZoom) {
     this.#wrapperEl.classList.remove('opacity-1');
     this.#contentEl.innerHTML = compileTemplate(imgTemplate, {
       src: url,
@@ -104,26 +104,29 @@ export class HbBoard extends BaseElement {
     });
 
     await this.#board.waitForContentReady();
-    await this.SetZoomMode();
+    await this.setZoomMode(zoomMode);
 
     this.#wrapperEl.classList.add('opacity-1');
   }
 
-  public async SetZoomMode(mode: ZoomMode = ZoomMode.ScaleToFit) {
+  public async setZoomMode(mode: ZoomMode = ZoomMode.AutoZoom) {
+    const fullW = this.#contentEl.scrollWidth / this.#board.scaleRatio;
+    const fullH = this.#contentEl.scrollHeight / this.#board.scaleRatio;
+    const widthScale = this.#containerEl.clientWidth / fullW;
+    const heightScale = this.#containerEl.clientHeight / fullH;
+    let scaleFactor = 1;
+
     if (mode === ZoomMode.ScaleToFit) {
-      const w = this.#contentEl.scrollWidth / this.#board.scaleRatio;
-      const h = this.#contentEl.scrollHeight / this.#board.scaleRatio;
-
-      const widthScale = this.#containerEl.clientWidth / w;
-      const heightScale = this.#containerEl.clientHeight / h;
-      const scale = Math.min(widthScale, heightScale);
-
-      const x = (this.#containerEl.offsetWidth - (w * scale)) / 2;
-      const y = (this.#containerEl.offsetHeight - (h * scale)) / 2;
-
-      await this.#board.panTo(-w / 2, -h / 2);
-      this.#board.zoomTo(scale, x, y);
+      scaleFactor = Math.min(widthScale, heightScale);
     }
+    else if (mode === ZoomMode.ScaleToWidth) {
+      scaleFactor = widthScale;
+    }
+    else if (mode === ZoomMode.ScaleToHeight) {
+      scaleFactor = heightScale;
+    }
+
+    this.#board.zoomTo(scaleFactor);
   }
 }
 
