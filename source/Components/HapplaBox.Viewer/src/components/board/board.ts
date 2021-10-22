@@ -15,7 +15,7 @@ export class Board {
   private arrowUpDown = false;
   private arrowDownDown = false;
 
-  private options: BoardOptions;
+  private options: BoardOptions = {};
   private defaultOptions: BoardOptions = {
     imageRendering: InterpolationMode.Auto,
 
@@ -42,14 +42,13 @@ export class Board {
   constructor(board: HTMLElement, boardContent: HTMLElement, options?: BoardOptions) {
     this.elBoard = board;
     this.elBoardContent = boardContent;
+    this.options = Object.assign({}, this.defaultOptions, options);
 
-    this.options = {
-      ...this.defaultOptions,
-      ...options || {},
-    };
+    // correct zoomFactor after calculating scaleRatio
+    this.options.zoomFactor /= this.options.scaleRatio;
 
     this.domMatrix = new DOMMatrix()
-      .scaleSelf(this.options.zoomFactor / this.options.scaleRatio)
+      .scaleSelf(this.zoomFactor)
       .translateSelf(this.options.panOffset.x, this.options.panOffset.y);
 
     this.zoomDistance = this.zoomDistance.bind(this);
