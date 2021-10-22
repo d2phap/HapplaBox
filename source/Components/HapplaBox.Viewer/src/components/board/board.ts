@@ -61,6 +61,7 @@ export class Board {
 
     this.enable = this.enable.bind(this);
     this.disable = this.disable.bind(this);
+    this.zoomToPoint = this.zoomToPoint.bind(this);
     this.zoomTo = this.zoomTo.bind(this);
     this.panTo = this.panTo.bind(this);
     this.applyTransform = this.applyTransform.bind(this);
@@ -353,7 +354,7 @@ export class Board {
     await this.applyTransform(duration);
   }
 
-  public async zoomTo(factor: number, x?: number, y?: number, duration?: number) {
+  public async zoomToPoint(factor: number, x?: number, y?: number, duration?: number) {
     // restrict the zoom factor
     this.options.zoomFactor = Math.min(
       Math.max(this.options.minZoom, this.dpi(factor)),
@@ -374,6 +375,20 @@ export class Board {
 
     this.updateImageRendering();
     await this.applyTransform(duration);
+  }
+
+  public async zoomTo(factor: number, duration?: number) {
+    const fullW = this.elBoardContent.scrollWidth / this.scaleRatio;
+    const fullH = this.elBoardContent.scrollHeight / this.scaleRatio;
+
+    let x = (this.elBoard.offsetWidth - (fullW * factor)) / 2;
+    let y = (this.elBoard.offsetHeight - (fullH * factor)) / 2;
+
+    // move to center point
+    await this.panTo(-fullW / 2, -fullH / 2);
+
+    // change zoom factor
+    this.zoomToPoint(factor, x, y, duration);
   }
 
   public applyTransform(duration: number = 0) {
