@@ -14,7 +14,7 @@ export const listenToBackendMsg = (el: HbBoard) => {
     const msg = JSON.parse(e.data || '{}') as WebMessageModel;
 
     if (msg.code === webMessageCodes.BE_LoadFile) {
-      el.loadImage(msg.data, ZoomMode.ScaleToFit);
+      el.loadImage(msg.data, ZoomMode.AutoZoom);
     }
   });
 };

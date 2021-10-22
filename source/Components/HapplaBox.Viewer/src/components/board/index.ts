@@ -114,19 +114,35 @@ export class HbBoard extends BaseElement {
     const fullH = this.#contentEl.scrollHeight / this.#board.scaleRatio;
     const widthScale = this.#containerEl.clientWidth / fullW;
     const heightScale = this.#containerEl.clientHeight / fullH;
-    let scaleFactor = 1;
+    let zoomFactor = 1;
 
-    if (mode === ZoomMode.ScaleToFit) {
-      scaleFactor = Math.min(widthScale, heightScale);
-    }
-    else if (mode === ZoomMode.ScaleToWidth) {
-      scaleFactor = widthScale;
+    if (mode === ZoomMode.ScaleToWidth) {
+      zoomFactor = widthScale;
     }
     else if (mode === ZoomMode.ScaleToHeight) {
-      scaleFactor = heightScale;
+      zoomFactor = heightScale;
+    }
+    else if (mode === ZoomMode.ScaleToFit) {
+      zoomFactor = Math.min(widthScale, heightScale);
+    }
+    else if (mode === ZoomMode.ScaleToFill) {
+      zoomFactor = Math.max(widthScale, heightScale);
+    }
+    else if (mode === ZoomMode.LockZoom) {
+      zoomFactor = this.#board.zoomFactor;
+    }
+    // AutoZoom
+    else {
+      // viewport size >= content size
+      if (widthScale >= 1 && heightScale >= 1) {
+        zoomFactor = 1; // show original size
+      }
+      else {
+        zoomFactor = Math.min(widthScale, heightScale);
+      }
     }
 
-    this.#board.zoomTo(scaleFactor);
+    this.#board.zoomTo(zoomFactor);
   }
 }
 
