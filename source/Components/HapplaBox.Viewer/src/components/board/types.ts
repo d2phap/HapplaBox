@@ -5,6 +5,12 @@ export interface IRect {
   top: number;
   bottom: number;
 }
+export interface IPadding {
+  left?: number;
+  right?: number;
+  top?: number;
+  bottom?: number;
+}
 
 export type ZoomEventFunction = (zoomFactor: number, x: number, y: number) => void;
 export type TransformEventFunction = (matrix: DOMMatrix) => void;
@@ -36,6 +42,7 @@ export interface BoardOptions {
 
   imageRendering?: InterpolationMode;
   scaleRatio?: number;
+  padding?: IPadding,
 
   onBeforeContentReady?: () => void;
   onContentReady?: () => void;

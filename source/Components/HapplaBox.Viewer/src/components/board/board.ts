@@ -1,5 +1,6 @@
+import merge from 'lodash.merge';
 import { pause } from '@/utils';
-import { BoardOptions, InterpolationMode } from './types';
+import { BoardOptions, InterpolationMode, IPadding } from './types';
 
 
 export class Board {
@@ -27,6 +28,10 @@ export class Board {
 
     allowPan: true,
     scaleRatio: window.devicePixelRatio,
+    padding: {
+      left: 0, right: 0,
+      top: 0, bottom: 0,
+    },
 
     onBeforeContentReady: () => {},
     onContentReady: () => {},
@@ -42,7 +47,7 @@ export class Board {
   constructor(board: HTMLElement, boardContent: HTMLElement, options?: BoardOptions) {
     this.elBoard = board;
     this.elBoardContent = boardContent;
-    this.options = Object.assign({}, this.defaultOptions, options);
+    this.options = merge({}, this.defaultOptions, options);
 
     // correct zoomFactor after calculating scaleRatio
     this.options.zoomFactor /= this.options.scaleRatio;
@@ -100,6 +105,14 @@ export class Board {
 
   set scaleRatio(value: number) {
     this.options.scaleRatio = value;
+  }
+
+  get padding() {
+    return this.options.padding;
+  }
+
+  set padding(value: IPadding) {
+    this.options.padding = value;
   }
 
   /**
@@ -353,7 +366,7 @@ export class Board {
     await this.applyTransform(duration);
   }
 
-  public async zoomToPoint(factor: number, x?: number, y?: number, duration?: number) {
+  public async zoomToPoint(factor: number, options: { x?: number, y?: number, duration?: number }) {
     // restrict the zoom factor
     this.options.zoomFactor = Math.min(
       Math.max(this.options.minZoom, this.dpi(factor)),
@@ -366,28 +379,30 @@ export class Board {
     // apply scale and translate value
     this.domMatrix.a = this.options.zoomFactor;
     this.domMatrix.d = this.options.zoomFactor;
-    this.domMatrix.e = x || 0;
-    this.domMatrix.f = y || 0;
+    this.domMatrix.e = (options.x || 0) + this.options.padding.left;
+    this.domMatrix.f = (options.y || 0) + this.options.padding.top;
 
     // raise event onAfterZoomChanged
     this.options.onAfterZoomChanged(this.zoomFactor, this.domMatrix.e, this.domMatrix.f);
 
     this.updateImageRendering();
-    await this.applyTransform(duration);
+    await this.applyTransform(options.duration);
   }
 
   public async zoomTo(factor: number, duration?: number) {
     const fullW = this.elBoardContent.scrollWidth / this.scaleRatio;
     const fullH = this.elBoardContent.scrollHeight / this.scaleRatio;
+    const horizontalPadding = this.padding.left + this.padding.right;
+    const verticalPadding = this.padding.top + this.padding.bottom;
 
-    let x = (this.elBoard.offsetWidth - (fullW * factor)) / 2;
-    let y = (this.elBoard.offsetHeight - (fullH * factor)) / 2;
+    let x = (this.elBoard.offsetWidth - horizontalPadding - (fullW * factor)) / 2;
+    let y = (this.elBoard.offsetHeight - verticalPadding - (fullH * factor)) / 2;
 
-    // move to center point
-    await this.panTo(-fullW / 2, -fullH / 2);
+    // // move to center point
+    // await this.panTo(-fullW, -fullH);
 
     // change zoom factor
-    this.zoomToPoint(factor, x, y, duration);
+    this.zoomToPoint(factor, { x, y, duration });
   }
 
   public applyTransform(duration: number = 0) {

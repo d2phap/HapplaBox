@@ -112,8 +112,10 @@ export class HbBoard extends BaseElement {
   public async setZoomMode(mode: ZoomMode = ZoomMode.AutoZoom) {
     const fullW = this.#contentEl.scrollWidth / this.#board.scaleRatio;
     const fullH = this.#contentEl.scrollHeight / this.#board.scaleRatio;
-    const widthScale = this.#containerEl.clientWidth / fullW;
-    const heightScale = this.#containerEl.clientHeight / fullH;
+    const horizontalPadding = this.#board.padding.left + this.#board.padding.right;
+    const verticalPadding = this.#board.padding.top + this.#board.padding.bottom;
+    const widthScale = (this.#containerEl.clientWidth - horizontalPadding) / fullW;
+    const heightScale = (this.#containerEl.clientHeight - verticalPadding) / fullH;
     let zoomFactor = 1;
 
     if (mode === ZoomMode.ScaleToWidth) {

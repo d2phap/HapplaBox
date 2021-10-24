@@ -12,8 +12,6 @@ import { pause } from '@/utils';
   Gallery.initialize();
   Viewport.initialize();
 
-  console.log(Toolbar.el.clientHeight, Gallery.el.clientHeight);
-
   pause(0).then(Toolbar.load);
   await pause(0).then(Gallery.load);
 

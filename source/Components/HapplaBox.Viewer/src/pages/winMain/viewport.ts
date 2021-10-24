@@ -3,6 +3,8 @@ import { HbBoard, init } from '@/components/board';
 import { ZoomEventFunction, ZoomMode } from '@/components/board/types';
 import webMessageCodes from '@/utils/webMessageCodes';
 import webview2, { WebMessageModel, Webview2Event } from '@/utils/webview2';
+import { Gallery } from './gallery';
+import { Toolbar } from './toolbar';
 
 
 export const onAfterZoomChanged: ZoomEventFunction = (factor: number, x: number, y: number) => {
@@ -29,11 +31,17 @@ export class Viewport {
     Viewport.el = document.querySelector('hb-board').shadowRoot.host as unknown as HbBoard;
 
     Viewport.el.initBoard({
+      padding: {
+        top: Toolbar.el.clientHeight,
+        bottom: Gallery.el.clientHeight,
+      },
       zoomFactor: 1,
       onAfterZoomChanged,
     });
 
+
     listenToBackendMsg(Viewport.el);
+    // Viewport.el.loadImage('file:///E:/WALLPAPER/NEW/dark/blazing_moon_by_bisbiswas_def6rgz.jpg', ZoomMode.AutoZoom);
 
     Viewport.el.addEventListener('dragenter', (e) => {
       e.stopPropagation();
