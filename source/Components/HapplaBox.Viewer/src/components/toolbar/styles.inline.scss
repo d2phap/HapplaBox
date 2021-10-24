@@ -151,14 +151,15 @@
   @include panel(0, #{var(--colorMenuBackground)});
   position: static;
   border-bottom: 1px solid RGBA(var(--colorBorder));
-  justify-content: center;
-
   display: flex;
-  padding: var(--containerPadding);
+  justify-content: center;
+  padding: 0 var(--containerPadding);
+  height: calc(var(--itemSize) + (var(--containerPadding) * 2));
 
   .group {
     display: flex;
     flex-wrap: nowrap;
+    align-items: center;
 
     &.group-list {
       flex: 0 1 auto;

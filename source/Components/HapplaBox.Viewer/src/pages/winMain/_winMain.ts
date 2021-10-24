@@ -3,16 +3,20 @@ import '@/modules/themeListener';
 
 import { Toolbar } from '@/pages/winMain/toolbar';
 import { Gallery } from '@/pages/winMain/gallery';
-import { Viewer } from '@/pages/winMain/viewer';
+import { Viewport } from '@/pages/winMain/viewport';
 import { pause } from '@/utils';
 
 
 (async function () {
-  pause(0).then(Viewer.initialize);
+  Toolbar.initialize();
+  Gallery.initialize();
+  Viewport.initialize();
 
-  pause(0).then(Toolbar.initialize);
+  console.log(Toolbar.el.clientHeight, Gallery.el.clientHeight);
 
-  await pause(0).then(Gallery.initialize);
+  pause(0).then(Toolbar.load);
+  await pause(0).then(Gallery.load);
+
   Gallery.el.scrollToIndex(30);
   Gallery.el.selectItems([5, 30]);
 })();

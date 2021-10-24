@@ -24,7 +24,9 @@ export class Gallery {
     // initialize the web component
     init();
     Gallery.el = document.querySelector('hb-gallery').shadowRoot.host as unknown as HbGallery;
+  }
 
+  public static load() {
     const items = loadItems();
     Gallery.el.load({
       isHorizontal: true,

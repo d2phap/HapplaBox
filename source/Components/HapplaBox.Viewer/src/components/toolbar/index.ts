@@ -141,8 +141,8 @@ export class HbToolbar extends BaseElement {
     // set left alignment by default to get correct offsets
     this.#containerEl.classList.add('item-align-start');
 
-    const isBtnShowMoreHidden = btnShowMoreEl.className.includes('hide');
-    const gap = isBtnShowMoreHidden ? btnShowMoreEl.clientWidth : btnShowMoreEl.clientWidth / 2;
+    const isBtnShowMoreHidden = btnShowMoreEl?.className.includes('hide');
+    const gap = isBtnShowMoreHidden ? btnShowMoreEl.clientWidth : btnShowMoreEl?.clientWidth / 2;
 
     Array.from(this.#groupListEl.children).forEach(el => {
       const itemEl = el as HTMLElement;
@@ -172,11 +172,11 @@ export class HbToolbar extends BaseElement {
 
     // show BTN_SHOW_MORE button if it's overflow
     if (btnShowMoreEl && this.#isOverflow) {
-      btnShowMoreEl.classList.remove('hide');
+      btnShowMoreEl?.classList.remove('hide');
       this.#containerEl.classList.add('is--overflow', 'item-align-start');
     }
     else {
-      btnShowMoreEl.classList.add('hide');
+      btnShowMoreEl?.classList.add('hide');
       this.#containerEl.classList.remove('is--overflow', 'item-align-start');
     }
   }

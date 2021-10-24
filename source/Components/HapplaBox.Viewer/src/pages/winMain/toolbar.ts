@@ -158,7 +158,9 @@ export class Toolbar {
     // initialize the web component
     init();
     Toolbar.el = document.querySelector('hb-toolbar').shadowRoot.host as unknown as HbToolbar;
+  }
 
+  public static load() {
     Toolbar.el.load({
       items,
       position: 'top',
