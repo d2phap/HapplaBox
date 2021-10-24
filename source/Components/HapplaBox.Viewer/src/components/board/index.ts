@@ -109,7 +109,7 @@ export class HbBoard extends BaseElement {
     this.#wrapperEl.classList.add('opacity-1');
   }
 
-  public async setZoomMode(mode: ZoomMode = ZoomMode.AutoZoom) {
+  public async setZoomMode(mode: ZoomMode = ZoomMode.AutoZoom, duration?: number) {
     const fullW = this.#contentEl.scrollWidth / this.#board.scaleRatio;
     const fullH = this.#contentEl.scrollHeight / this.#board.scaleRatio;
     const horizontalPadding = this.#board.padding.left + this.#board.padding.right;
@@ -144,7 +144,7 @@ export class HbBoard extends BaseElement {
       }
     }
 
-    this.#board.zoomTo(zoomFactor);
+    this.#board.zoomTo(zoomFactor, duration);
   }
 }
 

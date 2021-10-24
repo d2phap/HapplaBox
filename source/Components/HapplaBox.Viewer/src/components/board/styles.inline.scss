@@ -23,7 +23,7 @@
 }
 
 
-:host([checkerboard="true" i]) {
+:host([checkerboard=true i]) {
   .board-container {
     background-size: 20px 20px;
     background-image: conic-gradient(

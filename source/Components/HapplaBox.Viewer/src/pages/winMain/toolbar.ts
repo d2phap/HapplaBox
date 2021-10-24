@@ -3,6 +3,8 @@ import { HbToolbarClickFunc, HbToolbarItem } from '@/components/toolbar/types';
 import webMessageCodes from '@/utils/webMessageCodes';
 import webview2 from '@/utils/webview2';
 import zoomModes from '@/utils/zoomModes';
+import { Gallery } from './gallery';
+import { Viewport } from './viewport';
 
 // Main menu clicked
 export const onMenuButtonClicked: HbToolbarClickFunc = (e, btn) => {
@@ -16,12 +18,23 @@ export const onMenuButtonClicked: HbToolbarClickFunc = (e, btn) => {
 
 
 export const onToolbarButtonClicked: HbToolbarClickFunc = (e, btn) => {
+  const { code, params } = btn.data || {};
   console.log(btn.name, btn.data, btn.isChecked, e.currentTarget);
 
-  webview2.post(btn.data?.code, {
+  webview2.post(code, {
+    params,
     source: btn.name,
-    params: btn.data?.params,
   });
+
+  if (code === webMessageCodes.UI_ToggleCheckerboard) {
+    Viewport.el.setAttribute('checkerboard', (!!btn.isChecked).toString());
+  }
+  else if (code === webMessageCodes.UI_ToggleGallery) {
+    Gallery.el.setAttribute('visible', (!!btn.isChecked).toString());
+  }
+  else if(code === webMessageCodes.UI_SetZoomMode) {
+    Viewport.el.setZoomMode(params, 400);
+  }
 };
 
 
@@ -129,6 +142,7 @@ const items: HbToolbarItem[] = [
     label: 'Gallery',
     tooltip: 'Gallery (H)',
     checkable: true,
+    isChecked: true,
     data: { code: webMessageCodes.UI_ToggleGallery },
   },
   {
