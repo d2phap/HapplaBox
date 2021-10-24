@@ -20,36 +20,40 @@ export const listenToBackendMsg = (el: HbBoard) => {
 };
 
 
-export class Viewer {
+export class Viewport {
   public static el: HbBoard;
 
   public static initialize() {
     // initialize the web component
     init();
-    Viewer.el = document.querySelector('hb-board').shadowRoot.host as unknown as HbBoard;
+    Viewport.el = document.querySelector('hb-board').shadowRoot.host as unknown as HbBoard;
 
-    Viewer.el.initBoard({
+    Viewport.el.initBoard({
       zoomFactor: 1,
       onAfterZoomChanged,
     });
 
-    listenToBackendMsg(Viewer.el);
+    listenToBackendMsg(Viewport.el);
 
-    Viewer.el.addEventListener('dragenter', (e) => {
+    Viewport.el.addEventListener('dragenter', (e) => {
       e.stopPropagation();
       e.preventDefault();
     });
 
-    Viewer.el.addEventListener('dragover', (e) => {
+    Viewport.el.addEventListener('dragover', (e) => {
       e.stopPropagation();
       e.preventDefault();
       e.dataTransfer.dropEffect = 'copy';
     });
 
-    Viewer.el.addEventListener('drop', (e) => {
+    Viewport.el.addEventListener('drop', (e) => {
       e.stopPropagation();
       e.preventDefault();
       console.log(e.dataTransfer.files);
     });
+  }
+
+  public static load() {
+    Viewport.el.loadImage('file:///C:/Users/d2pha/Desktop/IMG_8095.jpg', ZoomMode.AutoZoom);
   }
 }
