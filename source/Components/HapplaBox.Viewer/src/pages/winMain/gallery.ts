@@ -1,17 +1,22 @@
 
 import { init, HbGallery } from '@/components/gallery';
-import { GalleryItem } from '@/components/gallery/types';
+import { GalleryItem, GalleryItemClickFunc, GalleryItemEventData, GalleryRequestRenderItemsFn as GalleryRequestThumbnailsUpdateFn } from '@/components/gallery/types';
+import webMessageCodes from '@/utils/webMessageCodes';
+import webview2, { WebMessageModel, Webview2Event } from '@/utils/webview2';
+import { Viewport } from './viewport';
 
-export const loadItems = () => {
+
+export const loadItems = (arr: Record<string, any>[] = []) => {
   const items: GalleryItem[] = [];
 
-  for (let index = 0; index < 500; index++) {
+  arr.forEach((item) => {
     items.push({
-      name: `Pic${index + 1}`,
-      src: `https://picsum.photos/seed/pic${index + 1}/300/200`,
-      tooltip: `Photo ${index + 1}`,
+      name: item.name,
+      src: item.filename,
+      tooltip: item.tooltip,
+      thumbnail: undefined,
     });
-  }
+  });
 
   return items;
 };
@@ -19,18 +24,51 @@ export const loadItems = () => {
 
 export class Gallery {
   public static el: HbGallery;
+  public static items: GalleryItem[];
 
   public static initialize() {
     // initialize the web component
     init();
     Gallery.el = document.querySelector('hb-gallery').shadowRoot.host as unknown as HbGallery;
+
+    Gallery.listenToBackendMsg();
   }
 
-  public static load() {
-    const items = loadItems();
+  public static load(items: Record<string, any>[]) {
+    Gallery.items = loadItems(items);
+
     Gallery.el.load({
       isHorizontal: true,
-      items,
+      items: Gallery.items,
+      clickItemFn: Gallery.clickItemFn,
+      requestRenderItemsFn: Gallery.requestThumbnailsUpdateFn,
     });
   }
+
+  public static renderItem({ index, thumbnail }: { index: number, thumbnail: string }) {
+    Gallery.el.renderItem(index, thumbnail);
+  }
+
+  private static requestThumbnailsUpdateFn: GalleryRequestThumbnailsUpdateFn = (indexes: number[]) => {
+    webview2.post(webMessageCodes.UI_RequestGalleryThumbnailUpdate, indexes);
+  };
+
+  private static clickItemFn: GalleryItemClickFunc = (e: PointerEvent, data: GalleryItemEventData) => {
+    Gallery.el.selectItems([data.index]);
+    Viewport.el.loadImage(Gallery.items[data.index].src);
+  };
+
+  private static listenToBackendMsg = () => {
+    webview2.on('message', (e: Webview2Event): void => {
+      const { code, data } = JSON.parse(e.data || '{}') as WebMessageModel;
+  
+      if (code === webMessageCodes.BE_LoadList) {
+        Gallery.load(data);
+      }
+      else if (code === webMessageCodes.BE_UpdateGalleryItemThumbnail) {
+        console.log(e.data);
+        Gallery.renderItem(data);
+      }
+    });
+  };
 }

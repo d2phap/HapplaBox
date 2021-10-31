@@ -13,8 +13,4 @@ import { pause } from '@/utils';
   Viewport.initialize();
 
   pause(0).then(Toolbar.load);
-  await pause(0).then(Gallery.load);
-
-  Gallery.el.scrollToIndex(30);
-  Gallery.el.selectItems([5, 30]);
 })();

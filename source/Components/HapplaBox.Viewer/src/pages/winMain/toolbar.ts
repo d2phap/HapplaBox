@@ -32,7 +32,7 @@ export const onToolbarButtonClicked: HbToolbarClickFunc = (e, btn) => {
   else if (code === webMessageCodes.UI_ToggleGallery) {
     Gallery.el.setAttribute('visible', (!!btn.isChecked).toString());
   }
-  else if(code === webMessageCodes.UI_SetZoomMode) {
+  else if (code === webMessageCodes.UI_SetZoomMode) {
     Viewport.el.setZoomMode(params, 400);
   }
 };

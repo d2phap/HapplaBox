@@ -1,6 +1,7 @@
 
 const uiMessages = {
   UI_SystemThemeChanged: 'UI_SystemThemeChanged',
+  UI_RequestGalleryThumbnailUpdate: 'UI_RequestGalleryThumbnailUpdate',
 
   // Menu > File
   UI_OpenFile: 'UI_OpenFile',
@@ -54,6 +55,8 @@ const uiMessages = {
 
 const beMessages = {
   BE_LoadFile: 'BE_LoadFile',
+  BE_LoadList: 'BE_LoadList',
+  BE_UpdateGalleryItemThumbnail: 'BE_UpdateGalleryItemThumbnail',
 };
 
 
