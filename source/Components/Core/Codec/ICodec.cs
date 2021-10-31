@@ -72,5 +72,23 @@ namespace HapplaBox.Core.Codec
         /// <param name="settings">Loading settings</param>
         /// <returns></returns>
         public Bitmap Load(string filename, CodecReadSettings settings);
+
+
+        /// <summary>
+        /// Gets thumbnail from image
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public byte[] GetThumbnail(string filename, int width, int height);
+
+
+        /// <summary>
+        /// Gets base64 thumbnail from image
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        public string GetThumbnailBase64(string filename, int width, int height);
     }
 }

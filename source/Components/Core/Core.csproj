@@ -8,4 +8,9 @@
       <RootNamespace>$(SolutionName).$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Magick.NET-Q16-OpenMP-x64" Version="8.3.3" />
+    <PackageReference Include="Magick.NET.SystemDrawing" Version="4.0.8" />
+  </ItemGroup>
+
 </Project>
