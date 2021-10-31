@@ -33,6 +33,7 @@ export class HbGallery extends BaseElement {
     rightClickItemFn: () => undefined,
     middleClickItemFn: () => undefined,
     doubleClickItemFn: () => undefined,
+    requestRenderItemsFn: () => undefined,
   };
 
 
@@ -55,14 +56,15 @@ export class HbGallery extends BaseElement {
     this.onItemDoulbeClicked = this.onItemDoulbeClicked.bind(this);
 
     // private methods
-    this.renderItems = this.renderItems.bind(this);
+    this.renderItemsTemplate = this.renderItemsTemplate.bind(this);
     this.createContainer = this.createContainer.bind(this);
     this.createScroller = this.createScroller.bind(this);
     this.setScrollerSize = this.setScrollerSize.bind(this);
-    this.redrawItems = this.redrawItems.bind(this);
+    this.redrawItemsTemplate = this.redrawItemsTemplate.bind(this);
 
     // public methods
     this.load = this.load.bind(this);
+    this.renderItem = this.renderItem.bind(this);
     this.scrollToIndex = this.scrollToIndex.bind(this);
     this.selectItems = this.selectItems.bind(this);
 
@@ -137,7 +139,7 @@ export class HbGallery extends BaseElement {
       this.lazyRenderItems();
     }
     else {
-      this.redrawItems();
+      this.redrawItemsTemplate();
     }
   }
 
@@ -145,7 +147,7 @@ export class HbGallery extends BaseElement {
     clearTimeout(this.#renderTimer);
 
     this.#renderTimer = setTimeout(async () => {
-      this.redrawItems();
+      this.redrawItemsTemplate();
 
       await pause(500);
       this.#isProgrammaticalylScroll = false;
@@ -202,7 +204,7 @@ export class HbGallery extends BaseElement {
     this.#cachedItemsLength = this.maxItemsOnScreen * 3;
     this.#maxBuffer = this.maxItemsOnScreen * this.itemRenderedSize;
 
-    this.redrawItems(true);
+    this.redrawItemsTemplate(true);
   }
 
   private onAttrHideLabelChanged(val: string) {
@@ -264,7 +266,7 @@ export class HbGallery extends BaseElement {
     }
   }
 
-  private async redrawItems(forced: boolean = false) {
+  private async redrawItemsTemplate(forced: boolean = false) {
     const scrollPos = this.#options.isHorizontal
       ? this.#containerEl.scrollLeft
       : this.#containerEl.scrollTop;
@@ -276,20 +278,17 @@ export class HbGallery extends BaseElement {
 
     if (forced || !this.#lastRepaintPos || isScrollChanged) {
       this.#lastRepaintPos = scrollPos;
-
-      // TODO
-      // this.#options.onItemRenderRequested();
-
-      this.renderItems(first, this.#cachedItemsLength);
+      this.renderItemsTemplate(first, this.#cachedItemsLength);
     }
   }
 
-  private renderItems(fromPos: number, howMany: number) {
+  private renderItemsTemplate(fromPos: number, howMany: number) {
     const fragment = document.createDocumentFragment();
+    const indexesToRender = [] as number[];
 
-    let finalItem = fromPos + howMany;
-    if (finalItem > this.#options.items.length) {
-      finalItem = this.#options.items.length;
+    let toPos = fromPos + howMany;
+    if (toPos > this.#options.items.length) {
+      toPos = this.#options.items.length;
     }
 
     // for center alignment
@@ -298,7 +297,7 @@ export class HbGallery extends BaseElement {
       firstPadding += this.containerSize / 2 - this.scrollingSize / 2;
     }
 
-    for (let i = fromPos; i < finalItem; i++) {
+    for (let i = fromPos; i < toPos; i++) {
       let style = '';
       let cssClass = '';
       const itemPos = firstPadding + (i * this.itemRenderedSize);
@@ -325,6 +324,7 @@ export class HbGallery extends BaseElement {
       });
 
       fragment.appendChild(itemEl.content.cloneNode(true));
+      indexesToRender.push(i);
     }
 
     Array.from(fragment.children).forEach(n => {
@@ -340,6 +340,9 @@ export class HbGallery extends BaseElement {
 
     this.#containerEl.innerHTML = '';
     this.#containerEl.appendChild(fragment);
+
+    // request render items
+    this.#options.requestRenderItemsFn(indexesToRender);
   }
 
 
@@ -356,7 +359,24 @@ export class HbGallery extends BaseElement {
     this.#maxBuffer = this.maxItemsOnScreen * this.itemRenderedSize;
 
     this.setScrollerSize(this.scrollingSize);
-    this.renderItems(0, this.#cachedItemsLength / 2);
+    this.renderItemsTemplate(0, this.#cachedItemsLength / 2);
+  }
+
+  public renderItem(index: number, thumbnail: string) {
+    const itemEl = this.#containerEl.querySelector(`.gallery-item[data-index="${index}"]`);
+    if (itemEl === null) return;
+
+    const imgEl = itemEl.querySelector('.preview > img') as HTMLImageElement;
+    if (imgEl === null) return;
+
+
+    const img = new Image();
+    img.onload = () => itemEl.classList.remove('is--valid');
+    img.onerror = () => itemEl.classList.add('is--invalid');
+    img.src = thumbnail;
+    img.alt = imgEl.alt;
+
+    imgEl.replaceWith(img);
   }
 
   /**
