@@ -1,4 +1,5 @@
 ﻿using HapplaBox.Core;
+using HapplaBox.Core.Services;
 
 namespace HapplaBox
 {
@@ -9,6 +10,7 @@ namespace HapplaBox
         /// </summary>
         public static ImgFactory ImgList { get; set; }
 
+        public static GalleryService GallerySvc { get; set; }
 
     }
 }

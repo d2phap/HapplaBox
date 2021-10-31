@@ -7,6 +7,7 @@ namespace HapplaBox.Base
         #region Messages sent from UI
 
         public static readonly string UI_SystemThemeChanged = "UI_SystemThemeChanged";
+        public static readonly string UI_RequestGalleryThumbnailUpdate = "UI_RequestGalleryThumbnailUpdate";
 
         // Menu > File
         public static readonly string UI_OpenFile = "UI_OpenFile";
@@ -61,6 +62,8 @@ namespace HapplaBox.Base
         #region Messages sent from Backend
 
         public static readonly string BE_LoadFile = "BE_LoadFile";
+        public static readonly string BE_LoadList = "BE_LoadList";
+        public static readonly string BE_UpdateGalleryItemThumbnail = "BE_UpdateGalleryItemThumbnail";
 
         #endregion
 
