@@ -1,9 +1,9 @@
 
 import { init, HbGallery } from '@/components/gallery';
-import { GalleryItem, GalleryItemClickFunc, GalleryItemEventData, GalleryRequestRenderItemsFn as GalleryRequestThumbnailsUpdateFn } from '@/components/gallery/types';
+import { GalleryItem, GalleryItemClickFunc, GalleryItemEventData, GalleryRequestRenderItemsFn } from '@/components/gallery/types';
 import webMessageCodes from '@/utils/webMessageCodes';
 import webview2, { WebMessageModel, Webview2Event } from '@/utils/webview2';
-import { Viewport } from './viewport';
+import { Viewport } from '@/pages/winMain/viewport';
 
 
 export const loadItems = (arr: Record<string, any>[] = []) => {
@@ -49,11 +49,11 @@ export class Gallery {
     Gallery.el.renderItem(index, thumbnail);
   }
 
-  private static requestThumbnailsUpdateFn: GalleryRequestThumbnailsUpdateFn = (indexes: number[]) => {
+  private static requestThumbnailsUpdateFn: GalleryRequestRenderItemsFn = (indexes: number[]) => {
     webview2.post(webMessageCodes.UI_RequestGalleryThumbnailUpdate, indexes);
   };
 
-  private static clickItemFn: GalleryItemClickFunc = (e: PointerEvent, data: GalleryItemEventData) => {
+  private static clickItemFn: GalleryItemClickFunc = (_: PointerEvent, data: GalleryItemEventData) => {
     Gallery.el.selectItems([data.index]);
     Viewport.el.loadImage(Gallery.items[data.index].src);
   };
@@ -66,7 +66,6 @@ export class Gallery {
         Gallery.load(data);
       }
       else if (code === webMessageCodes.BE_UpdateGalleryItemThumbnail) {
-        console.log(e.data);
         Gallery.renderItem(data);
       }
     });

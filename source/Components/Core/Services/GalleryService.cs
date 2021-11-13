@@ -55,7 +55,7 @@ namespace HapplaBox.Core.Services
         /// <summary>
         /// Background service worker
         /// </summary>
-        private BackgroundWorker Worker = new();
+        private BackgroundWorker Worker;
 
 
         private int MaxCacheItems { get; set; } = 50;
@@ -133,6 +133,7 @@ namespace HapplaBox.Core.Services
             this.CacheItems.Clear();
 
             // background worker
+            this.Worker = new();
             this.Worker.DoWork -= Worker_DoWork;
             this.Worker.DoWork += Worker_DoWork;
         }
