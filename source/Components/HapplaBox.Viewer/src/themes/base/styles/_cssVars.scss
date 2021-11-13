@@ -28,8 +28,8 @@
   --thumbnailSize: 50;
   --toolbarSize: 40;
 
-  --fontBase: "system-ui, -apple-system, BlinkMacSystemFont, Segoe UI";
-  --fontCode: "ui-monospace, SFMono-Regular, SF Mono, Consolas, Liberation Mono, Menlo, monospace";
+  --fontBase: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI";
+  --fontCode: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
 }
 
 @media (prefers-color-scheme: light) {
