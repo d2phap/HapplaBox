@@ -17,7 +17,6 @@ export class HbGallery extends BaseElement {
   #maxBuffer = 0;
   #isProgrammaticalylScroll = false;
   #renderTimer: NodeJS.Timeout = null;
-  #resizeTimer: NodeJS.Timeout = null;
 
   #cachedItemsLength = 0;
   #containerEl: HTMLElement;
@@ -51,7 +50,6 @@ export class HbGallery extends BaseElement {
     this.onScroll = this.onScroll.bind(this);
     this.onMouseWheel = this.onMouseWheel.bind(this);
     this.onResize = this.onResize.bind(this);
-    this.onResizeEnd = this.onResizeEnd.bind(this);
     this.onAttrHideLabelChanged = this.onAttrHideLabelChanged.bind(this);
     this.onItemClicked = this.onItemClicked.bind(this);
     this.onItemAuxClicked = this.onItemAuxClicked.bind(this);
@@ -59,6 +57,7 @@ export class HbGallery extends BaseElement {
 
     // private methods
     this.renderItemsTemplate = this.renderItemsTemplate.bind(this);
+    this.realignItems = this.realignItems.bind(this);
     this.createContainer = this.createContainer.bind(this);
     this.createScroller = this.createScroller.bind(this);
     this.setScrollerSize = this.setScrollerSize.bind(this);
@@ -203,11 +202,6 @@ export class HbGallery extends BaseElement {
   }
 
   private onResize() {
-    clearTimeout(this.#resizeTimer);
-    this.#resizeTimer = setTimeout(this.onResizeEnd, 100);
-  }
-
-  private onResizeEnd() {
     this.#cachedItemsLength = this.maxItemsOnScreen * 3;
     this.#maxBuffer = this.maxItemsOnScreen * this.itemRenderedSize;
 
@@ -289,11 +283,31 @@ export class HbGallery extends BaseElement {
     }
   }
 
+  private realignItems(renderedItems: NodeListOf<Element>) {
+    // for center alignment
+    let firstPadding = 0;
+    if (this.#options.items.length < this.maxItemsOnScreen) {
+      firstPadding += this.containerSize / 2 - this.scrollingSize / 2;
+    }
+
+    renderedItems.forEach((el: HTMLElement, i) => {
+      let transformCss = '';
+      const itemPos = firstPadding + (i * this.itemRenderedSize);
+
+      // set item position
+      if (this.#options.isHorizontal) {
+        transformCss = `translateX(${itemPos}px)`;
+      }
+      else {
+        transformCss = `translateY(${itemPos}px)`;
+      }
+
+      el.style.transform = transformCss;
+    });
+  }
+
   private renderItemsTemplate(fromPos: number, howMany: number) {
-    const fragment = document.createDocumentFragment();
-    const indexesToRender = [] as number[];
     const renderedItems = this.#containerEl.querySelectorAll('.gallery-item');
-    const renderedIndexes = Array.from(renderedItems).map(el => parseInt(el.getAttribute('data-index')));
 
     let toPos = fromPos + howMany;
     if (toPos > this.#options.items.length) {
@@ -306,64 +320,77 @@ export class HbGallery extends BaseElement {
       firstPadding += this.containerSize / 2 - this.scrollingSize / 2;
     }
 
-    for (let i = fromPos; i < toPos; i++) {
-      let style = '';
-      let cssClass = '';
-      let preview = '';
-      const itemPos = firstPadding + (i * this.itemRenderedSize);
+    // only realign the rendered items
+    if (renderedItems.length && this.maxItemsOnScreen > toPos - fromPos) {
+      this.realignItems(renderedItems);
+    }
+    // create and render items
+    else {
+      const fragment = document.createDocumentFragment();
+      const indexesToRender = [] as number[];
+      const renderedIndexes = Array.from(renderedItems).map(el => parseInt(el.getAttribute('data-index')));
 
-      // set item position
-      if (this.#options.isHorizontal) {
-        style = `transform: translateX(${itemPos}px)`;
-      }
-      else {
-        style = `transform: translateY(${itemPos}px)`;
+      for (let i = fromPos; i < toPos; i++) {
+        let style = '';
+        let cssClass = '';
+        let preview = '';
+        const itemPos = firstPadding + (i * this.itemRenderedSize);
+
+        // set item position
+        if (this.#options.isHorizontal) {
+          style = `transform: translateX(${itemPos}px)`;
+        }
+        else {
+          style = `transform: translateY(${itemPos}px)`;
+        }
+
+        // set selected item
+        if (this.#selectedItems.includes(i)) {
+          cssClass = CLASS_SELECTED;
+        }
+
+        if (this.#options.items[i].thumbnail) {
+          preview = `<img
+            src="${this.#options.items[i].thumbnail}"
+            alt=${this.#options.items[i].name}
+            role="presentation" />`;
+        }
+
+        const itemEl = document.createElement('template');
+        itemEl.innerHTML = compileTemplate(itemTemplate, {
+          ...this.#options.items[i],
+          style,
+          preview,
+          class: cssClass,
+          index: i,
+        });
+
+        fragment.appendChild(itemEl.content.cloneNode(true));
+
+        if (!renderedIndexes.includes(i) && !this.#options.items[i].thumbnail) {
+          indexesToRender.push(i);
+        }
       }
 
-      // set selected item
-      if (this.#selectedItems.includes(i)) {
-        cssClass = CLASS_SELECTED;
-      }
+      Array.from(fragment.children).forEach(n => {
+        n.addEventListener('click', this.onItemClicked, true);
+        n.addEventListener('auxclick', this.onItemAuxClicked, true);
+        n.addEventListener('dblclick', this.onItemDoulbeClicked, true);
 
-      if (this.#options.items[i].thumbnail) {
-        preview = `<img
-          src="${this.#options.items[i].thumbnail}"
-          alt=${this.#options.items[i].name}
-          role="presentation" />`;
-      }
-
-      const itemEl = document.createElement('template');
-      itemEl.innerHTML = compileTemplate(itemTemplate, {
-        ...this.#options.items[i],
-        style,
-        preview,
-        class: cssClass,
-        index: i,
+        // disable browser default context menu
+        n.addEventListener('contextmenu', e => e.preventDefault(), true);
       });
 
-      fragment.appendChild(itemEl.content.cloneNode(true));
+      fragment.appendChild(this.#scrollerEl);
 
-      if (!renderedIndexes.includes(i) && !this.#options.items[i].thumbnail) {
-        indexesToRender.push(i);
-      }
+      this.#containerEl.innerHTML = '';
+      this.#containerEl.appendChild(fragment);
+
+      // request render items
+      this.#options.requestRenderItemsFn(indexesToRender);
+
+      console.log(fragment.children.length, indexesToRender.length);
     }
-
-    Array.from(fragment.children).forEach(n => {
-      n.addEventListener('click', this.onItemClicked, true);
-      n.addEventListener('auxclick', this.onItemAuxClicked, true);
-      n.addEventListener('dblclick', this.onItemDoulbeClicked, true);
-
-      // disable browser default context menu
-      n.addEventListener('contextmenu', e => e.preventDefault(), true);
-    });
-
-    fragment.appendChild(this.#scrollerEl);
-
-    this.#containerEl.innerHTML = '';
-    this.#containerEl.appendChild(fragment);
-
-    // request render items
-    this.#options.requestRenderItemsFn(indexesToRender);
   }
 
 
@@ -380,7 +407,7 @@ export class HbGallery extends BaseElement {
     this.#maxBuffer = this.maxItemsOnScreen * this.itemRenderedSize;
 
     this.setScrollerSize(this.scrollingSize);
-    // this.renderItemsTemplate(0, this.#cachedItemsLength / 2);
+    this.renderItemsTemplate(0, this.#cachedItemsLength / 2);
   }
 
   public renderItem(index: number, thumbnail: string) {

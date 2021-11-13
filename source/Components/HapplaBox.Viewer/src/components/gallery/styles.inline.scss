@@ -1,6 +1,6 @@
 
 @import "../../themes/base/styles/mixins.scss";
-// @import "../../themes/base/styles/reset.scss";
+@import "../../themes/base/styles/reset.scss";
 @import "../../themes/base/styles/scrollbar.scss";
 
 :host {
@@ -37,7 +37,7 @@
   border-radius: var(--itemBorderRadius);
   width: var(--size);
   height: var(--size);
-  transition: all 400ms ease;
+  transition: background-color 400ms ease;
 
   .preview {
     border-radius: calc(var(--itemBorderRadius) / 2);
@@ -88,7 +88,7 @@
   }
 
   &:active {
-    transition: all 200ms ease;
+    transition: background-color 200ms ease;
     background-color: var(--colorMenuActive) ;
   }
 
@@ -110,10 +110,6 @@
 
   &.is--invalid {
     .preview {
-      svg {
-        display: block;
-      }
-
       // hide the broken image
       img {
         display: none;
