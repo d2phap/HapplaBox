@@ -6,16 +6,6 @@ import zoomModes from '@/utils/zoomModes';
 import { Gallery } from './gallery';
 import { Viewport } from './viewport';
 
-// Main menu clicked
-export const onMenuButtonClicked: HbToolbarClickFunc = (e, btn) => {
-  console.log(btn.name, e.currentTarget);
-
-  webview2.post(webMessageCodes.UI_OpenMainMenu, {
-    x: e.clientX,
-    y: e.clientY,
-  });
-};
-
 
 export const onToolbarButtonClicked: HbToolbarClickFunc = (e, btn) => {
   const { code, params } = btn.data || {};
@@ -178,8 +168,16 @@ export class Toolbar {
     Toolbar.el.load({
       items,
       position: 'top',
-      menuButtonClickFn: onMenuButtonClicked,
+      menuButtonClickFn: Toolbar.onMenuButtonClicked,
       defaultItemClickFn: onToolbarButtonClicked,
     });
+  }
+
+  // Main menu clicked
+  private static onMenuButtonClicked(e: PointerEvent, btn: HbToolbarItem) {
+    const x = Math.trunc(Toolbar.el.clientWidth * devicePixelRatio);
+    const y = Math.trunc(Toolbar.el.clientHeight * devicePixelRatio);
+
+    webview2.post(webMessageCodes.UI_OpenMainMenu, { x, y });
   }
 }

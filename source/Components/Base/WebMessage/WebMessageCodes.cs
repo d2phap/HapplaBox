@@ -54,6 +54,7 @@ namespace HapplaBox.Base
         public static readonly string UI_SendFeedback = "UI_SendFeedback";
 
         // Menu
+        public static readonly string UI_OpenMainMenu = "UI_OpenMainMenu";
         public static readonly string UI_ExitApp = "UI_ExitApp";
 
         #endregion

@@ -32,15 +32,7 @@ namespace HapplaBox.Base
         /// <returns></returns>
         public static WebMessageModel<T>? FromJson<T>(string json)
         {
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-
-
-            var result = JsonSerializer.Deserialize<WebMessageModel<T>>(json, options);
-
-            return result;
+            return Helpers.ParseJson<WebMessageModel<T>>(json);
         }
     }
 }

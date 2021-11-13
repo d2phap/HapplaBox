@@ -24,6 +24,14 @@ namespace HapplaBox.UI
         public Color BackgroundColor { get; private set; }
         public Color BackgroundInactiveColor { get; private set; }
 
+
+        // menu theme
+        public Color MenuBackgroundColor { get; private set; }
+        public Color MenuBackgroundHoverColor { get; private set; }
+
+        public Color MenuTextColor { get; private set; }
+        public Color MenuTextHoverColor { get; private set; }
+
         #endregion
 
 
@@ -38,6 +46,11 @@ namespace HapplaBox.UI
 
             this.BackgroundColor = Color.FromArgb(255, 235, 246, 249);
             this.BackgroundInactiveColor = Color.FromArgb(255, 243, 243, 243);
+
+            this.MenuBackgroundColor = this.BackgroundColor;
+            this.MenuBackgroundHoverColor = WinColors.AccentBrush;
+            this.MenuTextColor = Color.Black;
+            this.MenuTextHoverColor = Color.White;
         }
 
 

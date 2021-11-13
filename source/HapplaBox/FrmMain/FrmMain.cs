@@ -36,7 +36,6 @@ namespace HapplaBox
 
             var env = await CoreWebView2Environment.CreateAsync(userDataFolder: MyApp.ConfigDir(PathType.Dir, "ViewerData"), options: options);
 
-
             await Web2.EnsureCoreWebView2Async(env);
         }
 
@@ -60,7 +59,7 @@ namespace HapplaBox
 
             Web2.Source = new Uri(@"D:\_GITHUB\HapplaBox\source\Components\HapplaBox.Viewer\public\winMain.html");
 
-            //Web2.CoreWebView2.OpenDevToolsWindow();
+            Web2.CoreWebView2.OpenDevToolsWindow();
         }
 
 
@@ -68,7 +67,7 @@ namespace HapplaBox
         {
             UpdateWebviewTheme();
 
-            LoadPath();
+            //LoadPath();
         }
 
 
@@ -76,10 +75,12 @@ namespace HapplaBox
         {
             var msg = e.WebMessageAsJson;
             var json = WebMessage.FromJson<object>(msg);
+            var code = json?.Code ?? string.Empty;
+            var data = json?.Data ?? null;
 
-            if (json?.Code == WebMessageCodes.UI_SystemThemeChanged)
+            if (code == WebMessageCodes.UI_SystemThemeChanged)
             {
-                bool isLightTheme = json?.Data?.ToString() == "light";
+                bool isLightTheme = data?.ToString() == "light";
 
                 if (isLightTheme)
                 {
@@ -90,9 +91,9 @@ namespace HapplaBox
                     UpdateTheme(SystemTheme.Dark);
                 }
             }
-            else if (json?.Code == WebMessageCodes.UI_RequestGalleryThumbnailUpdate)
+            else if (code == WebMessageCodes.UI_RequestGalleryThumbnailUpdate)
             {
-                var arr = JsonSerializer.Deserialize<int[]>(json?.Data?.ToString() ?? "[]");
+                var arr = JsonSerializer.Deserialize<int[]>(data?.ToString() ?? "[]");
 
                 Local.GallerySvc.AddToQueue(arr ?? Array.Empty<int>());
             }
