@@ -6,9 +6,7 @@ namespace HapplaBox.Codec.MagickNET
     public class Codec : ICodec
     {
         public string Name => "Magick.NET codec";
-
         public string Description => "Use ImageMagick to decode file formats";
-
         public string Author => "Duong Dieu Phap";
         public string Contact => "phap@imageglass.org";
         public Version Version => new(1, 0, 0, 1);
