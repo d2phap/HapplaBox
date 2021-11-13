@@ -3,8 +3,8 @@ import { HbToolbarClickFunc, HbToolbarItem } from '@/components/toolbar/types';
 import webMessageCodes from '@/utils/webMessageCodes';
 import webview2 from '@/utils/webview2';
 import zoomModes from '@/utils/zoomModes';
-import { Gallery } from './gallery';
-import { Viewport } from './viewport';
+import { Gallery } from '@/pages/winMain/gallery';
+import { Viewport } from '@/pages/winMain/viewport';
 
 
 export const onToolbarButtonClicked: HbToolbarClickFunc = (e, btn) => {
@@ -23,7 +23,11 @@ export const onToolbarButtonClicked: HbToolbarClickFunc = (e, btn) => {
     Gallery.el.setAttribute('visible', (!!btn.isChecked).toString());
   }
   else if (code === webMessageCodes.UI_SetZoomMode) {
-    Viewport.el.setZoomMode(params, 400);
+    Viewport.zoomMode = params;
+    Viewport.refresh();
+  }
+  else if (code === webMessageCodes.UI_Refresh) {
+    Viewport.refresh();
   }
 };
 
