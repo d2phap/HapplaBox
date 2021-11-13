@@ -73,7 +73,7 @@ namespace HapplaBox.Core.Services
         private List<int> QueuedList { get; set; } = new();
 
 
-        private ImgFactory ImgList { get; set; }
+        private ImageService ImgList { get; set; }
 
         #endregion
 
@@ -110,7 +110,7 @@ namespace HapplaBox.Core.Services
         /// </summary>
         /// <param name="defaultCodec">Default codec</param>
         /// <param name="thumbnailIndexes">List of thumbnail indexes</param>
-        public GalleryService(ICodec defaultCodec, ImgFactory list)
+        public GalleryService(ICodec defaultCodec, ImageService list)
         {
             Initialize(defaultCodec, list);
         }
@@ -123,7 +123,7 @@ namespace HapplaBox.Core.Services
         /// </summary>
         /// <param name="defaultCodec">Default codec</param>
         /// <param name="thumbnailIndexes">List of thumbnail indexes</param>
-        private void Initialize(ICodec defaultCodec, ImgFactory list)
+        private void Initialize(ICodec defaultCodec, ImageService list)
         {
             this.Codec = defaultCodec;
             this.ImgList = list;
@@ -189,7 +189,14 @@ namespace HapplaBox.Core.Services
         /// <returns></returns>
         public string Get(int index)
         {
-            return this.CacheItems[index];
+            try
+            {
+                return this.CacheItems[index];
+            }
+            catch
+            {
+                return "";
+            }
         }
 
     }

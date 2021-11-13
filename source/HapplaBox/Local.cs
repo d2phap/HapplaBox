@@ -8,8 +8,12 @@ namespace HapplaBox
         /// <summary>
         /// Gets, sets current image list
         /// </summary>
-        public static ImgFactory ImgList { get; set; }
+        public static ImageService ImgSvc { get; set; }
 
+
+        /// <summary>
+        /// Gets, sets gallery
+        /// </summary>
         public static GalleryService GallerySvc { get; set; }
 
     }

@@ -86,6 +86,10 @@ namespace HapplaBox
 
                 Local.GallerySvc.AddToQueue(arr ?? Array.Empty<int>());
             }
+            else if(code == WebMessageCodes.UI_OpenFile)
+            {
+                OpenFilePicker();
+            }
         }
 
 
@@ -133,10 +137,10 @@ namespace HapplaBox
 
         private void LoadThumbnails(IEnumerable<string>? allFiles)
         {
-            Local.ImgList = new(Config.DefaultCodec, allFiles?.ToList() ?? new(0));
+            Local.ImgSvc = new(Config.DefaultCodec, allFiles?.ToList() ?? new(0));
 
             Local.GallerySvc?.Dispose();
-            Local.GallerySvc = new(Config.DefaultCodec, Local.ImgList);
+            Local.GallerySvc = new(Config.DefaultCodec, Local.ImgSvc);
             Local.GallerySvc.ItemRenderedHandler = ItemRenderedEvent;
 
 
@@ -155,6 +159,7 @@ namespace HapplaBox
             GC.Collect();
         }
 
+
         private void ItemRenderedEvent(int index)
         {
             if (this.InvokeRequired)
@@ -171,10 +176,26 @@ namespace HapplaBox
 
             var msgJson = WebMessage.ToJson(WebMessageCodes.BE_UpdateGalleryItemThumbnail, payload);
 
-
             Web2.CoreWebView2.PostWebMessageAsString(msgJson);
         }
 
 
+        private void OpenFilePicker()
+        {
+            var codecExts = string.Join(";",
+                Config.DefaultCodec.SupportedExts.Select(s => "*" + s));
+
+            var of = new OpenFileDialog()
+            {
+                CheckFileExists = true,
+                Filter = $"Supported formats|{codecExts}|All files (*.*)|*.*",
+                AutoUpgradeEnabled = true,
+            };
+
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                LoadPath(of.FileName);
+            }
+        }
     }
 }

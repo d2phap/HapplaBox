@@ -15,10 +15,21 @@ namespace HapplaBox.Codec.System
 
         public Version ApiVersion => new(0, 5);
 
-        public List<string> SupportedExts => new(2)
+        public List<string> SupportedExts => new()
         {
+            ".bmp",
+            ".cur",
+            ".fax",
+            ".gif",
+            ".ico",
+            ".jfif",
+            ".jp2",
+            ".jpe",
+            ".jpeg",
             ".jpg",
             ".png",
+            ".tif",
+            ".tiff",
         };
 
         public byte[] GetThumbnail(string filename, int width, int height)

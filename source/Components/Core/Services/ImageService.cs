@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HapplaBox.Core
 {
-    public class ImgFactory : IDisposable
+    public class ImageService : IDisposable
     {
 
 
@@ -48,7 +48,7 @@ namespace HapplaBox.Core
             GC.SuppressFinalize(this);
         }
 
-        ~ImgFactory()
+        ~ImageService()
         {
             Dispose(false);
         }
@@ -136,7 +136,7 @@ namespace HapplaBox.Core
         /// Initializes instance
         /// </summary>
         /// <param name="defaultCodec">Default codec</param>
-        public ImgFactory(ICodec defaultCodec)
+        public ImageService(ICodec defaultCodec)
         {
             Initialize(defaultCodec, new List<string>(0));
         }
@@ -147,7 +147,7 @@ namespace HapplaBox.Core
         /// </summary>
         /// <param name="defaultCodec">Default codec</param>
         /// <param name="filenames">List of filenames</param>
-        public ImgFactory(ICodec defaultCodec, IList<string> filenames)
+        public ImageService(ICodec defaultCodec, IList<string> filenames)
         {
             Initialize(defaultCodec, filenames);
         }

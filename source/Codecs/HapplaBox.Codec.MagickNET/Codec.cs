@@ -13,10 +13,28 @@ namespace HapplaBox.Codec.MagickNET
 
         public Version ApiVersion => new(0, 5);
 
-        public List<string> SupportedExts => new(2)
+        public List<string> SupportedExts => new()
         {
-            ".jpg",
-            ".png",
+            ".3fr",
+            ".ari", ".arw", ".avif",
+            ".b64", ".bay", ".bmp",
+            ".cap", ".cr2", ".cr3", ".crw", ".cur", ".cut",
+            ".dcr", ".dcs", ".dds", ".dib", ".dng", ".drf",
+            ".eip", ".emf", ".erf", ".exif", ".exr",
+            ".fax", ".fff", ".gif", ".gpr",
+            ".hdr", ".heic", ".heif",
+            ".ico", ".iiq",
+            ".jfif", ".jp2", ".jpe", ".jpeg", ".jpg", ".jxl",
+            ".k25", ".kdc",
+            ".mdc", ".mef", ".mos", ".mrw",
+            ".nef", ".nrw",
+            ".obm", ".orf",
+            ".pbm", ".pcx", ".pef", "pdf", ".pgm", ".png", ".ppm", ".psb", ".psd", ".ptx", ".pxn",
+            ".r3d", ".raf", ".raw", ".rw2", ".rwl", ".rwz",
+            ".sr2", ".srf", ".srw", ".svg",
+            ".tga", ".tif", ".tiff",
+            ".webp", ".wmf", ".wpg",
+            ".x3f", ".xbm", ".xpm",
         };
 
         public Bitmap Load(string filename, CodecReadSettings settings)
