@@ -354,6 +354,11 @@ namespace HapplaBox.Core
         /// <returns></returns>
         public int IndexOf(string filename)
         {
+            if (string.IsNullOrEmpty(filename.Trim()))
+            {
+                return -1;
+            }
+
             // case sensitivity, esp. if filename passed on command line
             return this.ImgList.FindIndex(item => item.Filename.ToUpperInvariant() == filename.ToUpperInvariant());
         }

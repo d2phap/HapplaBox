@@ -8,6 +8,7 @@ namespace HapplaBox.Base
 
         public static readonly string UI_SystemThemeChanged = "UI_SystemThemeChanged";
         public static readonly string UI_RequestGalleryThumbnailUpdate = "UI_RequestGalleryThumbnailUpdate";
+        public static readonly string UI_UpdateInfo = "UI_UpdateInfo";
 
         // Menu > File
         public static readonly string UI_OpenFile = "UI_OpenFile";

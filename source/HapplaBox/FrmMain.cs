@@ -34,7 +34,7 @@ namespace HapplaBox
 
         private void Web2_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
-            this.Text += " " + Web2.CoreWebView2.Environment.BrowserVersionString;
+            this.Text = Application.ProductName + " [" + Web2.CoreWebView2.Environment.BrowserVersionString + "]";
             IsWeb2Ready = true;
 
             Web2.CoreWebView2.Settings.IsZoomControlEnabled = false;
@@ -90,6 +90,11 @@ namespace HapplaBox
             {
                 OpenFilePicker();
             }
+            else if (code == WebMessageCodes.UI_UpdateInfo)
+            {
+                Local.StatusBar.Update(data?.ToString());
+                this.Text = Local.StatusBar.ToString();
+            }
         }
 
 
@@ -126,9 +131,17 @@ namespace HapplaBox
                 var msgJson = WebMessage.ToJson(WebMessageCodes.BE_LoadFile, url);
 
                 Web2.CoreWebView2.PostWebMessageAsString(msgJson);
-                this.Text = "HapplaBox " + Web2.CoreWebView2.Environment.BrowserVersionString +
-                    $" {filename}";
             }
+
+            Local.ImgSvc = new(Config.DefaultCodec, allFiles?.ToList() ?? new(0));
+
+            // update status bar
+            Local.StatusBar.Data = new()
+            {
+                Web2Version = Web2.CoreWebView2.Environment.BrowserVersionString,
+                Index = Local.ImgSvc.IndexOf(filename ?? string.Empty),
+            };
+            this.Text = Local.StatusBar.ToString();
 
 
             LoadThumbnails(allFiles);
@@ -137,8 +150,6 @@ namespace HapplaBox
 
         private void LoadThumbnails(IEnumerable<string>? allFiles)
         {
-            Local.ImgSvc = new(Config.DefaultCodec, allFiles?.ToList() ?? new(0));
-
             Local.GallerySvc?.Dispose();
             Local.GallerySvc = new(Config.DefaultCodec, Local.ImgSvc);
             Local.GallerySvc.ItemRenderedHandler = ItemRenderedEvent;
@@ -148,7 +159,7 @@ namespace HapplaBox
             {
                 Filename = new Uri(f).AbsoluteUri,
                 Name = Path.GetFileName(f),
-                Tooltip = $"[{i}] {f}",
+                Tooltip = f,
             });
 
             var msgJson = WebMessage.ToJson(WebMessageCodes.BE_LoadList, thumbnailList);

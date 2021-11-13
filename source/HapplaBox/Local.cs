@@ -16,5 +16,8 @@ namespace HapplaBox
         /// </summary>
         public static GalleryService GallerySvc { get; set; }
 
+
+        public static ViewStatus StatusBar { get; set; } = new();
+
     }
 }

@@ -2,6 +2,7 @@
 const uiMessages = {
   UI_SystemThemeChanged: 'UI_SystemThemeChanged',
   UI_RequestGalleryThumbnailUpdate: 'UI_RequestGalleryThumbnailUpdate',
+  UI_UpdateInfo: 'UI_UpdateInfo',
 
   // Menu > File
   UI_OpenFile: 'UI_OpenFile',

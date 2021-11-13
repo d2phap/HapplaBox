@@ -49,14 +49,18 @@ export class Gallery {
     Gallery.el.renderItem(index, thumbnail);
   }
 
-  private static requestThumbnailsUpdateFn: GalleryRequestRenderItemsFn = (indexes: number[]) => {
+  private static requestThumbnailsUpdateFn(indexes: number[]) {
     webview2.post(webMessageCodes.UI_RequestGalleryThumbnailUpdate, indexes);
-  };
+  }
 
-  private static clickItemFn: GalleryItemClickFunc = (_: PointerEvent, data: GalleryItemEventData) => {
+  private static clickItemFn(_: PointerEvent, data: GalleryItemEventData) {
     Gallery.el.selectItems([data.index]);
     Viewport.el.loadImage(Gallery.items[data.index].src);
-  };
+
+    webview2.post(webMessageCodes.UI_UpdateInfo, {
+      index: data.index,
+    });
+  }
 
   private static listenToBackendMsg = () => {
     webview2.on('message', (e: Webview2Event): void => {

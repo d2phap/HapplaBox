@@ -46,8 +46,8 @@ export class Viewport {
     });
   }
 
-  public static load() {
-    Viewport.el.loadImage('file:///C:/Users/d2pha/Desktop/IMG_8095.jpg', Viewport.zoomMode);
+  public static async load() {
+    await Viewport.el.loadImage('file:///C:/Users/d2pha/Desktop/IMG_8095.jpg', Viewport.zoomMode);
   }
 
   public static refresh(duration: number = 400) {
@@ -59,7 +59,9 @@ export class Viewport {
   }
 
   private static onAfterZoomChanged(factor: number) {
-    console.log(factor);
+    webview2.post(webMessageCodes.UI_UpdateInfo, {
+      zoomFactor: factor,
+    });
   }
 
   private static listenToBackendMsg() {
