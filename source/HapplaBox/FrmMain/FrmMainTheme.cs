@@ -1,11 +1,8 @@
 ﻿using HapplaBox.UI;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace HapplaBox
 {
-    internal partial class FrmMain: Form
+    public partial class FrmMain
     {
         private Theme CurrentTheme = new();
 
@@ -53,7 +50,5 @@ namespace HapplaBox
 
             Web2.CoreWebView2.ExecuteScriptAsync($"document.documentElement.style.setProperty('--colorAccent', '{accentColorStr}');");
         }
-
-
     }
 }

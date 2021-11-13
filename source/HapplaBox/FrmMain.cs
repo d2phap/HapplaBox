@@ -1,19 +1,12 @@
-﻿using HapplaBox.Base;
+using HapplaBox.Base;
 using HapplaBox.Settings;
 using HapplaBox.UI;
 using Microsoft.Web.WebView2.Core;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace HapplaBox
 {
-    internal partial class FrmMain : Form
+    public partial class FrmMain : Form
     {
         private bool IsWeb2Ready { get; set; } = false;
 
@@ -58,18 +51,14 @@ namespace HapplaBox
             Web2.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
 
             Web2.Source = new Uri(@"D:\_GITHUB\HapplaBox\source\Components\HapplaBox.Viewer\public\winMain.html");
-
-            Web2.CoreWebView2.OpenDevToolsWindow();
         }
-
 
         private void Web2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
             UpdateWebviewTheme();
 
-            //LoadPath();
+            LoadPath();
         }
-
 
         private void CoreWebView2_WebMessageReceived(object? sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
@@ -121,7 +110,7 @@ namespace HapplaBox
                 allFiles = Directory.EnumerateFiles(dir ?? "");
                 filename = path;
             }
-            else if(Directory.Exists(path))
+            else if (Directory.Exists(path))
             {
                 allFiles = Directory.EnumerateFiles(path);
                 filename = allFiles.FirstOrDefault();

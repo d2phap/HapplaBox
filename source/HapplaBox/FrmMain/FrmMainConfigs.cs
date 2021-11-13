@@ -1,14 +1,8 @@
 ﻿using HapplaBox.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace HapplaBox
 {
-    internal partial class FrmMain
+    public partial class FrmMain
     {
         private void SetUpFrmMainConfigs()
         {

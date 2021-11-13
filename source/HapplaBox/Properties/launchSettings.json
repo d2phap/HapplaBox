@@ -2,8 +2,7 @@
   "profiles": {
     "HapplaBox": {
       "commandName": "Project",
-      "commandLineArgs": "E:\\WALLPAPER\\cow.jpg",
-      "nativeDebugging": false
+      "commandLineArgs": "E:\\WALLPAPER\\cow.jpg"
     }
   }
 }

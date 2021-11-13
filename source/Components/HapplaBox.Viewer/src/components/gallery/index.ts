@@ -203,8 +203,8 @@ export class HbGallery extends BaseElement {
   }
 
   private onResize() {
-    clearTimeout(this.#renderTimer);
-    this.#renderTimer = setTimeout(this.onResizeEnd, 100);
+    clearTimeout(this.#resizeTimer);
+    this.#resizeTimer = setTimeout(this.onResizeEnd, 100);
   }
 
   private onResizeEnd() {
