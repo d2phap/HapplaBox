@@ -292,6 +292,8 @@ export class HbGallery extends BaseElement {
   private renderItemsTemplate(fromPos: number, howMany: number) {
     const fragment = document.createDocumentFragment();
     const indexesToRender = [] as number[];
+    const renderedItems = this.#containerEl.querySelectorAll('.gallery-item');
+    const renderedIndexes = Array.from(renderedItems).map(el => parseInt(el.getAttribute('data-index')));
 
     let toPos = fromPos + howMany;
     if (toPos > this.#options.items.length) {
@@ -307,6 +309,7 @@ export class HbGallery extends BaseElement {
     for (let i = fromPos; i < toPos; i++) {
       let style = '';
       let cssClass = '';
+      let preview = '';
       const itemPos = firstPadding + (i * this.itemRenderedSize);
 
       // set item position
@@ -322,16 +325,27 @@ export class HbGallery extends BaseElement {
         cssClass = CLASS_SELECTED;
       }
 
+      if (this.#options.items[i].thumbnail) {
+        preview = `<img
+          src="${this.#options.items[i].thumbnail}"
+          alt=${this.#options.items[i].name}
+          role="presentation" />`;
+      }
+
       const itemEl = document.createElement('template');
       itemEl.innerHTML = compileTemplate(itemTemplate, {
         ...this.#options.items[i],
         style,
+        preview,
         class: cssClass,
         index: i,
       });
 
       fragment.appendChild(itemEl.content.cloneNode(true));
-      indexesToRender.push(i);
+
+      if (!renderedIndexes.includes(i) && !this.#options.items[i].thumbnail) {
+        indexesToRender.push(i);
+      }
     }
 
     Array.from(fragment.children).forEach(n => {
@@ -366,24 +380,29 @@ export class HbGallery extends BaseElement {
     this.#maxBuffer = this.maxItemsOnScreen * this.itemRenderedSize;
 
     this.setScrollerSize(this.scrollingSize);
-    this.renderItemsTemplate(0, this.#cachedItemsLength / 2);
+    // this.renderItemsTemplate(0, this.#cachedItemsLength / 2);
   }
 
   public renderItem(index: number, thumbnail: string) {
     const itemEl = this.#containerEl.querySelector(`.gallery-item[data-index="${index}"]`);
     if (itemEl === null) return;
 
-    const imgEl = itemEl.querySelector('.preview > img') as HTMLImageElement;
-    if (imgEl === null) return;
+    const previewEl = itemEl.querySelector('.preview') as HTMLImageElement;
+    if (previewEl === null) return;
 
-
+    const item = this.#options.items[index];
     const img = new Image();
-    img.onload = () => itemEl.classList.remove('is--valid');
+    img.setAttribute('role', 'presentation');
+    img.onload = () => {
+      itemEl.classList.remove('is--invalid');
+      item.thumbnail = thumbnail;
+    };
     img.onerror = () => itemEl.classList.add('is--invalid');
     img.src = thumbnail;
-    img.alt = imgEl.alt;
+    img.alt = item.name;
 
-    imgEl.replaceWith(img);
+    previewEl.innerHTML = '';
+    previewEl.appendChild(img);
   }
 
   /**
