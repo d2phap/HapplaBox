@@ -17,6 +17,7 @@ export class HbGallery extends BaseElement {
   #maxBuffer = 0;
   #isProgrammaticalylScroll = false;
   #renderTimer: NodeJS.Timeout = null;
+  #resizeTimer: NodeJS.Timeout = null;
 
   #cachedItemsLength = 0;
   #containerEl: HTMLElement;
@@ -50,6 +51,7 @@ export class HbGallery extends BaseElement {
     this.onScroll = this.onScroll.bind(this);
     this.onMouseWheel = this.onMouseWheel.bind(this);
     this.onResize = this.onResize.bind(this);
+    this.onResizeEnd = this.onResizeEnd.bind(this);
     this.onAttrHideLabelChanged = this.onAttrHideLabelChanged.bind(this);
     this.onItemClicked = this.onItemClicked.bind(this);
     this.onItemAuxClicked = this.onItemAuxClicked.bind(this);
@@ -201,6 +203,11 @@ export class HbGallery extends BaseElement {
   }
 
   private onResize() {
+    clearTimeout(this.#renderTimer);
+    this.#renderTimer = setTimeout(this.onResizeEnd, 100);
+  }
+
+  private onResizeEnd() {
     this.#cachedItemsLength = this.maxItemsOnScreen * 3;
     this.#maxBuffer = this.maxItemsOnScreen * this.itemRenderedSize;
 
