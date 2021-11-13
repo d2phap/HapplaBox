@@ -37,6 +37,7 @@ export class Viewport {
       },
       zoomFactor: 1,
       onAfterZoomChanged,
+      onResizing: Viewport.onResizing,
     });
 
 
@@ -63,5 +64,9 @@ export class Viewport {
 
   public static load() {
     Viewport.el.loadImage('file:///C:/Users/d2pha/Desktop/IMG_8095.jpg', ZoomMode.AutoZoom);
+  }
+
+  private static onResizing() {
+    Viewport.el.setZoomMode(ZoomMode.AutoZoom);
   }
 }

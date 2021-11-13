@@ -1,11 +1,12 @@
 
+import merge from 'lodash.merge';
 import { compileTemplate } from '@/utils';
 
 import BaseElement from '../BaseElement';
 import styles from './styles.inline.scss';
 import imgTemplate from './imgTemplate.html';
 import { Board } from './board';
-import { BoardOptions, ZoomMode } from './types';
+import { ViewportOptions, ZoomMode } from './types';
 
 
 export class HbBoard extends BaseElement {
@@ -15,6 +16,10 @@ export class HbBoard extends BaseElement {
   #containerEl: HTMLDivElement;
   #wrapperEl: HTMLDivElement;
   #contentEl: HTMLDivElement;
+
+  #options: ViewportOptions = {
+    onResizing: () => undefined,
+  };
 
   constructor() {
     super();
@@ -34,12 +39,16 @@ export class HbBoard extends BaseElement {
     this.#resizeObserver.observe(this.shadowRoot.host);
   }
 
+  get options() {
+    return this.#options;
+  }
+
   private disconnectedCallback() {
     this.#resizeObserver.disconnect();
   }
 
   private onResize() {
-    //
+    this.#options.onResizing();
   }
 
   private onAuxClicked(e: PointerEvent) {
@@ -90,8 +99,9 @@ export class HbBoard extends BaseElement {
   }
 
 
-  public initBoard(options: BoardOptions = {}) {
-    this.#board = new Board(this.#containerEl, this.#contentEl, options);
+  public initBoard(options: ViewportOptions = {}) {
+    this.#options = merge(this.#options, options);
+    this.#board = new Board(this.#containerEl, this.#contentEl, this.#options);
 
     this.#board.enable();
   }

@@ -54,3 +54,7 @@ export interface BoardOptions {
   onPanning?: PanEventFunction;
   onAfterPanned?: PanEventFunction;
 }
+
+export interface ViewportOptions extends BoardOptions {
+  onResizing?: () => void;
+}

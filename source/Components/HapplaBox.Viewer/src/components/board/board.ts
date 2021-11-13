@@ -33,15 +33,15 @@ export class Board {
       top: 0, bottom: 0,
     },
 
-    onBeforeContentReady: () => {},
-    onContentReady: () => {},
+    onBeforeContentReady: () => undefined,
+    onContentReady: () => undefined,
 
-    onBeforeZoomChanged: () => {},
-    onAfterZoomChanged: () => {},
-    onAfterTransformed: () => {},
+    onBeforeZoomChanged: () => undefined,
+    onAfterZoomChanged: () => undefined,
+    onAfterTransformed: () => undefined,
 
-    onPanning: () => {},
-    onAfterPanned: () => {},
+    onPanning: () => undefined,
+    onAfterPanned: () => undefined,
   };
 
   constructor(board: HTMLElement, boardContent: HTMLElement, options?: BoardOptions) {
