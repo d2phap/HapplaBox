@@ -147,7 +147,7 @@ namespace HapplaBox.Core
         /// </summary>
         /// <param name="defaultCodec">Default codec</param>
         /// <param name="filenames">List of filenames</param>
-        public ImageService(ICodec defaultCodec, IList<string> filenames)
+        public ImageService(ICodec defaultCodec, IEnumerable<string> filenames)
         {
             Initialize(defaultCodec, filenames);
         }
@@ -161,9 +161,13 @@ namespace HapplaBox.Core
         /// </summary>
         /// <param name="defaultCodec">Default codec</param>
         /// <param name="filenames">List of filenames</param>
-        private void Initialize(ICodec defaultCodec, IList<string> filenames)
+        private void Initialize(ICodec defaultCodec, IEnumerable<string> filenames)
         {
             this.Codec = defaultCodec;
+
+            // todo:
+            // sort and filter file list
+            ///////////////////////////////////////////////////
 
             // import filenames to the list
             this.ImgList.Clear();

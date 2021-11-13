@@ -133,7 +133,7 @@ namespace HapplaBox
                 Web2.CoreWebView2.PostWebMessageAsString(msgJson);
             }
 
-            Local.ImgSvc = new(Config.DefaultCodec, allFiles?.ToList() ?? new(0));
+            Local.ImgSvc = new(Config.DefaultCodec, allFiles ?? new List<string>(0));
 
             // update status bar
             Local.StatusBar.Data = new()
