@@ -1,25 +1,25 @@
 
 
 ::-webkit-scrollbar {
-  width: var(--scrollBarSize);
-  height: var(--scrollBarSize);
+  width: var(--scrollBarSize-px);
+  height: var(--scrollBarSize-px);
   background: transparent;
   cursor: pointer;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: RGBA(var(--colorText) / 0.4);
-  border-radius: var(--scrollBarSize);
+  background-color: RGBA(var(--colorText) / 0.15);
+  border-radius: var(--scrollBarSize-px);
   border-color: transparent;
   border-style: solid;
-  border-width: calc((var(--scrollBarSize) / 2.5) - 1px);
+  border-width: calc((var(--scrollBarSize-px) / 2.5) - 1px);
   background-clip: padding-box;
+  cursor: pointer;
 }
-::-webkit-scrollbar-thumb:active {
-  background-color: RGBA(var(--colorText) / 0.7);
+::-webkit-scrollbar-thumb:hover {
+  border-width: 0;
+  background-color: RGBA(var(--colorText) / 0.35);
 }
-::-webkit-scrollbar-thumb:hover,
 ::-webkit-scrollbar-thumb:active {
   border-width: 0;
-  background-color: RGBA(var(--colorText) / 0.6);
-  cursor: pointer;
+  background-color: RGBA(var(--colorText) / 0.5);
 }

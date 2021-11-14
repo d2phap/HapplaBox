@@ -1,7 +1,7 @@
 
 @mixin fluentBackground($color: var(--colorBg)) {
   background-color: RGBA($color / var(--fluentOpacity));
-  backdrop-filter: blur(var(--fluentBlur));
+  backdrop-filter: blur(var(--fluentBlur-px));
 }
 
 
