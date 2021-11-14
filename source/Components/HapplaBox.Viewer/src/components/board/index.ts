@@ -158,7 +158,7 @@ export class HbBoard extends BaseElement {
   }
 
   public focus() {
-    this.#containerEl.focus({ preventScroll: true };)
+    this.#containerEl.focus({ preventScroll: true });
   }
 }
 

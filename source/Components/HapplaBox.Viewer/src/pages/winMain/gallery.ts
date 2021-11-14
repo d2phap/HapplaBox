@@ -1,6 +1,6 @@
 
 import { init, HbGallery } from '@/components/gallery';
-import { GalleryItem, GalleryItemClickFunc, GalleryItemEventData, GalleryRequestRenderItemsFn } from '@/components/gallery/types';
+import { GalleryItem, GalleryItemEventData } from '@/components/gallery/types';
 import webMessageCodes from '@/utils/webMessageCodes';
 import webview2, { WebMessageModel, Webview2Event } from '@/utils/webview2';
 import { Viewport } from '@/pages/winMain/viewport';

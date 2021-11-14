@@ -7,7 +7,7 @@
   cursor: pointer;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: RGBA(var(--colorText) / 0.15);
+  background-color: RGBA(var(--colorText) / 0.3);
   border-radius: var(--scrollBarSize-px);
   border-color: transparent;
   border-style: solid;
