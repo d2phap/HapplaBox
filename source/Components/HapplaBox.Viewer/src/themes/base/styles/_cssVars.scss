@@ -8,11 +8,11 @@
 
   --colorMenu: 255 255 255;
   --colorMenuBackground: 37 46 53;
-  --colorMenuHover: RGBA(var(--colorMenu) / 0.13);
-  --colorMenuActive: RGBA(var(--colorMenu) / 0.23);
-  --colorMenuSelected: RGBA(var(--colorMenu) / 0.45);
-  --colorMenuSelectedHover: RGBA(var(--colorMenu) / 0.3);
-  --colorMenuSelectedActive: RGBA(var(--colorMenu) / 0.5);
+  --colorMenuHover: RGBA(var(--colorMenu) / 0.2);
+  --colorMenuActive: RGBA(var(--colorMenu) / 0.1);
+  --colorMenuSelected: RGBA(var(--colorMenu) / 0.32);
+  --colorMenuSelectedHover: RGBA(var(--colorMenu) / 0.45);
+  --colorMenuSelectedActive: RGBA(var(--colorMenu) / 0.25);
 
 
   --colorAccent: 0 99 177;
@@ -41,8 +41,8 @@
     --colorMenuBackground: 242 242 242;
     --colorMenuHover: RGBA(var(--colorMenu) / 0.15);
     --colorMenuActive: RGBA(var(--colorMenu) / 0.25);
-    --colorMenuSelected: RGBA(var(--colorMenu) / 0.4);
+    --colorMenuSelected: RGBA(var(--colorMenu) / 0.35);
     --colorMenuSelectedHover: RGBA(var(--colorMenu) / 0.3);
-    --colorMenuSelectedActive: RGBA(var(--colorMenu) / 0.45);
+    --colorMenuSelectedActive: RGBA(var(--colorMenu) / 0.4);
   }
 }

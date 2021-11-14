@@ -30,6 +30,8 @@
 }
 
 .gallery-item {
+  @include setItemButtonStyle();
+
   position: absolute;
   user-select: none;
   display: grid;
@@ -47,14 +49,6 @@
     flex-direction: column;
     align-items: center;
     background-color: RGBA(var(--colorText) / 0.05);
-    transition: all 400ms ease;
-
-    svg {
-      display: none;
-      width: 50%;
-      height: 100%;
-      fill: RGB(var(--colorText));
-    }
 
     img {
       display: block;
@@ -84,28 +78,10 @@
     display: var(--infoDisplay, none);
   }
 
-  &:hover {
-    background-color: var(--colorMenuHover) ;
-  }
-
-  &:active {
-    transition: background-color 200ms ease;
-    background-color: var(--colorMenuActive) ;
-  }
 
   &.is--selected {
-    background-color: var(--colorMenuSelected);
-
     .preview {
       background-color: transparent;
-    }
-
-    &:hover {
-      background-color: var(--colorMenuSelectedHover);
-    }
-
-    &:active {
-      background-color: var(--colorMenuSelectedActive);
     }
   }
 

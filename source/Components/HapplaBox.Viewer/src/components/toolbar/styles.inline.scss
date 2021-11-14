@@ -84,28 +84,8 @@
 
   // button
   &.item-button {
+    @include setItemButtonStyle();
     max-width: var(--itemSize);
-
-    &:hover {
-      background-color: var(--colorMenuHover) ;
-    }
-
-    &:active {
-      transition: all 200ms ease;
-      background-color: var(--colorMenuActive) ;
-    }
-
-    &.is--selected {
-      background-color: var(--colorMenuSelected) ;
-
-      &:hover {
-        background-color: var(--colorMenuSelectedHover);
-      }
-
-      &:active {
-        background-color: var(--colorMenuSelectedActive);
-      }
-    }
 
     // show hidden overflown buttons
     &.item-show-more {
