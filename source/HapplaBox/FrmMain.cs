@@ -51,6 +51,8 @@ namespace HapplaBox
             Web2.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
 
             Web2.Source = new Uri(@"D:\_GITHUB\HapplaBox\source\Components\HapplaBox.Viewer\public\winMain.html");
+
+            Web2.Focus();
         }
 
         private void Web2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
@@ -208,5 +210,6 @@ namespace HapplaBox
                 LoadPath(of.FileName);
             }
         }
+
     }
 }

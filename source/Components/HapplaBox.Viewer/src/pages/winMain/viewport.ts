@@ -44,6 +44,8 @@ export class Viewport {
       e.preventDefault();
       console.log(e.dataTransfer.files);
     });
+
+    Viewport.el.focus();
   }
 
   public static async load() {

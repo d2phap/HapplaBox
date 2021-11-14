@@ -156,6 +156,10 @@ export class HbBoard extends BaseElement {
 
     this.#board.zoomTo(zoomFactor, duration);
   }
+
+  public focus() {
+    this.#containerEl.focus({ preventScroll: true };)
+  }
 }
 
 export const init = () => window.customElements.define('hb-board', HbBoard);

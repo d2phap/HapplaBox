@@ -22,7 +22,6 @@ namespace HapplaBox
         private void UpdateTheme(SystemTheme theme = SystemTheme.Unknown)
         {
             var newTheme = theme;
-
             if (theme == SystemTheme.Unknown)
             {
                 newTheme = ThemeUtils.GetSystemTheme();
